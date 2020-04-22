@@ -18,18 +18,99 @@ data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) 
          respondent_id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied)
 ```
 
+According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, so as to avoid biased results, we were unable to satisfactorily replicate Harvard’s admission statistics.
+
+Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:
 
 ```{r}
 # Survey was dominated by White and Asians
-
-data %>% 
+racial_respondent <- data %>% 
   group_by(race) %>% 
   count() %>% 
-  ungroup() %>% 
+  ungroup() %>%
+  mutate(percent_survey = (n / 415) * 100) %>% 
   gt() %>% 
-  tab_header(title = "Survey Respondents Ethnic Breakdown") %>% 
-  cols_label(race = "Reported Ethnicity and/or Race", n = "Total number")
+  tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
+  fmt_number(decimals = 2, columns = "percent_survey") %>% 
+  cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
+  tab_footnote(footnote = "These percentages total 99.99% due to rounding",
+               locations = cells_column_labels(columns = vars("percent_survey")))
+racial_respondent
 ```
+
+<br>
+
+Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other.
+
+<br>
+
+```{r}
+race_satisfaction <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  group_by(manipulated_race) %>% 
+  ggplot(aes(x = satisfied)) +
+  geom_bar(fill = "darkred") +
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+race_satisfaction
+```
+
+<br>
+
+In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another.
+
+<br>
+
+```{r}
+name <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  ggplot(aes(x = know_by_name)) + 
+  geom_bar(fill = "steelblue") + 
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  labs(x = "Amount of people students know by name",
+       y = "Number of respondents", title = "The Amount of people students know by name",
+       subtitle = "Broken down by race") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+name
+
+street <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  ggplot(aes(x = know_street)) + 
+  geom_bar(fill = "darkred") + 
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  labs(x = "Amount of people students would recognize on the street",
+       y = "Number of respondents", title = "The Amount of people students would recognize on the street",
+       subtitle = "Broken down by race") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+street
+
+berg <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  ggplot(aes(x = know_annenberg)) + 
+  geom_bar(fill = "purple") + 
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  labs(x = "Amount of people students would sit down next to in Annenberg",
+       y = "Number of respondents", title = "The Amount of people students would sit next to in Annenberg",
+       subtitle = "Broken down by race") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+berg
+```
+
+These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg.
+
+Regarding the who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities.
+
+
+All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.
+
 
 ### Scratchwork
 
@@ -75,61 +156,6 @@ where_meet <- data %>%
   mutate(multiple = str_detect(string = first_meet, pattern = "[,]")) 
 ```
 
-```{r}
-
-
-name <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  ggplot(aes(x = know_by_name)) + 
-  geom_bar(fill = "steelblue") + 
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  labs(x = "Amount of people students know by name",
-       y = "Number of respondents", title = "The Amount of people students know by name",
-       subtitle = "Broken down by race") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-name
-
-street <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  ggplot(aes(x = know_street)) + 
-  geom_bar(fill = "darkred") + 
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  labs(x = "Amount of people students would recognize on the street",
-       y = "Number of respondents", title = "The Amount of people students would recognize on the street",
-       subtitle = "Broken down by race") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-street
-
-berg <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  ggplot(aes(x = know_annenberg)) + 
-  geom_bar(fill = "purple") + 
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  labs(x = "Amount of people students would sit down next to in Annenberg",
-       y = "Number of respondents", title = "The Amount of people students would sit next to in Annenberg",
-       subtitle = "Broken down by race") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-berg
-```
-
-```{r}
-race_satisfaction <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  group_by(manipulated_race) %>% 
-  ggplot(aes(x = satisfied)) +
-  geom_bar(fill = "darkred") +
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-race_satisfaction
-```
 
 
 
