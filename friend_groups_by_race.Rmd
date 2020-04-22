@@ -1,0 +1,139 @@
+---
+title: "friend_groups_by_race"
+author: "Jeremiah Kim"
+date: "4/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+library(tidyverse)
+library(infer)
+library(broom)
+library(magrittr)
+library(readr)
+library(gt)
+data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) %>% 
+  select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+         respondent_id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied)
+```
+
+
+```{r}
+# Survey was dominated by White and Asians
+
+data %>% 
+  group_by(race) %>% 
+  count() %>% 
+  ungroup() %>% 
+  gt() %>% 
+  tab_header(title = "Survey Respondents Ethnic Breakdown") %>% 
+  cols_label(race = "Reported Ethnicity and/or Race", n = "Total number")
+```
+
+### Scratchwork
+
+Looking at who people put down as the person they know best. I mutated to see if the person the respondent put down as #1 also filled out our survey.
+survey_respondent <- data %>% 
+  select(race, respondent_id)
+
+first_friend <- data %>% 
+  select(race, first_id)
+
+Using the combined data below, 150 people both filled out the survey and were also put down as someone else's number one friend. 85 of the 150 people are of the same race as their friend.
+
+both_filled <- inner_join(x = survey_respondent, y = first_friend, by = c("respondent_id" = "first_id"), suffix = c(".respondent", ".1friend")) %>% 
+  mutate(race = str_detect(race.respondent, race.1friend)) %>% 
+  count(race)
+both_filled
+
+replicate the same process, but see which groups exclude people from other races. 
+
+second_friend <- data %>% 
+  select(race, second_id) %>% 
+
+third_friend <- data %>% 
+  select(race, third_id)
+
+fourth_friend <- data %>% 
+  select(race, fourth_id)
+
+
+all_four_filled <- left_join(x = survey_respondent, y = first_friend, by = c("respondent_id" = "first_id"), suffix = c(".respondent", ".1friend")) %>% 
+  left_join(x = ., y = second_friend, by = c("respondent_id" = "second_id"), suffix = c(".respondent", ".2friend")) %>% 
+  inner_join(x = ., y = third_friend, by = c("respondent_id" = "third_id"), suffix = c(".2friend", ".3friend")) %>% 
+  inner_join(x = ., y = fourth_friend, by = c("respondent_id" = "fourth_id"))
+
+
+```{r}
+
+# Looking at first friends, 93 people said that they met their best friends through multiple events. 320 only listed one place for meeting their first friend. 
+
+where_meet <- data %>% 
+  select(first_meet) %>% 
+  group_by(first_meet) %>% 
+  mutate(multiple = str_detect(string = first_meet, pattern = "[,]")) 
+```
+
+```{r}
+
+
+name <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  ggplot(aes(x = know_by_name)) + 
+  geom_bar(fill = "steelblue") + 
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  labs(x = "Amount of people students know by name",
+       y = "Number of respondents", title = "The Amount of people students know by name",
+       subtitle = "Broken down by race") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+name
+
+street <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  ggplot(aes(x = know_street)) + 
+  geom_bar(fill = "darkred") + 
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  labs(x = "Amount of people students would recognize on the street",
+       y = "Number of respondents", title = "The Amount of people students would recognize on the street",
+       subtitle = "Broken down by race") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+street
+
+berg <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  ggplot(aes(x = know_annenberg)) + 
+  geom_bar(fill = "purple") + 
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  labs(x = "Amount of people students would sit down next to in Annenberg",
+       y = "Number of respondents", title = "The Amount of people students would sit next to in Annenberg",
+       subtitle = "Broken down by race") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+berg
+```
+
+```{r}
+race_satisfaction <- data %>% 
+  mutate(manipulated_race = ifelse(race != "White", "Other", race),
+         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
+  group_by(manipulated_race) %>% 
+  ggplot(aes(x = satisfied)) +
+  geom_bar(fill = "darkred") +
+  facet_wrap(vars(manipulated_race)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+race_satisfaction
+```
+
+
+
+
+
+
+
