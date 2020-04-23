@@ -109,7 +109,7 @@ ui <- fluidPage(
                         
                         h3(tags$b("Connections between Athletics and Pre-Orientation")),
                         
-                        visNetworkOutput("mark_plot",  width = 500, height = 500)
+                        visNetworkOutput("mark_plot",  width = 750, height = 750)
                )
     )
     
@@ -298,7 +298,34 @@ server <- function(input, output) {
     output$mark_plot <- renderVisNetwork({
         nodes2 <- read_csv("data/nodes2.csv")
         edges2 <- read_csv("data/edges2.csv")
-        visNetwork(nodes2, edges2)
+        # change shape, color, and size for each group
+        
+        visNetwork(nodes2, edges2) %>%
+            visGroups(groupname = "Dorms", color = "darkblue", shape = "square", size = 65) %>%
+            visGroups(groupname = "Pre-Orientation", color = "darkred", shape = "square", size = 45) %>%
+            visGroups(groupname = "Sports", color = "darkgreen", shape = "square", size = 45) %>%
+            
+            # add functionality to highlight close connections when hovering over node
+            
+            visOptions(nodesIdSelection = list(enabled = TRUE,
+                                               style = "margin-bottom: -30px; visibility: hidden"),
+                       highlightNearest = list(enabled = T, degree = 2, hover = T),
+                       selectedBy = "group") %>%
+            
+            # adjust physics to decrease load time
+            
+            visPhysics(
+                solver = "forceAtlas2Based", 
+                timestep = 0.5,
+                minVelocity = 1,
+                maxVelocity = 30,
+                forceAtlas2Based = list(gravitationalConstant = -200, damping = 1),
+                stabilization = list(iterations = 200, updateInterval = 10),
+                adaptiveTimestep = TRUE) %>%
+            
+            # add legend for groups
+            
+            visLegend()
         
         
     })
