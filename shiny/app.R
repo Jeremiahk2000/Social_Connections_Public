@@ -32,6 +32,9 @@ ui <- fluidPage(
                           Therefore, we had a 23.39% response rate from the 
                           Class of 2023 (which has a total matriculation of 1650)."), br(),
                         
+                        
+                        visNetworkOutput("mark_plot",  width = 750, height = 750)
+                        
                ),
                
                tabPanel("Gender",
@@ -105,11 +108,7 @@ ui <- fluidPage(
                         
                         # plotOutput("street_encounter", width = 500, height = 500),
                         
-                        plotOutput("social_num", width = 500, height = 500),
-                        
-                        h3(tags$b("Connections between Athletics and Pre-Orientation")),
-                        
-                        visNetworkOutput("mark_plot",  width = 750, height = 750)
+                        plotOutput("social_num", width = 500, height = 500)
                )
     )
     
