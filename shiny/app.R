@@ -224,10 +224,52 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                           scores. Between the two populations, however, the 
                           difference was not significant."), br(),
                         
-               )
+               ),
+               tabPanel("Comment Analysis",
+                        h2(tags$b("Word Cloud")),
+                        img(src="wordcloud.png", width = "50%"),
+                        h2(tags$b("Comment Analysis")),
+                        p('Four Primary Themes: (out of 81 total comments)'),
+                        
+                        h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
+                        p("Examples:"),
+                        p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
+                        p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
+                        p("“Everyone has been pretty great and super interesting to meet so far.”"),
+                        p("“Absolutely love it”"),
+                        p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
+                        
+                        h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
+                        p("Examples:"),
+                        p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
+                        p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
+                        p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”"),
+                        p("“There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”'),
+                        p("“It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out’...”"),
+                        
+                        h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
+                        p("Examples:"),
+                        p("“Once you make friends initially, it is hard to expand out of that circle.”"),
+                        p("“I feel like Harvard is a difficult place to make a ton of friends unless you're already part of a defined group, like a sports team.”"),
+                        p("“I find it difficult to connect with people that you aren't naturally in contact with (in your entryway, in your social group, a cappella group, section, etc.)”"),
+                        p("“If you don't have time to be in one of the high-time commitment clubs, then it's really hard to make friends. I personally feel super lonely because of my niche interests and my desire to just debate with my peers over various topics.”"),
+                        p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”"),
+                        
+                        h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
+                        p("Examples: "),
+                        p("“I will say the social environment is very very easy to self-segregate. In my case, I went from having maybe two asian friends in high school to having majority Asian friends in college (this is also where choice of extracurriculars matters a lot, and I am in two orgs that have “Asian american” in their names)”"),
+                        p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
+                        p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
+                        
+                        h2(tags$b("Summary:")),
+                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging."),
+                        
+                        
+               
+                        
     )
     
-)
+))
 
 # Define server logic
 # I store the file in filename using normalizePath
