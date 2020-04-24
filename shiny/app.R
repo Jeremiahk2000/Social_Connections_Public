@@ -1,7 +1,7 @@
 
 
-library(shiny)
 
+library(shiny)
 library(igraph)
 library(visNetwork)
 library(purrr)
@@ -15,29 +15,31 @@ library(dplyr)
 library(gt)
 library(RColorBrewer)
 library(ggplot2)
+library(shinythemes)
+
+
 
 # UI for application 
 # use plotOutput function to plot the graph
 # I named my image "plot" so that is what I put in the function call
 
-ui <- fluidPage(
-    
+ui <- bootstrapPage(theme = shinytheme("yeti"),
     navbarPage(tags$b("Social Connectedness in the Class of 2023"),
-               
-               tabPanel("Demographics",
+
+               tabPanel(align = "center", "About",
                         
                         h2(tags$b("Total Sample Size")),
                         
-                        p("A total of 386 first-year students answered our survey. 
-                          Therefore, we had a 23.39% response rate from the 
+                        p("A total of 413 first-year students answered our survey. 
+                          Therefore, we had a 25.03% response rate from the 
                           Class of 2023 (which has a total matriculation of 1650)."), br(),
                         
                         
-                        visNetworkOutput("mark_plot",  width = 750, height = 750)
+                        visNetworkOutput("mark_plot", width = "100%", height = "1000px")
                         
                ),
                
-               tabPanel("Gender",
+               tabPanel("Demographics",
                         
                         h2(tags$b("Gender Identity Breakdown")),
                         
@@ -45,33 +47,45 @@ ui <- fluidPage(
                           were male 0.26% of respondents were genderqueer. 0% of 
                           respondents preferred not to share their gender."), br(),
                         
-                        plotOutput("gender_pie", width = 500, height = 500),
-               ),
-               tabPanel("Dorm",
+                        img(src='1gender_ratio_all_responses.png', width = "50%"),
                         
                         h2(tags$b("Dorm Breakdown")),
                         
-                        plotOutput("dorm_stats", width = 500, height = 500)
+                        img(src="2dorm_ratio_all_responses.png", width = "50%"),
                ),
                tabPanel("Analyzing the Data",
+                        
+                        
+                        p("We asked each respondent how satisfied they were with 
+                        their social connections. Each respondent was given 5 options: 
+                        Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied."), br(),
+                        
+                        p("When coded from -2 to 2 (-2 being Very Dissatisfied, 0 being Neutral, 
+                          and 2 being Very Satisfied), the mean satisfaction score 
+                          of all respondents was 0.7917676."), br(),
+                    
                         
                         h2(tags$b("Satisfaction of Harvard’s social culture based on whether
                            or not they were listed among other respondents’ closest 4 friends")),
                         
-                        p("In our survey, we asked respondents to list 4 first-years
-                          they felt closest to. We also asked each respondent about
-                          how satisfied they were with their social connections
-                          (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), br(),
-
-                        p("To analyze this data, we counted how many times each
-                          respondent’s name appeared in other respondents’ top 4
-                          closest friends lists. We compared this to each respondent’s
+                        p("In our survey, we asked respondents to list 4 first-years 
+                           they felt closest to. We also asked each respondent about 
+                           how satisfied they were with their social connections 
+                           (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), br(),
+                         
+                        p("To analyze this data, we counted how many times each 
+                           respondent’s name appeared in other respondents’ top 4 
+                           closest friends lists. We compared this to each respondent’s 
                           satisfaction level"), br(),
-
-                        plotOutput("compare_satisfaction", width = 500, height = 500),
                         
+                        img(src="3mean_satisfaction_score_bar_plot.png", width = "50%"),
+                        
+                        p("First, we compared the satisfaction score mean of 
+                          respondents who did appear in others' friend lists, 
+                          and the satisfaction score mean of those who did not."), br(),
+
                         p("The horizontal line the graph indicates the mean satisfaction 
-                          level across all first-years, which was 0.7797927. 
+                          level across all first-years, which was 0.7917676. 
                           Since the satisfaction levels were scaled as a 0 if neutral 
                           and a 1 if satisfied, our respondents, on average, reported 
                           somewhere between neutral and satisfied (leaning satisfied) 
@@ -85,30 +99,131 @@ ui <- fluidPage(
                         satisfaction, while respondents who did appear reported 
                         an above average level of satisfaction."), br(),
                         
-                        plotOutput("satisfaction_scatter_plot", width = 500, height = 500),
+                        p("Then, we plotted number of appearances against mean 
+                        satisfaction score on a scatter plot."), br(),
                         
-                        p("As seen above, the R value is 0.89, which demonstrates 
-                        a very strong correlation between satisfaction score 
-                        and number of appearances."), br(),
+                        img(src="4appearances_satisfaction_lvl.png", width = "50%"),
                         
-                        h2(tags$b("Do most “socially connected” students appear the most 
-                          frequently in top 4 friend lists?")),
+                        p("The R value is not statistically significant (p > 0.05), 
+                          indicating that there is not a very strong relationship 
+                          between satisfaction level and number of individuals who 
+                          consider them close friends. This observation suggests that 
+                          satisfaction about social relationships may not originate from 
+                          someone else's consideration of you as a close friend — perhaps 
+                          individuals feel more socially satisfied as a result of 
+                          other factors. Another way to interpret this absence of 
+                          a finding is that individuals may be unaware of how 
+                          close others consider them."), br(),
                         
-                        p("In our survey, we asked respondents to name the student 
-                        they perceive to be the “most socially connected” in the 
-                        Class of 2023. To create the graph below, we compiled the 
-                        \top 10 “most socially connected” students. Then, we counted 
+                        h2(tags$b("Do students who know more first-years feel more satisfied?")),
+                        
+                        h3(tags$b("How many members of the Class of 2023 would 
+                        you recognize on the street?")),
+                        
+                        p("We also asked respondents how many members of the 
+                        2023 class they would recognize on the street. Below were our results:"), br(),
+                        
+                        img(src="5know_on_street_responses.png", width = "50%"),
+                        
+                        p("We then observed the mean satisfaction levels 
+                        (measured on a scale from -2 to 2) of each group that 
+                        stated similar street recognition levels. Below are our 
+                        results, graphed with the overall average satisfaction 
+                        level of our entire sample (the black horizontal line)."), br(),
+                        
+                        img(src="6know_on_street_satisfaction.png", width = "50%"),
+                        
+                        p("As can be observed, the respondents who could recognize 
+                        1000+ first-years on the street reported higher satisfaction 
+                        level means. The respondents who could recognize 0-50, 
+                        on the other hand, reported lower than average satisfaction 
+                        means. This result seems to suggest that the more 
+                        fellow freshmen the respondent could recognize, the 
+                        more satisfied they tended to feel about their social 
+                        experience. This correlation is intuitive."), br(),
+                        
+                        h3(tags$b("How many members of the Class of 2023 would 
+                                  you feel comfortable sitting down with at Annenberg?")),
+                        
+                        
+                        p("We also asked respondents how many freshmen they 
+                        would feel comfortable sitting down with at Annenberg. Below were our results:"), br(),
+                        
+                        img(src="7know_in_berg_responses.png", width = "50%"),
+                        
+                        p("We then observed the mean satisfaction levels 
+                        (measured on a scale from -2 to 2) of each group that 
+                        stated similar numbers of students they felt comfortable 
+                        sitting next to in Annenberg. Below are our results, 
+                        graphed with the overall average satisfaction level 
+                        of our entire sample (the black horizontal line)."), br(),
+                        
+                        img(src="8know_in_berg_satisfaction.png", width = "50%"),
+                        
+                        p("In this question, students who answered differently 
+                        did not demonstrate large differences in satisfaction 
+                        level. Compared to the street recognition level question, 
+                        mean satisfaction scores of Annenberg-comfortable 
+                        groups differed less noticeably. This observation 
+                        suggests that respondents base personal satisfaction 
+                        more heavily on how many students they recognize, 
+                        rather than how many students they feel personally close to."), br(),
+                        
+                        
+                        h2(tags$b('Analyzing the "most socially" connected individuals?')),
+                        
+                        p('In our survey, we asked respondents to name the student 
+                          they perceive to be the "most socially connected" in the Class of 2023.'), br(),
+                        
+                        
+                        h3(tags$b('How many times did the "most socially connected" 
+                                  students appear in top 4 friend lists??')),
+                        
+                        p('To create the graph below, we compiled the top 100 
+                        "most socially connected" students. Then, we counted 
                         how many times those students appeared in other 
-                        respondents’ top 4 friend lists."), br(),
+                        respondents top 4 friend lists.'), br(),
                         
-                        plotOutput("top_socially_connected_appearance_in_top4", width = 500, height = 500),
                         
+                        img(src="9social_connect_top4.png", width = "50%"),
+                        
+                        p('As seen in the graph above, the number of times 
+                        someone was named "most socially connected" had a very 
+                        weak positive correlation with the number of times that 
+                        person was named a close friend. This observation is 
+                        interesting — it indicates that individuals who are 
+                        considered socially connected may not always be the 
+                        "closest" to the most people. Having a general impression 
+                        of someone as a socially connected person does not mean 
+                        the most people considers that person a close friend.'), br(),
                         
                         plotOutput("helen_plot", width = 500, height = 500),
                         
-                        plotOutput("street_encounter", width = 500, height = 500),
+
+                        h3(tags$b('Comparing satisfaction levels of top 100 
+                        "most socially connected" to top 100 number of appearances in friend lists')),
                         
-                        plotOutput("social_num", width = 500, height = 500)
+                        
+                        p("Next, we compared the mean satisfaction scores of the 
+                        top 100 students who appeared the most in the socially 
+                        connected column to the top 100 students who appeared 
+                        the most in other respondents' friend lists."), br(),
+                        
+                        p('* The overall satisfaction score mean of our entire 
+                        sample: 0.7917676.'), br(),
+                        
+                        p('* The satisfaction score mean of top 100 
+                        "most socially connected students": 1.2083333.'), br(),
+                    
+                        p('* The satisfaction score mean of top 100 students with 
+                        most appearances in friend lists: 1.04.'),br(),
+                        
+                        p("Students who are considered more socially connected 
+                          and students who appeared most frequently in others' 
+                          friend lists had higher-than-average mean satisfaction 
+                          scores. Between the two populations, however, the 
+                          difference was not significant."), br(),
+                        
                )
     )
     
@@ -123,18 +238,7 @@ ui <- fluidPage(
 # The image's original dimensions are 2099x1499, so I scaled it down by half and rounded
 
 server <- function(input, output) {
-    
-    output$gender_pie <- renderPlot({
-        gender_group <- read_csv("data/gender_group.csv")
-        gender_group %>%
-            ggplot(aes(x = "", y = n, fill = gender_id)) +
-            geom_bar(stat = "identity", width = 1) +
-            coord_polar("y", start = 0) +
-            theme_void() +
-            labs(
-                title = "Respondent Sample by Gender"
-            )
-    })
+
     
     
     output$dorm_stats <- renderPlot({
@@ -236,24 +340,6 @@ server <- function(input, output) {
             )
     })
     
-    output$street_encounter <- renderPlot({
-        freshmen <- read_csv("data/freshmen.csv") 
-        
-        freshmen$know_on_street <- factor(freshmen$know_on_street,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000", "1000+"))
-        
-        ggplot(data = freshmen, aes(x = know_on_street)) + 
-            geom_bar(fill = "seagreen4") + 
-            labs(x = "How many members of the Class of 2023 would you
-    recognize on the street?",
-                y = "Count",
-                title = "Number of freshmen respondents would recognize
-    on the street") + 
-            theme_classic() +
-            theme(
-                plot.background = element_rect(fill = "gray90"),
-                plot.margin = margin(2, 10, 2, 10, "pt")
-            )
-    })
     
     output$social_num <- renderPlot({
         freshmen_mod <- read_csv("data/freshmen_mod.csv")
