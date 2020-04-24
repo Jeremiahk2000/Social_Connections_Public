@@ -170,6 +170,10 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         rather than how many students they feel personally close to."), br(),
                         
                         
+                        
+                        
+               ),
+               tabPanel("Most Connected Individuals",
                         h2(tags$b('Analyzing the "most socially" connected individuals?')),
                         
                         p('In our survey, we asked respondents to name the student 
@@ -197,9 +201,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         of someone as a socially connected person does not mean 
                         the most people considers that person a close friend.'), br(),
                         
-                        plotOutput("helen_plot", width = 500, height = 500),
                         
-
                         h3(tags$b('Comparing satisfaction levels of top 100 
                         "most socially connected" to top 100 number of appearances in friend lists')),
                         
@@ -214,7 +216,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         p('* The satisfaction score mean of top 100 
                         "most socially connected students": 1.2083333.'), br(),
-                    
+                        
                         p('* The satisfaction score mean of top 100 students with 
                         most appearances in friend lists: 1.04.'),br(),
                         
@@ -223,6 +225,51 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                           friend lists had higher-than-average mean satisfaction 
                           scores. Between the two populations, however, the 
                           difference was not significant."), br(),
+                        
+                        h3(tags$b('Social Network Analysis Tests')),
+                        
+                        h4(tags$b("Survey: Top 10 Connected Individuals")),
+                        p("These IDs correspond to the top 10 students voted to be the most connected individuals in the freshmen class."),
+                        img(src="most.png", width = "30%"),
+                        
+                        p("To assess the accuracy of these predictions, we ran Social Network Analysis tests on the connections listed by respondents. (Connections are counted if the student’s name is written as one of the top 4 closest friends.)"),
+                        
+                        h4(tags$b("What is Social Network Analysis?")),
+                        p("Social Network Analysis is a set of methods used to visualize networks, describe specific characteristics of overall network structure, and build mathematical and statistical models of network structures and dynamics."),
+                        p("First, we begin by visualizing our social network graph. A graph consists of edges and nodes. In our case, the nodes are the freshmen, and the edges are connections between students. The graph is colored based on the level of connection (first through fourth)"),
+                        plotOutput("helen_plot", width = 500, height = 500),
+                        
+                        p("Now, onto the analysis. Although visualizing the network can be useful for examining the data at a high level, one of the most important features of social network analysis is the ability to mathematically describe a node’s characteristics on the network. The positions of individuals are best described in terms of centrality. Centrally positioned individuals enjoy a position of privilege over those in the circumference of the network. We ran the three main centrality tests: degree centrality, betweenness centrality, and closeness centrality."),
+                        
+                        h4(tags$b("Degree Centrality")),
+                        p("Degree centrality is the simplest of the tests. It measures the number of connections between a node and all other nodes. Essentially, it calculates the number of connections each student has. Degree centrality assigns an importance score based simply on the number of links held by each node. This test is best used for finding very connected individuals who can quickly connect with the wider network."),
+                        p("The following IDs correspond to the 10 students with the highest degree centrality:"),
+                        img(src="degree.png", width = "26%"),
+                        
+                        h4(tags$b("Closeness Centrality")),
+                        p("Closeness centrality is an evaluation of the proximity of a node to all other nodes in a network, not only direct connections. The closeness centrality of a node is defined by the inverse of the average length of the shortest paths to or from all the other nodes in the graph. Closeness centrality can help find good ‘broadcasters’, but in a highly-connected network, often all nodes have a similar score (this is the case for our data). This test is best used for finding the individuals who are best placed to influence the entire network most quickly."),
+                        p("The following IDs correspond to the 10 students with the highest closeness centrality:"),
+                        img(src="close.png", width = "28%"),
+                        
+                        h4(tags$b("Betweenness Centrality")),
+                        p("Betweenness centrality measures the number of times a node lies on the shortest path between other nodes.This measure shows which nodes are ‘bridges’ between nodes in a network. It does this by identifying all the shortest paths and then counting how many times each node falls on one. Betweenness is useful for analyzing communication dynamics, but should be used with care. A high betweenness count could indicate someone holds authority over disparate clusters in a network, or just that they are on the periphery of both clusters. This test is best used for finding the individuals who influence the flow around a system"),
+                        p("The following IDs correspond to the 10 students with the highest betweenness centrality:"),
+                        img(src="between.png", width = "30%"),
+                        
+                        h4(tags$b("Eigenvector Centrality")),
+                        p("Eigenvector Centrality measures a node’s influence based on the number of links it has to other nodes in the network, just like degree centrality. The test then goes a step further by also taking into account how well connected a node is, and how many links their connections have, and so on through the network. By calculating the extended connections of a node, we can identify individuals with influence over the whole network, not just those directly connected to it. This test is the best overall evaluation of an individual in a network."),
+                        p("The following IDs correspond to the 10 students with the highest eigenvector centrality:"),
+                        img(src="eigen.png", width = "30%"),
+                        
+                        h4(tags$b("Top 10 Centrality Comparison")),
+                        img(src="comparison.png", width = "60%"),
+                        p("We can see a significant difference in the perceived influential people in the network, versus the centrality test results."),
+                        p("Only one individual out of the top voted people actually appears in the top 10 for a centrality test. This is ID 1570, voted 3rd for most connected. They were #1 in degree centrality and #4 in betweenness centrality."),
+                        p("From our centrality tests, it is quite clear that the most connected person, according to our survey data, is ID 1401. They were 1st in eigenvector centrality, 3rd in degree centrality, 1st in closeness centrality, and 2nd in betweenness centrality. There is no other individual who was in the top 10 for all centrality tests, and certainly no one who monopolized the top 3 positions across the board."),
+                        p("However, ID 1401 was tied for 21st place in voting, with only 2 people who believed them to be the most socially connected person in the class."),
+                        p("As such, our social network analysis testing prompts interesting questions and possible conclusions."),
+                        p("The disparity in data could be explained by several factors. We must consider how connections have been defined from survey data. We asked respondents to list the 4 people who they feel closest to. As such, our centrality analysis favors people who are trusted and very close to their friends. On the other hand, our survey question asks students who they believe the most socially connected person is. The wording of this question has several implications, as students may vote for people they believe are popular, are very involved in networking. The people who perform the best will likely differ from people who have developed deeper relationships with their peers."),
+                        p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions."),
                         
                ),
                tabPanel("Comment Analysis",
@@ -263,11 +310,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         h2(tags$b("Summary:")),
                         p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging."),
-                        
-                        
-               
-                        
-    )
+  
+            )
     
 ))
 

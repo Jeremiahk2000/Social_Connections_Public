@@ -1,0 +1,201 @@
+---
+title: "trends"
+author: "Helen Pang"
+date: "4/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(infer)
+library(broom)
+library(magrittr)
+library(readr)
+library(gt)
+library(igraph)
+library(RColorBrewer)
+library(plyr)
+library(dplyr)
+survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+```
+
+
+```{r}
+color <- brewer.pal(4, "Set3") 
+
+edges_full <- survey_data %>% 
+  select(id, first_id, second_id, third_id, fourth_id) %>% 
+  pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+  mutate(colors = case_when(
+    degree == "first_id" ~ color[1],
+    degree == "second_id" ~ color[2],
+    degree == "third_id" ~ color[3],
+    degree == "fourth_id" ~ color[4],
+  ))
+
+edges <- edges_full %>% 
+  select(id, endpoint)
+
+nodes <- survey_data %>% 
+  select(id) 
+
+first <- survey_data %>% 
+  select(first_id) 
+
+second <- survey_data %>% 
+  select(second_id) 
+
+third <- survey_data %>% 
+  select(third_id) 
+
+fourth <- survey_data %>% 
+  select(fourth_id) 
+
+all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+
+
+nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+
+
+g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+
+
+l <- layout_on_sphere(g)
+
+
+#png("ms_6/helen_plot.png", 1800, 1800) 
+plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
+title("Friend Network",cex.main=3,col.main="black")
+
+legend("bottomright", c("First","Second", "Third", "Fourth"), pch=21,
+  col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
+```
+
+
+```{r echo=FALSE}
+most <- survey_data %>% 
+  select(most_id) %>% 
+  filter(most_id != 1654)
+
+count(most) %>% 
+  arrange(desc(freq)) 
+most_10 <- count(most) %>% 
+  arrange(desc(freq)) %>% 
+  head(10) 
+
+gt(most_10) %>% 
+  tab_header(title = "Top 10 Socially Connected Freshman: Survey") %>% 
+  cols_label(most_id = "ID",
+             freq = "Number of Votes") %>% 
+  gtsave("shiny/www/most.png")
+
+```
+
+
+```{r echo=FALSE} 
+deg <- degree(g, mode="all")
+
+degree <- tibble(deg) %>% 
+  mutate(degree_id = nodes$id) %>% 
+  arrange(desc(deg)) %>% 
+  filter(degree_id != 1654) %>% 
+  select(degree_id, deg)
+
+degree_10 <- degree %>% 
+  head(10)
+
+gt(degree_10) %>% 
+  tab_header(title = "Top 10 Degree Centrality") %>% 
+  cols_label(degree_id = "ID",
+             deg = "Number of Connections") %>% 
+  gtsave("shiny/www/degree.png")
+
+
+
+```
+
+```{r echo=FALSE}
+close <- closeness(g, mode="all", weights=NA, normalized=T)
+
+closeness <- tibble(close) %>% 
+  mutate(close_id = nodes$id) %>% 
+  arrange(desc(close)) %>% 
+  filter(close_id != 1654) %>% 
+  select(close_id, close)
+
+closeness_10 <- closeness %>% 
+  head(10)
+
+gt(closeness_10) %>% 
+  tab_header(title = "Top 10 Closeness Centrality") %>% 
+  cols_label(close_id = "ID",
+             close = "Closeness Score") %>% 
+  gtsave("shiny/www/close.png")
+
+```
+
+```{r echo=FALSE}
+between <- betweenness(g, directed=F, weights=NA, normalized = T)
+
+betweenness <- tibble(between) %>% 
+  mutate(between_id = nodes$id) %>% 
+  arrange(desc(between)) %>% 
+  filter(between_id != 1654) %>% 
+  select(between_id, between)
+
+
+betweenness_10 <- betweenness %>% 
+  head(10)
+
+gt(betweenness_10) %>% 
+  tab_header(title = "Top 10 Betweenness Centrality") %>% 
+  cols_label(between_id = "ID",
+             between = "Betweenness Score") %>% 
+  gtsave("shiny/www/between.png")
+```
+
+```{r}
+eigen <- eigen_centrality(g)
+eigen <- eigen$vector
+
+eigenvector <- tibble(eigen) %>% 
+  mutate(eigen_id = nodes$id) %>% 
+  arrange(desc(eigen)) %>% 
+  filter(eigen_id != 1654) %>% 
+  select(eigen_id, eigen)
+  
+eigenvector_10 <- eigenvector %>% 
+  head(10)
+
+gt(eigenvector_10) %>% 
+  tab_header(title = "Top 10 Eigenvector Centrality") %>% 
+  cols_label(eigen_id = "ID",
+             eigen = "Eigenvector Score") %>% 
+  gtsave("shiny/www/eigen.png")
+
+```
+```{r}
+most_id_10 <- most_10$most_id
+degree_id_10 <- degree_10$degree_id
+close_id_10 <- closeness_10$close_id
+between_id_10 <- betweenness_10$between_id
+eigen_id_10 <- eigenvector_10$eigen_id
+comp <- tibble(most_id_10, degree_id_10, close_id_10, between_id_10, eigen_id_10) 
+
+gt(comp) %>% 
+  tab_header(title = "Top 10 ID Comparison") %>% 
+  cols_label(most_id_10 = "Survey",
+             eigen_id_10 = "Eigenvector Centrality",
+             degree_id_10 = "Degree Centrality",
+             close_id_10 = "Closeness Centrality",
+             between_id_10 = "Betweenness Centrality") %>% 
+  gtsave("comparison.png")
+
+```
+
+
+
+
+
