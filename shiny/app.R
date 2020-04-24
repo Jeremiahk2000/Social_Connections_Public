@@ -58,17 +58,17 @@ ui <- fluidPage(
                         h2(tags$b("Satisfaction of Harvard’s social culture based on whether
                            or not they were listed among other respondents’ closest 4 friends")),
                         
-                        # p("In our survey, we asked respondents to list 4 first-years 
-                        #   they felt closest to. We also asked each respondent about 
-                        #   how satisfied they were with their social connections 
-                        #   (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), br(),
-                        # 
-                        # p("To analyze this data, we counted how many times each 
-                        #   respondent’s name appeared in other respondents’ top 4 
-                        #   closest friends lists. We compared this to each respondent’s 
-                        #   satisfaction level"), br(),
-                        # 
-                        # plotOutput("compare_satisfaction", width = 500, height = 500),
+                        p("In our survey, we asked respondents to list 4 first-years
+                          they felt closest to. We also asked each respondent about
+                          how satisfied they were with their social connections
+                          (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), br(),
+
+                        p("To analyze this data, we counted how many times each
+                          respondent’s name appeared in other respondents’ top 4
+                          closest friends lists. We compared this to each respondent’s
+                          satisfaction level"), br(),
+
+                        plotOutput("compare_satisfaction", width = 500, height = 500),
                         
                         p("The horizontal line the graph indicates the mean satisfaction 
                           level across all first-years, which was 0.7797927. 
@@ -104,9 +104,9 @@ ui <- fluidPage(
                         plotOutput("top_socially_connected_appearance_in_top4", width = 500, height = 500),
                         
                         
-                        # plotOutput("helen_plot", width = 500, height = 500),
+                        plotOutput("helen_plot", width = 500, height = 500),
                         
-                        # plotOutput("street_encounter", width = 500, height = 500),
+                        plotOutput("street_encounter", width = 500, height = 500),
                         
                         plotOutput("social_num", width = 500, height = 500)
                )
@@ -154,41 +154,53 @@ server <- function(input, output) {
         
     })
     
-    # commented out for now
-    
-    # output$compare_satisfaction <- renderPlot({
-    #     freshmen <- read_excel("Harvard Freshmen Social Connections Survey (Responses).xlsx") %>%
-    #         clean_names()
-    #     compare_satisfaction <- read_csv("data/compare_satisfaction.csv")
-    #     freshmen_satisfaction <- freshmen %>%
-    #         nest(top4 = c(know_best_1, know_best_2,
-    #                       know_best_3, know_best_4)) %>%
-    #         select(name, satisfaction, top4) %>%
-    #         mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
-    #                                             satisfaction == "Satisfied" ~ 1,
-    #                                             satisfaction == "Neutral" ~ 0,
-    #                                             satisfaction == "Dissatisfied" ~ -1,
-    #                                             satisfaction == "Very Dissatisfied" ~ -2)) 
-    #     
-    #     all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
-    #         summarize(mean = mean(satisfaction_lvl)) %>%
-    #         pull(mean)
-    #     
-    #     compare_satisfaction %>%
-    #         ggplot(aes(x = appear, y = mean_satis, fill = appear)) +
-    #         geom_bar(stat = "identity") + 
-    #         guides(fill=FALSE) +
-    #         scale_x_discrete(labels = c("No", "Yes")) +
-    #         labs(
-    #             x = "Did the respondent's name appear in other respondents' top 4 friends lists?",
-    #             y = "Mean Satisfaction Score",
-    #             title = "Comparing mean satisfaction scores of respondents",
-    #             subtitle = "Respondents who appeared more frequently were more satisfied",
-    #             caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
-    #         ) +
-    #         geom_hline(yintercept = all_freshmen_satisfaction_mean) +
-    #         theme_classic()
-    # })
+
+    output$compare_satisfaction <- renderPlot({
+        freshmen <- read_csv("data/freshmen.csv") 
+   
+        freshmen_satisfaction <- freshmen %>%
+            nest(top4 = c(know_best_1, know_best_2,
+                          know_best_3, know_best_4)) %>%
+            select(name, satisfaction, top4) %>%
+            mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
+                                                satisfaction == "Satisfied" ~ 1,
+                                                satisfaction == "Neutral" ~ 0,
+                                                satisfaction == "Dissatisfied" ~ -1,
+                                                satisfaction == "Very Dissatisfied" ~ -2))
+        
+        # List of all names listed in top 4 friends, with repeats
+        
+        freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
+        
+        # Calculate overall satisfaction score mean
+        
+        all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
+            summarize(mean = mean(satisfaction_lvl)) %>%
+            pull(mean)
+        
+        # Create a tibble for comparing satisfaction levels vs. whether or not
+        # they appear.
+        
+        compare_satisfaction <- freshmen_satisfaction %>%
+            mutate(appear = name %in% freshmen_top4_list) %>%
+            group_by(appear) %>%
+            summarize(mean_satis = mean(satisfaction_lvl))
+        
+        compare_satisfaction %>%
+            ggplot(aes(x = appear, y = mean_satis, fill = appear)) +
+            geom_bar(stat = "identity") + 
+            guides(fill=FALSE) +
+            scale_x_discrete(labels = c("No", "Yes")) +
+            labs(
+                x = "Did the respondent's name appear in other respondents' top 4 friends lists?",
+                y = "Mean Satisfaction Score",
+                title = "Comparing mean satisfaction scores of respondents",
+                subtitle = "Respondents who appeared in others lists were more satisfied",
+                caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
+            ) +
+            geom_hline(yintercept = all_freshmen_satisfaction_mean) +
+            theme_classic()
+    })
     
     output$satisfaction_scatter_plot <- renderPlot({
         satisfaction_scatter_tbl <- read_csv("data/satisfaction_scatter_tbl.csv")
@@ -224,13 +236,24 @@ server <- function(input, output) {
             )
     })
     
-    # output$street_encounter <- renderPlot({
-    #     freshmen <- read_excel("Harvard Freshmen Social Connections Survey (Responses).xlsx") %>%
-    #         clean_names()
-    #     ggplot(data = freshmen, aes(x = recognize_street)) + geom_bar(fill = "cornsilk1") + labs(
-    #         x = "Number of fellow freshmen respondents would recognize if encountered on the street",
-    #         title = "Street encounter recognition levels")
-    # })
+    output$street_encounter <- renderPlot({
+        freshmen <- read_csv("data/freshmen.csv") 
+        
+        freshmen$know_on_street <- factor(freshmen$know_on_street,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000", "1000+"))
+        
+        ggplot(data = freshmen, aes(x = know_on_street)) + 
+            geom_bar(fill = "seagreen4") + 
+            labs(x = "How many members of the Class of 2023 would you
+    recognize on the street?",
+                y = "Count",
+                title = "Number of freshmen respondents would recognize
+    on the street") + 
+            theme_classic() +
+            theme(
+                plot.background = element_rect(fill = "gray90"),
+                plot.margin = margin(2, 10, 2, 10, "pt")
+            )
+    })
     
     output$social_num <- renderPlot({
         freshmen_mod <- read_csv("data/freshmen_mod.csv")
@@ -242,57 +265,58 @@ server <- function(input, output) {
     
     
     
-    # output$helen_plot <- renderPlot({
-    #     survey_data <- read_csv("survey_data_3-31-20.csv") 
-    #     library(RColorBrewer)
-    #     color  <- brewer.pal(4, "Set3") 
-    #     edges_full <- survey_data %>% 
-    #         select(name, first, second, third, fourth) %>% 
-    #         pivot_longer(cols = c(first, second, third, fourth), names_to = "degree", values_to = "endpoint") %>% 
-    #         mutate(colors = case_when(
-    #             degree == "first" ~ color[1],
-    #             degree == "second" ~ color[2],
-    #             degree == "third" ~ color[3],
-    #             degree == "fourth" ~ color[4],
-    #         ))
-    #     
-    #     edges <- edges_full %>% 
-    #         select(name, endpoint)
-    #     edges
-    #     nodes <- survey_data %>% 
-    #         select(name)
-    #     
-    #     first <- survey_data %>% 
-    #         select(first) %>% 
-    #         rename("name" = "first")
-    #     second <- survey_data %>% 
-    #         select(second) %>% 
-    #         rename("name" = "second")
-    #     third <- survey_data %>% 
-    #         select(third) %>% 
-    #         rename("name" = "third")
-    #     fourth <- survey_data %>% 
-    #         select(fourth) %>% 
-    #         rename("name" = "fourth")
-    #     
-    #     all_names <- full_join(first, full_join(second, full_join(third, fourth, by="name"), by="name"), by="name")
-    #     
-    #     nodes <- unique(full_join(nodes, all_names, by="name"))
-    #     
-    #     
-    #     
-    #     
-    #     g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
-    #     
-    #     
-    #     l <-layout_in_circle(g)
-    #     l2 <- layout_on_sphere(g)
-    #     
-    #     
-    #     #png("ms_6/helen_plot.png", 1800, 1800) 
-    #     plot(g, vertex.label="", layout = l2, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
-    #     title("Friend Network",cex.main=3,col.main="black")
-    # })
+    output$helen_plot <- renderPlot({
+        survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+        library(RColorBrewer)
+        color <- brewer.pal(4, "Set3") 
+        
+        edges_full <- survey_data %>% 
+            select(id, first_id, second_id, third_id, fourth_id) %>% 
+            pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+            mutate(colors = case_when(
+                degree == "first_id" ~ color[1],
+                degree == "second_id" ~ color[2],
+                degree == "third_id" ~ color[3],
+                degree == "fourth_id" ~ color[4],
+            ))
+        
+        edges <- edges_full %>% 
+            select(id, endpoint)
+        
+        nodes <- survey_data %>% 
+            select(id) 
+        
+        first <- survey_data %>% 
+            select(first_id) 
+        
+        second <- survey_data %>% 
+            select(second_id) 
+        
+        third <- survey_data %>% 
+            select(third_id) 
+        
+        fourth <- survey_data %>% 
+            select(fourth_id) 
+        
+        all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+        
+        
+        nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+        
+        
+        g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+        
+        
+        l <- layout_on_sphere(g)
+        
+        
+        #png("ms_6/helen_plot.png", 1800, 1800) 
+        plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
+        title("Friend Network",cex.main=3,col.main="black")
+        
+        legend("bottomright", c("First","Second", "Third", "Fourth"), pch=21,
+               col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
+    })
     
     output$mark_plot <- renderVisNetwork({
         nodes2 <- read_csv("data/nodes2.csv")
