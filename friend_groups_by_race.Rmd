@@ -13,16 +13,21 @@ library(broom)
 library(magrittr)
 library(readr)
 library(gt)
+library(gganimate)
+library(ggthemes)
 data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) %>% 
+  mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
   select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
-         respondent_id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied)
+         respondent_id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+
+read_this <- read_csv("shiny/data/FINAL_PUBLIC_DATA-4-23-20.csv")
 ```
 
-According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, so as to avoid biased results, we were unable to satisfactorily replicate Harvard’s admission statistics.
+According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, we were unable to satisfactorily replicate Harvard’s admission statistics.
 
 Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:
 
-```{r}
+```{r, respondents by race}
 # Survey was dominated by White and Asians
 racial_respondent <- data %>% 
   group_by(race) %>% 
@@ -44,16 +49,26 @@ Given the small sample size of our survey, relative to the size of the class of 
 
 <br>
 
-```{r}
+```{r, satisfaction by race, cache=TRUE}
 race_satisfaction <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  group_by(manipulated_race) %>% 
-  ggplot(aes(x = satisfied)) +
-  geom_bar(fill = "darkred") +
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  group_by(manipulated_race) %>%
+  count(satisfied) %>% 
+  mutate(proportion = case_when(
+    manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+    manipulated_race == "White" ~ n / 154, 
+    manipulated_race == "Black or African American" ~ n / 32,
+    manipulated_race == "Hispanic or Latino" ~ n / 29,
+    manipulated_race == "Other" ~ n / 84)) %>% 
+  ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
+  geom_col(fill = "darkred") +
+  theme_economist() +
+  theme(axis.title.x = element_text(vjust = -0.5)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+  labs(title = "Social Satifaction levels",
+       subtitle = "Racial group: {closest_state}",
+       x = "How satisfied are respondents with Harvard's social environment?",
+       y = "Proportion of respondents")
 race_satisfaction
 ```
 
@@ -63,98 +78,87 @@ In addition to satisfaction rates mirroring each other, the amount of people eac
 
 <br>
 
-```{r}
+```{r, Who students know, cache=TRUE}
 name <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  ggplot(aes(x = know_by_name)) + 
-  geom_bar(fill = "steelblue") + 
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  labs(x = "Amount of people students know by name",
-       y = "Number of respondents", title = "The Amount of people students know by name",
-       subtitle = "Broken down by race") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  group_by(manipulated_race) %>%
+  count(know_by_name) %>% 
+  mutate(proportion = case_when(
+    manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+    manipulated_race == "White" ~ n / 154, 
+    manipulated_race == "Black or African American" ~ n / 32,
+    manipulated_race == "Hispanic or Latino" ~ n / 29,
+    manipulated_race == "Other" ~ n / 84)) %>% 
+  ggplot(aes(x = know_by_name, y = proportion)) + 
+  geom_col(fill = "steelblue") + 
+  theme_economist() +
+  theme(axis.title.x = element_text(vjust = -1)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+  labs(title = "The Amount of classmates respondents know by name",
+       subtitle = "Racial group: {closest_state}",
+       x = "Amount of people students know by name",
+       y = "Proportion of respondents")
 name
+```
+
+```{r, Street}
 
 street <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  ggplot(aes(x = know_street)) + 
-  geom_bar(fill = "darkred") + 
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  labs(x = "Amount of people students would recognize on the street",
-       y = "Number of respondents", title = "The Amount of people students would recognize on the street",
-       subtitle = "Broken down by race") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  group_by(manipulated_race) %>%
+  count(know_street) %>% 
+  mutate(proportion = case_when(
+    manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+    manipulated_race == "White" ~ n / 154, 
+    manipulated_race == "Black or African American" ~ n / 32,
+    manipulated_race == "Hispanic or Latino" ~ n / 29,
+    manipulated_race == "Other" ~ n / 84)) %>% 
+  ggplot(aes(x = know_street, y = proportion)) + 
+  geom_col(fill = "red") + 
+  theme_economist() +
+  theme(axis.title.x = element_text(vjust = -1)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+  labs(title = "The Amount of classmates respondents would
+       recognize on the street",
+       subtitle = "Racial group: {closest_state}",
+       x = "Amount of people students would recognize 
+       on the street",
+       y = "Proportion of respondents")
 street
+```
 
+```{r, Annenberg}
 berg <- data %>% 
-  mutate(manipulated_race = ifelse(race != "White", "Other", race),
-         manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander", "Other", race)) %>% 
-  ggplot(aes(x = know_annenberg)) + 
-  geom_bar(fill = "purple") + 
-  facet_wrap(vars(manipulated_race)) +
-  theme_classic() +
-  labs(x = "Amount of people students would sit down next to in Annenberg",
-       y = "Number of respondents", title = "The Amount of people students would sit next to in Annenberg",
-       subtitle = "Broken down by race") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  group_by(manipulated_race) %>%
+  count(know_annenberg) %>% 
+  mutate(proportion = case_when(
+    manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+    manipulated_race == "White" ~ n / 154, 
+    manipulated_race == "Black or African American" ~ n / 32,
+    manipulated_race == "Hispanic or Latino" ~ n / 29,
+    manipulated_race == "Other" ~ n / 84)) %>% 
+  ggplot(aes(x = know_annenberg, y = proportion)) + 
+  geom_col(fill = "purple") + 
+  theme_economist() +
+  theme(axis.title.x = element_text(vjust = -1)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+  labs(title = "The Amount of classmates respondenets would sit next to
+       in Annenberg",
+       subtitle = "Racial group: {closest_state}",
+       x = "Amount of people students would sit next
+       to in Annenberg",
+       y = "Proportion of respondents")
 berg
 ```
 
 These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg.
 
-Regarding the who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities.
+Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities.
 
 
 All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.
 
-
-### Scratchwork
-
-Looking at who people put down as the person they know best. I mutated to see if the person the respondent put down as #1 also filled out our survey.
-survey_respondent <- data %>% 
-  select(race, respondent_id)
-
-first_friend <- data %>% 
-  select(race, first_id)
-
-Using the combined data below, 150 people both filled out the survey and were also put down as someone else's number one friend. 85 of the 150 people are of the same race as their friend.
-
-both_filled <- inner_join(x = survey_respondent, y = first_friend, by = c("respondent_id" = "first_id"), suffix = c(".respondent", ".1friend")) %>% 
-  mutate(race = str_detect(race.respondent, race.1friend)) %>% 
-  count(race)
-both_filled
-
-replicate the same process, but see which groups exclude people from other races. 
-
-second_friend <- data %>% 
-  select(race, second_id) %>% 
-
-third_friend <- data %>% 
-  select(race, third_id)
-
-fourth_friend <- data %>% 
-  select(race, fourth_id)
-
-
-all_four_filled <- left_join(x = survey_respondent, y = first_friend, by = c("respondent_id" = "first_id"), suffix = c(".respondent", ".1friend")) %>% 
-  left_join(x = ., y = second_friend, by = c("respondent_id" = "second_id"), suffix = c(".respondent", ".2friend")) %>% 
-  inner_join(x = ., y = third_friend, by = c("respondent_id" = "third_id"), suffix = c(".2friend", ".3friend")) %>% 
-  inner_join(x = ., y = fourth_friend, by = c("respondent_id" = "fourth_id"))
-
-
-```{r}
-
-# Looking at first friends, 93 people said that they met their best friends through multiple events. 320 only listed one place for meeting their first friend. 
-
-where_meet <- data %>% 
-  select(first_meet) %>% 
-  group_by(first_meet) %>% 
-  mutate(multiple = str_detect(string = first_meet, pattern = "[,]")) 
-```
 
 
 

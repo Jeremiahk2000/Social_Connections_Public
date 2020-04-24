@@ -16,6 +16,12 @@ library(gt)
 library(RColorBrewer)
 library(ggplot2)
 library(shinythemes)
+library(infer)
+library(broom)
+library(magrittr)
+library(readr)
+library(gganimate)
+library(ggthemes)
 
 
 
@@ -26,7 +32,7 @@ library(shinythemes)
 ui <- bootstrapPage(theme = shinytheme("yeti"),
     navbarPage(tags$b("Social Connectedness in the Class of 2023"),
 
-               tabPanel(align = "center", "About",
+               tabPanel(align = "center", "The Social Web",
                         
                         h2(tags$b("Total Sample Size")),
                         
@@ -39,20 +45,6 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                ),
                
-               tabPanel("Demographics",
-                        
-                        h2(tags$b("Gender Identity Breakdown")),
-                        
-                        p("58.03% of respondents were female. 41.45% of respondents 
-                          were male 0.26% of respondents were genderqueer. 0% of 
-                          respondents preferred not to share their gender."), br(),
-                        
-                        img(src='1gender_ratio_all_responses.png', width = "50%"),
-                        
-                        h2(tags$b("Dorm Breakdown")),
-                        
-                        img(src="2dorm_ratio_all_responses.png", width = "50%"),
-               ),
                tabPanel("Analyzing the Data",
                         
                         
@@ -272,6 +264,19 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions."),
                         
                ),
+               tabPanel("Satisfaction and race",
+                        
+                        h2(tags$b("Analysis of the data by race")),
+                        
+                        p("According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, we were unable to satisfactorily replicate Harvard’s admission statistics."), 
+                        br(),
+                        p("Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:"),
+                        br(),
+                        plotOutput("racial_respondent", width = 500, height = 500)
+                        
+                        
+               ),
+               
                tabPanel("Comment Analysis",
                         h2(tags$b("Word Cloud")),
                         img(src="wordcloud.png", width = "50%"),
@@ -311,7 +316,28 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         h2(tags$b("Summary:")),
                         p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging."),
   
-            )
+                        
+            ),
+            tabPanel("About",
+                     h3(tags$b("Purpose of our research")),
+                     p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
+                     p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
+                     p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
+                     
+                     h3(tags$b("About the data")),
+                     p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumably bias associated with who responded and who did not, we cross checked our responses with a random sample of 2023 students. The random sample was a random compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
+                     
+                     h2(tags$b("The Team")),
+                     p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
+                     h2(tags$b("Jeremiah Kim")),
+                     p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R for school projects and as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, I love classic literature, and my contact information is jeremiahkim@college.harvard.edu."),
+                     h2(tags$b("Emily Ni")),
+                     p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
+                     h2(tags$b("Kelsey Wu")),
+                     p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
+                     h2(tags$b("Jack Kelly")),
+                     h2(tags$b("Mark Stephens")),
+                     h2(tags$b("Helen Pang")))
     
 ))
 
@@ -433,6 +459,27 @@ server <- function(input, output) {
         ggplot(data = freshmen_mod, aes(x = recognize_street, y = satisfaction)) + geom_point(alpha = .2) + geom_jitter() + labs(
             x = "Number of fellow freshmen respondents would recognize if encountered on the street", y = "levels of satisfaction",
             title = "Relationship between satisfaction with social life and number of people they recognize")
+    })
+    
+    output$racial_respondent <- renderPlot({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
+        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+               id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+      
+      data %>% 
+        group_by(race) %>% 
+        count() %>% 
+        ungroup() %>%
+        mutate(percent_survey = (n / 415) * 100) %>% 
+        gt() %>% 
+        tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
+        fmt_number(decimals = 2, columns = "percent_survey") %>% 
+        cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
+        tab_footnote(footnote = "These percentages total 99.99% due to rounding",
+                     locations = cells_column_labels(columns = vars("percent_survey")))
+      
     })
     
     
