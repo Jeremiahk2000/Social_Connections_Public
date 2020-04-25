@@ -251,9 +251,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         h4(tags$b("Survey: Top 10 Connected Individuals")),
                         p("These IDs correspond to the top 10 students voted to be the most connected individuals in the freshmen class."),
-  # Get the RMD 
-                      img(src="most.png", width = "30%"),
-                        
+                        gt_output("most"),
                         p("To assess the accuracy of these predictions, we ran Social Network Analysis tests on the connections listed by respondents. (Connections are counted if the student’s name is written as one of the top 4 closest friends.)"),
                         
                         h4(tags$b("What is Social Network Analysis?")),
@@ -266,28 +264,25 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         h4(tags$b("Degree Centrality")),
                         p("Degree centrality is the simplest of the tests. It measures the number of connections between a node and all other nodes. Essentially, it calculates the number of connections each student has. Degree centrality assigns an importance score based simply on the number of links held by each node. This test is best used for finding very connected individuals who can quickly connect with the wider network."),
                         p("The following IDs correspond to the 10 students with the highest degree centrality:"),
- # Get the RMD  
-                      img(src="degree.png", width = "26%"),
-                        
+                        gt_output("degree"),
+ 
                         h4(tags$b("Closeness Centrality")),
                         p("Closeness centrality is an evaluation of the proximity of a node to all other nodes in a network, not only direct connections. The closeness centrality of a node is defined by the inverse of the average length of the shortest paths to or from all the other nodes in the graph. Closeness centrality can help find good ‘broadcasters’, but in a highly-connected network, often all nodes have a similar score (this is the case for our data). This test is best used for finding the individuals who are best placed to influence the entire network most quickly."),
                         p("The following IDs correspond to the 10 students with the highest closeness centrality:"),
- # Get the RMD   
-                     img(src="close.png", width = "28%"),
-                        
+                        gt_output("close"),
+ 
                         h4(tags$b("Betweenness Centrality")),
                         p("Betweenness centrality measures the number of times a node lies on the shortest path between other nodes.This measure shows which nodes are ‘bridges’ between nodes in a network. It does this by identifying all the shortest paths and then counting how many times each node falls on one. Betweenness is useful for analyzing communication dynamics, but should be used with care. A high betweenness count could indicate someone holds authority over disparate clusters in a network, or just that they are on the periphery of both clusters. This test is best used for finding the individuals who influence the flow around a system"),
- # Get the RMD 
-                       p("The following IDs correspond to the 10 students with the highest betweenness centrality:"),
-                        img(src="between.png", width = "30%"),
+                        p("The following IDs correspond to the 10 students with the highest betweenness centrality:"),
+                        gt_output("between"),
                         
                         h4(tags$b("Eigenvector Centrality")),
                         p("Eigenvector Centrality measures a node’s influence based on the number of links it has to other nodes in the network, just like degree centrality. The test then goes a step further by also taking into account how well connected a node is, and how many links their connections have, and so on through the network. By calculating the extended connections of a node, we can identify individuals with influence over the whole network, not just those directly connected to it. This test is the best overall evaluation of an individual in a network."),
                         p("The following IDs correspond to the 10 students with the highest eigenvector centrality:"),
-                        img(src="eigen.png", width = "30%"),
- # Get the RMD                       
+                        gt_output("eigen"),
+
                         h4(tags$b("Top 10 Centrality Comparison")),
-                        img(src="comparison.png", width = "60%"),
+                        gt_output("top10"),
                         p("We can see a significant difference in the perceived influential people in the network, versus the centrality test results."),
                         p("Only one individual out of the top voted people actually appears in the top 10 for a centrality test. This is ID 1570, voted 3rd for most connected. They were #1 in degree centrality and #4 in betweenness centrality."),
                         p("From our centrality tests, it is quite clear that the most connected person, according to our survey data, is ID 1401. They were 1st in eigenvector centrality, 3rd in degree centrality, 1st in closeness centrality, and 2nd in betweenness centrality. There is no other individual who was in the top 10 for all centrality tests, and certainly no one who monopolized the top 3 positions across the board."),
@@ -518,24 +513,26 @@ server <- function(input, output) {
         
         # now make the animation
         p = data %>% 
-          group_by(manipulated_race) %>%
-          count(satisfied) %>% 
+          select(manipulated_race, satisfied) %>% 
+          group_by(manipulated_race) %>% 
+          count() %>% 
           mutate(proportion = case_when(
-            manipulated_race == "Asian / Pacific Islander" ~ n / 116,
-            manipulated_race == "White" ~ n / 154, 
-            manipulated_race == "Black or African American" ~ n / 32,
-            manipulated_race == "Hispanic or Latino" ~ n / 29,
-            manipulated_race == "Other" ~ n / 84)) %>% 
+            manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
+            manipulated_race == "White" ~ freq / 154, 
+            manipulated_race == "Black or African American" ~ freq / 32,
+            manipulated_race == "Hispanic or Latino" ~ freq / 29,
+            manipulated_race == "Other" ~ freq / 84)) %>% 
           ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
           geom_col(fill = "darkred") +
           theme_economist() +
           theme(axis.title.x = element_text(vjust = -0.5)) +
           scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
           transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-          labs(title = "Social Satifaction levels",
+          labs(title = "Social Satisfaction levels",
                subtitle = "Racial group: {closest_state}",
                x = "How satisfied are respondents with Harvard's social environment?",
                y = "Proportion of respondents")
+        
         
         anim_save("race_satisfaction.gif", animate(p)) # New
         
@@ -556,14 +553,14 @@ server <- function(input, output) {
       race_know_street <- tempfile(fileext='.gif')
       
       s = data %>% 
-        group_by(manipulated_race) %>%
-        count(know_street) %>% 
+        group_by(manipulated_race, know_street) %>%
+        count() %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
-          manipulated_race == "White" ~ n / 154, 
-          manipulated_race == "Black or African American" ~ n / 32,
-          manipulated_race == "Hispanic or Latino" ~ n / 29,
-          manipulated_race == "Other" ~ n / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
+          manipulated_race == "White" ~ freq / 154, 
+          manipulated_race == "Black or African American" ~ freq / 32,
+          manipulated_race == "Hispanic or Latino" ~ freq / 29,
+          manipulated_race == "Other" ~ freq / 84)) %>% 
         ggplot(aes(x = know_street, y = proportion)) + 
         geom_col(fill = "red") + 
         theme_economist() +
@@ -595,14 +592,14 @@ server <- function(input, output) {
       race_know_name <- tempfile(fileext='.gif')
       
       x = data %>% 
-        group_by(manipulated_race) %>%
-        count(know_by_name) %>% 
+        group_by(manipulated_race, know_by_name) %>%
+        count() %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
-          manipulated_race == "White" ~ n / 154, 
-          manipulated_race == "Black or African American" ~ n / 32,
-          manipulated_race == "Hispanic or Latino" ~ n / 29,
-          manipulated_race == "Other" ~ n / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
+          manipulated_race == "White" ~ freq / 154, 
+          manipulated_race == "Black or African American" ~ freq / 32,
+          manipulated_race == "Hispanic or Latino" ~ freq / 29,
+          manipulated_race == "Other" ~ freq / 84)) %>% 
         ggplot(aes(x = know_by_name, y = proportion)) + 
         geom_col(fill = "steelblue") + 
         theme_economist() +
@@ -632,14 +629,14 @@ server <- function(input, output) {
       race_know_berg <- tempfile(fileext='.gif')
       
       b = data %>% 
-        group_by(manipulated_race) %>%
-        count(know_annenberg) %>% 
+        group_by(manipulated_race, know_annenberg) %>%
+        count() %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
-          manipulated_race == "White" ~ n / 154, 
-          manipulated_race == "Black or African American" ~ n / 32,
-          manipulated_race == "Hispanic or Latino" ~ n / 29,
-          manipulated_race == "Other" ~ n / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
+          manipulated_race == "White" ~ freq / 154, 
+          manipulated_race == "Black or African American" ~ freq / 32,
+          manipulated_race == "Hispanic or Latino" ~ freq / 29,
+          manipulated_race == "Other" ~ freq / 84)) %>% 
         ggplot(aes(x = know_annenberg, y = proportion)) + 
         geom_col(fill = "purple") + 
         theme_economist() +
@@ -693,22 +690,33 @@ server <- function(input, output) {
     
     output$racial_respondent <- render_gt({
       
-      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+      read_this <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
-        select(-X1, gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
-      data %>% 
+      r <- strsplit(read_this$race, split = ", ")
+      race <- data.frame(race = unlist(r))
+      
+      races <- race %>% 
         group_by(race) %>% 
         count() %>% 
-        ungroup() %>%
-        mutate(percent_survey = (n / 415) * 100) %>% 
+        ungroup() 
+      
+      total <- sum(races$freq) 
+      
+      
+      racial_respondent <- races %>% 
+        mutate(percent_survey = freq / total * 100) %>%
         gt() %>% 
         tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
         fmt_number(decimals = 2, columns = "percent_survey") %>% 
-        cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
+        cols_label(race = "Reported Ethnicity and/or Race", freq = "Total number", percent_survey = "Percent of our survey") %>% 
         tab_footnote(footnote = "These percentages total 99.99% due to rounding",
                      locations = cells_column_labels(columns = vars("percent_survey")))
+      
+      
+      racial_respondent
       
     })
     
@@ -767,6 +775,314 @@ server <- function(input, output) {
                col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
     })
     
+    output$eigen <- render_gt({
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      nodes <- survey_data %>% 
+        select(id) 
+      first <- survey_data %>% 
+        select(first_id) 
+      second <- survey_data %>% 
+        select(second_id) 
+      third <- survey_data %>% 
+        select(third_id) 
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      eigen <- eigen_centrality(g)
+      eigen <- eigen$vector
+      
+      eigenvector <- tibble(eigen) %>% 
+        mutate(eigen_id = nodes$id) %>% 
+        arrange(desc(eigen)) %>% 
+        filter(eigen_id != 1654) %>% 
+        select(eigen_id, eigen)
+      
+      eigenvector_10 <- eigenvector %>% 
+        head(10)
+      
+      gt(eigenvector_10) %>% 
+        tab_header(title = "Top 10 Eigenvector Centrality") %>% 
+        cols_label(eigen_id = "ID",
+                   eigen = "Eigenvector Score") 
+    })
+    output$degree <- render_gt({
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      nodes <- survey_data %>% 
+        select(id) 
+      first <- survey_data %>% 
+        select(first_id) 
+      second <- survey_data %>% 
+        select(second_id) 
+      third <- survey_data %>% 
+        select(third_id) 
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      deg <- degree(g, mode="all")
+      
+      degree <- tibble(deg) %>% 
+        mutate(degree_id = nodes$id) %>% 
+        arrange(desc(deg)) %>% 
+        filter(degree_id != 1654) %>% 
+        select(degree_id, deg)
+      
+      degree_10 <- degree %>% 
+        head(10)
+      
+      gt(degree_10) %>% 
+        tab_header(title = "Top 10 Degree Centrality") %>% 
+        cols_label(degree_id = "ID",
+                   deg = "Number of Connections") 
+    })
+    output$most <- render_gt({
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      nodes <- survey_data %>% 
+        select(id) 
+      first <- survey_data %>% 
+        select(first_id) 
+      second <- survey_data %>% 
+        select(second_id) 
+      third <- survey_data %>% 
+        select(third_id) 
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      most <- survey_data %>% 
+        select(most_id) %>% 
+        filter(most_id != 1654)
+      
+      count(most) %>% 
+        arrange(desc(freq)) 
+      most_10 <- count(most) %>% 
+        arrange(desc(freq)) %>% 
+        head(10) 
+      
+      gt(most_10) %>% 
+        tab_header(title = "Top 10 Socially Connected Freshman: Survey") %>% 
+        cols_label(most_id = "ID",
+                   freq = "Number of Votes")
+    })
+    
+    output$between <- render_gt({
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      nodes <- survey_data %>% 
+        select(id) 
+      first <- survey_data %>% 
+        select(first_id) 
+      second <- survey_data %>% 
+        select(second_id) 
+      third <- survey_data %>% 
+        select(third_id) 
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      between <- betweenness(g, directed=F, weights=NA, normalized = T)
+      
+      betweenness <- tibble(between) %>% 
+        mutate(between_id = nodes$id) %>% 
+        arrange(desc(between)) %>% 
+        filter(between_id != 1654) %>% 
+        select(between_id, between)
+    
+      betweenness_10 <- betweenness %>% 
+        head(10)
+      
+      gt(betweenness_10) %>% 
+        tab_header(title = "Top 10 Betweenness Centrality") %>% 
+        cols_label(between_id = "ID",
+                   between = "Betweenness Score") 
+    })
+    
+    output$close <- render_gt({
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      nodes <- survey_data %>% 
+        select(id) 
+      first <- survey_data %>% 
+        select(first_id) 
+      second <- survey_data %>% 
+        select(second_id) 
+      third <- survey_data %>% 
+        select(third_id) 
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      close <- closeness(g, mode="all", weights=NA, normalized=T)
+      
+      closeness <- tibble(close) %>% 
+        mutate(close_id = nodes$id) %>% 
+        arrange(desc(close)) %>% 
+        filter(close_id != 1654) %>% 
+        select(close_id, close)
+      
+      closeness_10 <- closeness %>% 
+        head(10)
+      
+      gt(closeness_10) %>% 
+        tab_header(title = "Top 10 Closeness Centrality") %>% 
+        cols_label(close_id = "ID",
+                   close = "Closeness Score")
+    })
+    
+    output$top10 <- render_gt({
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      nodes <- survey_data %>% 
+        select(id) 
+      first <- survey_data %>% 
+        select(first_id) 
+      second <- survey_data %>% 
+        select(second_id) 
+      third <- survey_data %>% 
+        select(third_id) 
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      most <- survey_data %>% 
+        select(most_id) %>% 
+        filter(most_id != 1654)
+      
+      count(most) %>% 
+        arrange(desc(freq)) 
+      most_10 <- count(most) %>% 
+        arrange(desc(freq)) %>% 
+        head(10) 
+      
+      deg <- degree(g, mode="all")
+      degree <- tibble(deg) %>% 
+        mutate(degree_id = nodes$id) %>% 
+        arrange(desc(deg)) %>% 
+        filter(degree_id != 1654) %>% 
+        select(degree_id, deg)
+      degree_10 <- degree %>% 
+        head(10)
+      
+      close <- closeness(g, mode="all", weights=NA, normalized=T)
+      closeness <- tibble(close) %>% 
+        mutate(close_id = nodes$id) %>% 
+        arrange(desc(close)) %>% 
+        filter(close_id != 1654) %>% 
+        select(close_id, close)
+      closeness_10 <- closeness %>% 
+        head(10)
+      
+      between <- betweenness(g, directed=F, weights=NA, normalized = T)
+      betweenness <- tibble(between) %>% 
+        mutate(between_id = nodes$id) %>% 
+        arrange(desc(between)) %>% 
+        filter(between_id != 1654) %>% 
+        select(between_id, between)
+      betweenness_10 <- betweenness %>% 
+        head(10)
+      
+      eigen <- eigen_centrality(g)
+      eigen <- eigen$vector
+      eigenvector <- tibble(eigen) %>% 
+        mutate(eigen_id = nodes$id) %>% 
+        arrange(desc(eigen)) %>% 
+        filter(eigen_id != 1654) %>% 
+        select(eigen_id, eigen)
+      eigenvector_10 <- eigenvector %>% 
+        head(10)
+      
+      
+      most_id_10 <- most_10$most_id
+      degree_id_10 <- degree_10$degree_id
+      close_id_10 <- closeness_10$close_id
+      between_id_10 <- betweenness_10$between_id
+      eigen_id_10 <- eigenvector_10$eigen_id
+      comp <- tibble(most_id_10, degree_id_10, close_id_10, between_id_10, eigen_id_10) 
+      
+      gt(comp) %>% 
+        tab_header(title = "Top 10 ID Comparison") %>% 
+        cols_label(most_id_10 = "Survey",
+                   eigen_id_10 = "Eigenvector Centrality",
+                   degree_id_10 = "Degree Centrality",
+                   close_id_10 = "Closeness Centrality",
+                   between_id_10 = "Betweenness Centrality") 
+    })
     #This is the web on the front of the web page
     
     output$mark_plot <- renderVisNetwork({

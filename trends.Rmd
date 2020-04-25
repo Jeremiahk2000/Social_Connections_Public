@@ -15,6 +15,7 @@ library(magrittr)
 library(readr)
 library(gt)
 library(igraph)
+library(ggthemes)
 library(RColorBrewer)
 library(plyr)
 library(dplyr)
@@ -66,7 +67,7 @@ l <- layout_on_sphere(g)
 
 
 #png("ms_6/helen_plot.png", 1800, 1800) 
-plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
+plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors) 
 title("Friend Network",cex.main=3,col.main="black")
 
 legend("bottomright", c("First","Second", "Third", "Fourth"), pch=21,
@@ -109,9 +110,7 @@ degree_10 <- degree %>%
 gt(degree_10) %>% 
   tab_header(title = "Top 10 Degree Centrality") %>% 
   cols_label(degree_id = "ID",
-             deg = "Number of Connections") %>% 
-  gtsave("shiny/www/degree.png")
-
+             deg = "Number of Connections") 
 
 
 ```
@@ -131,8 +130,7 @@ closeness_10 <- closeness %>%
 gt(closeness_10) %>% 
   tab_header(title = "Top 10 Closeness Centrality") %>% 
   cols_label(close_id = "ID",
-             close = "Closeness Score") %>% 
-  gtsave("shiny/www/close.png")
+             close = "Closeness Score") 
 
 ```
 
@@ -152,8 +150,7 @@ betweenness_10 <- betweenness %>%
 gt(betweenness_10) %>% 
   tab_header(title = "Top 10 Betweenness Centrality") %>% 
   cols_label(between_id = "ID",
-             between = "Betweenness Score") %>% 
-  gtsave("shiny/www/between.png")
+             between = "Betweenness Score") 
 ```
 
 ```{r}
@@ -172,8 +169,7 @@ eigenvector_10 <- eigenvector %>%
 gt(eigenvector_10) %>% 
   tab_header(title = "Top 10 Eigenvector Centrality") %>% 
   cols_label(eigen_id = "ID",
-             eigen = "Eigenvector Score") %>% 
-  gtsave("shiny/www/eigen.png")
+             eigen = "Eigenvector Score") 
 
 ```
 ```{r}
@@ -190,8 +186,7 @@ gt(comp) %>%
              eigen_id_10 = "Eigenvector Centrality",
              degree_id_10 = "Degree Centrality",
              close_id_10 = "Closeness Centrality",
-             between_id_10 = "Betweenness Centrality") %>% 
-  gtsave("comparison.png")
+             between_id_10 = "Betweenness Centrality") 
 
 ```
 
