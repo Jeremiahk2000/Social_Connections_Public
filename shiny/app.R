@@ -38,8 +38,10 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         h2(tags$b("Common Demographics")),
                         plotOutput("dorm_stats"),
+                        p("We need to put a gender breakdown, which activites were the most common from respondents, and other VERY BASIC things about our literal data"),
                         br(),
-                        plotOutput("")
+                        h2(tags$b("Survey Questions"))
+                      
                         
                         ),
                         
@@ -186,7 +188,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         groups differed less noticeably. This observation 
                         suggests that respondents base personal satisfaction 
                         more heavily on how many students they recognize, 
-                        rather than how many students they feel personally close to."), br(),
+                        rather than how many students they feel personally close to."), br()
                         
                         
                         
@@ -292,7 +294,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("However, ID 1401 was tied for 21st place in voting, with only 2 people who believed them to be the most socially connected person in the class."),
                         p("As such, our social network analysis testing prompts interesting questions and possible conclusions."),
                         p("The disparity in data could be explained by several factors. We must consider how connections have been defined from survey data. We asked respondents to list the 4 people who they feel closest to. As such, our centrality analysis favors people who are trusted and very close to their friends. On the other hand, our survey question asks students who they believe the most socially connected person is. The wording of this question has several implications, as students may vote for people they believe are popular, are very involved in networking. The people who perform the best will likely differ from people who have developed deeper relationships with their peers."),
-                        p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions."),
+                        p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions.")
                         
                ),
                tabPanel("Satisfaction and race",
@@ -307,20 +309,38 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
                         br(),
-                        plotOutput("race_satisfaction", align = "center"),
+                        plotOutput("race_satisfaction"),
                         br(),
                         br(),
+                        
+                        br(),
+                        br(),
+                        br(),
+                        
                         p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         br(),
                         br(),
-                        plotOutput("race_know_name", align = "center"),
+                        
+                        
+                        plotOutput("race_know_street"),
                         br(),
                         br(),
-                        img(src="race_street.gif", width = "60%", align = "center")
-                      
                         
                         
+                        plotOutput("race_know_berg"),
+                        br(),
+                        br(),
                         
+                        
+                        plotOutput("race_know_name"),
+                        br(),
+                        br(),
+                        
+                        br(),
+                        p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
+                        p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
+                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
+                
                ),
                
                tabPanel("Comment Analysis",
@@ -360,7 +380,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
                         
                         h2(tags$b("Summary:")),
-                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging."),
+                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
   
                         
             ),
@@ -487,7 +507,7 @@ server <- function(input, output) {
     })
     
     # Included
-    output$race_satisfaction <- renderImage({
+    output$race_satisfaction <- renderPlot({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
@@ -526,16 +546,55 @@ server <- function(input, output) {
     
     # Included
     
-    output$race_know_name <- renderImage({
+    output$race_know_street <- renderImage({
       
-      data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) %>% 
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
         select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
-               respondent_id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+               id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+      
+      race_know_street <- tempfile(fileext='.gif')
+      
+      s = data %>% 
+        group_by(manipulated_race) %>%
+        count(know_street) %>% 
+        mutate(proportion = case_when(
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
+        ggplot(aes(x = know_street, y = proportion)) + 
+        geom_col(fill = "red") + 
+        theme_economist() +
+        theme(axis.title.x = element_text(vjust = -1)) +
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+        labs(title = "The Amount of classmates respondents would
+       recognize on the street",
+             subtitle = "Racial group: {closest_state}",
+             x = "Amount of people students would recognize 
+       on the street",
+             y = "Proportion of respondents")
+      
+      anim_save("race_know_street.gif", animate(s))
+      
+      list(src = "race_know_street.gif",
+           contentType = 'image/gif')}, 
+      deleteFile = TRUE)
+    
+    # Included
+    
+    output$race_know_name <- renderImage({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
+        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+               id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
       race_know_name <- tempfile(fileext='.gif')
       
-      x <- data %>% 
+      x = data %>% 
         group_by(manipulated_race) %>%
         count(know_by_name) %>% 
         mutate(proportion = case_when(
@@ -557,7 +616,46 @@ server <- function(input, output) {
       
       anim_save("race_know_name.gif", animate(x))
       
-      list(src = "race_know name.gif",
+      list(src = "race_know_name.gif",
+           contentType = 'image/gif')}, 
+      deleteFile = TRUE)
+    
+    # Included
+    
+    output$race_know_berg <- renderImage({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
+        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+               id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+      
+      race_know_berg <- tempfile(fileext='.gif')
+      
+      b = data %>% 
+        group_by(manipulated_race) %>%
+        count(know_annenberg) %>% 
+        mutate(proportion = case_when(
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
+        ggplot(aes(x = know_annenberg, y = proportion)) + 
+        geom_col(fill = "purple") + 
+        theme_economist() +
+        theme(axis.title.x = element_text(vjust = -1)) +
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+        labs(title = "The Amount of classmates respondenets would sit next to
+       in Annenberg",
+             subtitle = "Racial group: {closest_state}",
+             x = "Amount of people students would sit next
+       to in Annenberg",
+             y = "Proportion of respondents")
+      
+      anim_save("race_know_berg.gif", animate(b))
+      
+      list(src = "race_know_berg.gif",
            contentType = 'image/gif')}, 
       deleteFile = TRUE)
     
@@ -628,7 +726,7 @@ server <- function(input, output) {
                 degree == "first_id" ~ color[1],
                 degree == "second_id" ~ color[2],
                 degree == "third_id" ~ color[3],
-                degree == "fourth_id" ~ color[4],
+                degree == "fourth_id" ~ color[4]
             ))
         
         edges <- edges_full %>% 
