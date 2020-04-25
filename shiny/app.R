@@ -31,8 +31,20 @@ library(ggthemes)
 
 ui <- bootstrapPage(theme = shinytheme("yeti"),
     navbarPage(tags$b("Social Connectedness in the Class of 2023"),
-
-               tabPanel(align = "center", "The Social Web",
+               
+               tabPanel(align = "center", "The Survey",
+                        h2(tags$b("About the survey")),
+                        p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumably bias associated with who responded and who did not, we cross checked our responses with a random sample of 2023 students. The random sample was a random compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
+                        br(),
+                        h2(tags$b("Common Demographics")),
+                        plotOutput("dorm_stats"),
+                        br(),
+                        plotOutput("")
+                        
+                        ),
+                        
+                        
+               tabPanel("The Social Web",
                         
                         h2(tags$b("Total Sample Size")),
                         
@@ -47,7 +59,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                
                tabPanel("Analyzing the Data",
                         
-                        
+                        h2(tags$b("From categorical to numerical data")),
+                        br(),
                         p("We asked each respondent how satisfied they were with 
                         their social connections. Each respondent was given 5 options: 
                         Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied."), br(),
@@ -63,25 +76,30 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("In our survey, we asked respondents to list 4 first-years 
                            they felt closest to. We also asked each respondent about 
                            how satisfied they were with their social connections 
-                           (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), br(),
+                           (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), 
+                        br(),
                          
                         p("To analyze this data, we counted how many times each 
                            respondent’s name appeared in other respondents’ top 4 
                            closest friends lists. We compared this to each respondent’s 
-                          satisfaction level"), br(),
+                          satisfaction level"), 
+                        br(),
                         
-                        img(src="3mean_satisfaction_score_bar_plot.png", width = "50%"),
+                        plotOutput("compare_satisfaction"),
+                        br(),
                         
                         p("First, we compared the satisfaction score mean of 
                           respondents who did appear in others' friend lists, 
-                          and the satisfaction score mean of those who did not."), br(),
+                          and the satisfaction score mean of those who did not."), 
+                        br(),
 
                         p("The horizontal line the graph indicates the mean satisfaction 
                           level across all first-years, which was 0.7917676. 
                           Since the satisfaction levels were scaled as a 0 if neutral 
                           and a 1 if satisfied, our respondents, on average, reported 
                           somewhere between neutral and satisfied (leaning satisfied) 
-                          regarding their social connections."), br(),
+                          regarding their social connections."), 
+                        br(),
                         
                         p("Respondents who appeared in other respondents’ top 4 
                         closest friends lists reported a higher level of satisfaction 
@@ -94,7 +112,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Then, we plotted number of appearances against mean 
                         satisfaction score on a scatter plot."), br(),
                         
-                        img(src="4appearances_satisfaction_lvl.png", width = "50%"),
+                        plotOutput("satisfaction_scatter_plot"),
                         
                         p("The R value is not statistically significant (p > 0.05), 
                           indicating that there is not a very strong relationship 
@@ -108,22 +126,28 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                           close others consider them."), br(),
                         
                         h2(tags$b("Do students who know more first-years feel more satisfied?")),
+                        br(),
+                        plotOutput("top_socially_connected_appearance_in_top4"),
+                        br(),
+                        p("Obviously these numbers are pretty thin, indicating that it is hard to draw conclusions from the students who were listed most often. Therefore, the data we have suggests that students who know more people may have more close friends, but the relationship is certainly not clear."),
                         
                         h3(tags$b("How many members of the Class of 2023 would 
                         you recognize on the street?")),
                         
                         p("We also asked respondents how many members of the 
-                        2023 class they would recognize on the street. Below were our results:"), br(),
+                        2023 class they would recognize on the street. Below were our results:"), 
+                        br(),
                         
-                        img(src="5know_on_street_responses.png", width = "50%"),
+ # We need this graph                       
                         
                         p("We then observed the mean satisfaction levels 
                         (measured on a scale from -2 to 2) of each group that 
                         stated similar street recognition levels. Below are our 
                         results, graphed with the overall average satisfaction 
-                        level of our entire sample (the black horizontal line)."), br(),
+                        level of our entire sample (the black horizontal line)."),
+ br(),
                         
-                        img(src="6know_on_street_satisfaction.png", width = "50%"),
+                        plotOutput("social_num_street_satisfaction"),
                         
                         p("As can be observed, the respondents who could recognize 
                         1000+ first-years on the street reported higher satisfaction 
@@ -132,7 +156,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         means. This result seems to suggest that the more 
                         fellow freshmen the respondent could recognize, the 
                         more satisfied they tended to feel about their social 
-                        experience. This correlation is intuitive."), br(),
+                        experience. This correlation is intuitive."), 
+ br(),
                         
                         h3(tags$b("How many members of the Class of 2023 would 
                                   you feel comfortable sitting down with at Annenberg?")),
@@ -140,7 +165,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         p("We also asked respondents how many freshmen they 
                         would feel comfortable sitting down with at Annenberg. Below were our results:"), br(),
-                        
+                       
+ # Get the RMD 
                         img(src="7know_in_berg_responses.png", width = "50%"),
                         
                         p("We then observed the mean satisfaction levels 
@@ -149,7 +175,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         sitting next to in Annenberg. Below are our results, 
                         graphed with the overall average satisfaction level 
                         of our entire sample (the black horizontal line)."), br(),
-                        
+
+ # Get the RMD                        
                         img(src="8know_in_berg_satisfaction.png", width = "50%"),
                         
                         p("In this question, students who answered differently 
@@ -180,7 +207,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         how many times those students appeared in other 
                         respondents top 4 friend lists.'), br(),
                         
-                        
+ # Get the RMD                       
                         img(src="9social_connect_top4.png", width = "50%"),
                         
                         p('As seen in the graph above, the number of times 
@@ -222,7 +249,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         h4(tags$b("Survey: Top 10 Connected Individuals")),
                         p("These IDs correspond to the top 10 students voted to be the most connected individuals in the freshmen class."),
-                        img(src="most.png", width = "30%"),
+  # Get the RMD 
+                      img(src="most.png", width = "30%"),
                         
                         p("To assess the accuracy of these predictions, we ran Social Network Analysis tests on the connections listed by respondents. (Connections are counted if the student’s name is written as one of the top 4 closest friends.)"),
                         
@@ -236,23 +264,26 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         h4(tags$b("Degree Centrality")),
                         p("Degree centrality is the simplest of the tests. It measures the number of connections between a node and all other nodes. Essentially, it calculates the number of connections each student has. Degree centrality assigns an importance score based simply on the number of links held by each node. This test is best used for finding very connected individuals who can quickly connect with the wider network."),
                         p("The following IDs correspond to the 10 students with the highest degree centrality:"),
-                        img(src="degree.png", width = "26%"),
+ # Get the RMD  
+                      img(src="degree.png", width = "26%"),
                         
                         h4(tags$b("Closeness Centrality")),
                         p("Closeness centrality is an evaluation of the proximity of a node to all other nodes in a network, not only direct connections. The closeness centrality of a node is defined by the inverse of the average length of the shortest paths to or from all the other nodes in the graph. Closeness centrality can help find good ‘broadcasters’, but in a highly-connected network, often all nodes have a similar score (this is the case for our data). This test is best used for finding the individuals who are best placed to influence the entire network most quickly."),
                         p("The following IDs correspond to the 10 students with the highest closeness centrality:"),
-                        img(src="close.png", width = "28%"),
+ # Get the RMD   
+                     img(src="close.png", width = "28%"),
                         
                         h4(tags$b("Betweenness Centrality")),
                         p("Betweenness centrality measures the number of times a node lies on the shortest path between other nodes.This measure shows which nodes are ‘bridges’ between nodes in a network. It does this by identifying all the shortest paths and then counting how many times each node falls on one. Betweenness is useful for analyzing communication dynamics, but should be used with care. A high betweenness count could indicate someone holds authority over disparate clusters in a network, or just that they are on the periphery of both clusters. This test is best used for finding the individuals who influence the flow around a system"),
-                        p("The following IDs correspond to the 10 students with the highest betweenness centrality:"),
+ # Get the RMD 
+                       p("The following IDs correspond to the 10 students with the highest betweenness centrality:"),
                         img(src="between.png", width = "30%"),
                         
                         h4(tags$b("Eigenvector Centrality")),
                         p("Eigenvector Centrality measures a node’s influence based on the number of links it has to other nodes in the network, just like degree centrality. The test then goes a step further by also taking into account how well connected a node is, and how many links their connections have, and so on through the network. By calculating the extended connections of a node, we can identify individuals with influence over the whole network, not just those directly connected to it. This test is the best overall evaluation of an individual in a network."),
                         p("The following IDs correspond to the 10 students with the highest eigenvector centrality:"),
                         img(src="eigen.png", width = "30%"),
-                        
+ # Get the RMD                       
                         h4(tags$b("Top 10 Centrality Comparison")),
                         img(src="comparison.png", width = "60%"),
                         p("We can see a significant difference in the perceived influential people in the network, versus the centrality test results."),
@@ -272,14 +303,29 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         p("Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:"),
                         br(),
-                        plotOutput("racial_respondent", width = 500, height = 500)
+                        gt_output("racial_respondent"),
+                        br(),
+                        p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
+                        br(),
+                        plotOutput("race_satisfaction", align = "center"),
+                        br(),
+                        br(),
+                        p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
+                        br(),
+                        br(),
+                        plotOutput("race_know_name", align = "center"),
+                        br(),
+                        br(),
+                        img(src="race_street.gif", width = "60%", align = "center")
+                      
+                        
                         
                         
                ),
                
                tabPanel("Comment Analysis",
-                        h2(tags$b("Word Cloud")),
-                        img(src="wordcloud.png", width = "50%"),
+                        h2(tags$b("Word Cloud- taken from survey comments")),
+                        img(src="wordcloud.png", width = "50%", align = "center"),
                         h2(tags$b("Comment Analysis")),
                         p('Four Primary Themes: (out of 81 total comments)'),
                         
@@ -318,26 +364,27 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
   
                         
             ),
-            tabPanel("About",
+            tabPanel("Creators",
                      h3(tags$b("Purpose of our research")),
                      p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
                      p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
                      p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
                      
-                     h3(tags$b("About the data")),
-                     p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumably bias associated with who responded and who did not, we cross checked our responses with a random sample of 2023 students. The random sample was a random compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
                      
                      h2(tags$b("The Team")),
                      p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
                      h2(tags$b("Jeremiah Kim")),
-                     p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R for school projects and as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, I love classic literature, and my contact information is jeremiahkim@college.harvard.edu."),
+                     p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu."),
                      h2(tags$b("Emily Ni")),
                      p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
                      h2(tags$b("Kelsey Wu")),
                      p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
                      h2(tags$b("Jack Kelly")),
+                     p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com"),
                      h2(tags$b("Mark Stephens")),
-                     h2(tags$b("Helen Pang")))
+                     p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu"),
+                     h2(tags$b("Helen Pang")),
+                     p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu."))
     
 ))
 
@@ -351,7 +398,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
 
 server <- function(input, output) {
 
-    
+    #Included
     
     output$dorm_stats <- renderPlot({
         dorm_group <- read_csv("data/dorm_group.csv")
@@ -361,6 +408,7 @@ server <- function(input, output) {
             geom_col() + 
             geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
             coord_flip() + 
+          theme_economist() +
             labs(
                 x = "",
                 y = "Number of Respondents",
@@ -370,7 +418,8 @@ server <- function(input, output) {
         
     })
     
-
+    # Included
+    
     output$compare_satisfaction <- renderPlot({
         freshmen <- read_csv("data/freshmen.csv") 
    
@@ -415,9 +464,10 @@ server <- function(input, output) {
                 caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
             ) +
             geom_hline(yintercept = all_freshmen_satisfaction_mean) +
-            theme_classic()
+            theme_economist()
     })
     
+    # Included
     output$satisfaction_scatter_plot <- renderPlot({
         satisfaction_scatter_tbl <- read_csv("data/satisfaction_scatter_tbl.csv")
         
@@ -433,8 +483,85 @@ server <- function(input, output) {
                 subtitle = "Respondents who appeared more frequently reported to be more satisfied",
                 caption = "Very Dissatisfied = 1, Dissatisfied = 2, Neutral = 3, Satisfied = 4, Very Satisfied = 5"
             ) + 
-            theme_classic()
+            theme_economist()
     })
+    
+    # Included
+    output$race_satisfaction <- renderImage({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
+        select(-X1, gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+               id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+      
+        race_satisfaction <- tempfile(fileext='.gif')
+        
+        # now make the animation
+        p = data %>% 
+          group_by(manipulated_race) %>%
+          count(satisfied) %>% 
+          mutate(proportion = case_when(
+            manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+            manipulated_race == "White" ~ n / 154, 
+            manipulated_race == "Black or African American" ~ n / 32,
+            manipulated_race == "Hispanic or Latino" ~ n / 29,
+            manipulated_race == "Other" ~ n / 84)) %>% 
+          ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
+          geom_col(fill = "darkred") +
+          theme_economist() +
+          theme(axis.title.x = element_text(vjust = -0.5)) +
+          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+          transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+          labs(title = "Social Satifaction levels",
+               subtitle = "Racial group: {closest_state}",
+               x = "How satisfied are respondents with Harvard's social environment?",
+               y = "Proportion of respondents")
+        
+        anim_save("race_satisfaction.gif", animate(p)) # New
+        
+        # Return a list containing the filename
+        list(src = "race_satisfaction.gif",
+             contentType = 'image/gif')}, 
+      deleteFile = TRUE)
+    
+    # Included
+    
+    output$race_know_name <- renderImage({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
+        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+               respondent_id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
+      
+      race_know_name <- tempfile(fileext='.gif')
+      
+      x <- data %>% 
+        group_by(manipulated_race) %>%
+        count(know_by_name) %>% 
+        mutate(proportion = case_when(
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
+        ggplot(aes(x = know_by_name, y = proportion)) + 
+        geom_col(fill = "steelblue") + 
+        theme_economist() +
+        theme(axis.title.x = element_text(vjust = -1)) +
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+        labs(title = "The Amount of classmates respondents know by name",
+             subtitle = "Racial group: {closest_state}",
+             x = "Amount of people students know by name",
+             y = "Proportion of respondents")
+      
+      anim_save("race_know_name.gif", animate(x))
+      
+      list(src = "race_know name.gif",
+           contentType = 'image/gif')}, 
+      deleteFile = TRUE)
+    
+    # Included, but strongly consider getting rid of this graph and section
     
     output$top_socially_connected_appearance_in_top4 <- renderPlot({
         well_connected_top_appearances <- read_csv("data/well_connected_top_appearances.csv")
@@ -449,23 +576,28 @@ server <- function(input, output) {
                 y = "Number of appearances in top 4 friend lists",
                 title = "Appearances of 'most socially connected' people in top 4 friend lists",
                 subtitle = "Most 'socially connected' does not strongly correlate with 'closeness' with the most people"
-            )
+            ) +
+          theme_economist()
     })
     
+    # This is included, but the second part of these analysis is missing
     
-    output$social_num <- renderPlot({
+    output$social_num_street_satisfaction <- renderPlot({
         freshmen_mod <- read_csv("data/freshmen_mod.csv")
         
         ggplot(data = freshmen_mod, aes(x = recognize_street, y = satisfaction)) + geom_point(alpha = .2) + geom_jitter() + labs(
             x = "Number of fellow freshmen respondents would recognize if encountered on the street", y = "levels of satisfaction",
-            title = "Relationship between satisfaction with social life and number of people they recognize")
+            title = "Relationship between satisfaction with social life and number of people they recognize") +
+          theme_economist()
     })
     
-    output$racial_respondent <- renderPlot({
+    # Included
+    
+    output$racial_respondent <- render_gt({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
-        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+        select(-X1, gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
       data %>% 
@@ -482,7 +614,7 @@ server <- function(input, output) {
       
     })
     
-    
+    # Included
     
     output$helen_plot <- renderPlot({
         survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
@@ -536,6 +668,8 @@ server <- function(input, output) {
         legend("bottomright", c("First","Second", "Third", "Fourth"), pch=21,
                col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
     })
+    
+    #This is the web on the front of the web page
     
     output$mark_plot <- renderVisNetwork({
         nodes2 <- read_csv("data/nodes2.csv")

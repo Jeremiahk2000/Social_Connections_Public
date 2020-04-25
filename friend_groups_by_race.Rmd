@@ -15,6 +15,10 @@ library(readr)
 library(gt)
 library(gganimate)
 library(ggthemes)
+library(ggpubr)
+library(RColorBrewer)
+library(igraph)
+library(magick)
 data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) %>% 
   mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
   select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
@@ -125,6 +129,8 @@ street <- data %>%
        on the street",
        y = "Proportion of respondents")
 street
+
+anim_save("race_street.gif", street)
 ```
 
 ```{r, Annenberg}
@@ -158,6 +164,159 @@ Regarding who was listed as the survey's number one friend, 150 of respondents b
 
 
 All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.
+
+
+```{r}
+dorm_group <- read_csv("shiny/data/dorm_group.csv")
+        
+        dorm_group %>%
+            ggplot(aes(y = n, x = dorm, fill = dorm)) +
+            geom_col() + 
+            geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
+            coord_flip() + 
+            theme_economist() +
+            labs(
+                x = "",
+                y = "Number of Respondents",
+                title = "Respondent Sample by Dorm"
+            ) + 
+            theme(legend.position = "none")
+```
+
+```{r}
+freshmen <- read_csv("shiny/data/freshmen.csv") 
+   
+        freshmen_satisfaction <- freshmen %>%
+            nest(top4 = c(know_best_1, know_best_2,
+                          know_best_3, know_best_4)) %>%
+            select(name, satisfaction, top4) %>%
+            mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
+                                                satisfaction == "Satisfied" ~ 1,
+                                                satisfaction == "Neutral" ~ 0,
+                                                satisfaction == "Dissatisfied" ~ -1,
+                                                satisfaction == "Very Dissatisfied" ~ -2))
+        
+        # List of all names listed in top 4 friends, with repeats
+        
+        freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
+        
+        # Calculate overall satisfaction score mean
+        
+        all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
+            summarize(mean = mean(satisfaction_lvl)) %>%
+            pull(mean)
+        
+        # Create a tibble for comparing satisfaction levels vs. whether or not
+        # they appear.
+        
+        compare_satisfaction <- freshmen_satisfaction %>%
+            mutate(appear = name %in% freshmen_top4_list) %>%
+            group_by(appear) %>%
+            summarize(mean_satis = mean(satisfaction_lvl))
+        
+        compare_satisfaction %>%
+            ggplot(aes(x = appear, y = mean_satis, fill = appear)) +
+            geom_bar(stat = "identity") + 
+            guides(fill=FALSE) +
+            scale_x_discrete(labels = c("No", "Yes")) +
+            labs(
+                x = "Did the respondent's name appear in other respondents' top 4 friends lists?",
+                y = "Mean Satisfaction Score",
+                title = "Comparing mean satisfaction scores of respondents",
+                subtitle = "Respondents who appeared in others lists were more satisfied",
+                caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
+            ) +
+            geom_hline(yintercept = all_freshmen_satisfaction_mean) +
+            theme_economist()
+```
+
+```{r}
+satisfaction_scatter_tbl <- read_csv("shiny/data/satisfaction_scatter_tbl.csv")
+        
+        satisfaction_scatter_tbl %>%
+            ggplot(aes(x = appearances, y = mean)) +
+            geom_point(position = "jitter") +
+            geom_smooth(method='lm', formula= y~x) +
+            stat_cor(label.x = 5, label.y = 4.7) +
+            labs(
+                x = "Number of appearances in top 4 friend lists",
+                y = "Mean satisfaction level (1 = Very Dissatisfied, 5 = Very Satisfied)",
+                title = "Number of appearances and satisfaction level of Harvard social culture",
+                subtitle = "Respondents who appeared more frequently reported to be more satisfied",
+                caption = "Very Dissatisfied = 1, Dissatisfied = 2, Neutral = 3, Satisfied = 4, Very Satisfied = 5"
+            ) + 
+            theme_economist()
+```
+
+```{r}
+well_connected_top_appearances <- read_csv("shiny/data/well_connected_top_appearances.csv")
+        
+        well_connected_top_appearances %>%
+            ggplot(aes(x = appearances_in_well_connected, y = appearances_in_top4)) +
+            geom_jitter() +
+            geom_smooth(method='lm', formula= y~x) +
+            stat_cor(label.x = 5, label.y = 4.7) +
+            labs(
+                x = "Number of appearances in 'most socially connected' question",
+                y = "Number of appearances in top 4 friend lists",
+                title = "Appearances of 'most socially connected' people in top 4 friend lists",
+                subtitle = "Most 'socially connected' does not strongly correlate with 'closeness' with the most people"
+            ) +
+          theme_economist()
+```
+
+```{r}
+survey_data <- read_csv("shiny/data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) 
+        color <- brewer.pal(4, "Set3") 
+        
+        edges_full <- survey_data %>% 
+            select(id, first_id, second_id, third_id, fourth_id) %>% 
+            pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+            mutate(colors = case_when(
+                degree == "first_id" ~ color[1],
+                degree == "second_id" ~ color[2],
+                degree == "third_id" ~ color[3],
+                degree == "fourth_id" ~ color[4],
+            ))
+        
+        edges <- edges_full %>% 
+            select(id, endpoint)
+        
+        nodes <- survey_data %>% 
+            select(id) 
+        
+        first <- survey_data %>% 
+            select(first_id) 
+        
+        second <- survey_data %>% 
+            select(second_id) 
+        
+        third <- survey_data %>% 
+            select(third_id) 
+        
+        fourth <- survey_data %>% 
+            select(fourth_id) 
+        
+        all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+        
+        
+        nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+        
+        
+        g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+        
+        
+        l <- layout_on_sphere(g)
+        
+        
+        #png("ms_6/helen_plot.png", 1800, 1800) 
+        plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
+        title("Friend Network",cex.main=3,col.main="black")
+        
+        legend("bottomright", c("First","Second", "Third", "Fourth"), pch=21,
+               col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
+```
+
 
 
 
