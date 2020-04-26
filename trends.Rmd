@@ -172,6 +172,7 @@ gt(eigenvector_10) %>%
              eigen = "Eigenvector Score") 
 
 ```
+
 ```{r}
 most_id_10 <- most_10$most_id
 degree_id_10 <- degree_10$degree_id
