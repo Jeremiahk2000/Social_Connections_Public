@@ -433,12 +433,32 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         h2(tags$b("Summary:")),
                         p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
   
-
-                        
-                        
-                        
                     
-               )
+               ),
+               
+               tabPanel("Creators",
+                        h3(tags$b("Purpose of our research")),
+                        p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
+                        p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
+                        p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
+                        
+                        
+                        h2(tags$b("The Team")),
+                        p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
+                        h2(tags$b("Jeremiah Kim")),
+                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu."),
+                        h2(tags$b("Emily Ni")),
+                        p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
+                        h2(tags$b("Kelsey Wu")),
+                        p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
+                        h2(tags$b("Jack Kelly")),
+                        p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com"),
+                        h2(tags$b("Mark Stephens")),
+                        p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu"),
+                        h2(tags$b("Helen Pang")),
+                        p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu."))
+               
+               
                
                         
                         
