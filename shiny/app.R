@@ -1596,31 +1596,38 @@ server <- function(input, output) {
         # change shape, color, and size for each group
         
         visNetwork(nodes2, edges2) %>%
-            visGroups(groupname = "Dorms", color = "darkblue", shape = "square", size = 65) %>%
-            visGroups(groupname = "Pre-Orientation", color = "darkred", shape = "square", size = 45) %>%
-            visGroups(groupname = "Sports", color = "darkgreen", shape = "square", size = 45) %>%
-            
-            # add functionality to highlight close connections when hovering over node
-            
-            visOptions(nodesIdSelection = list(enabled = TRUE,
-                                               style = "margin-bottom: -30px; visibility: hidden"),
-                       highlightNearest = list(enabled = T, degree = 2, hover = T),
-                       selectedBy = "group") %>%
-            
-            # adjust physics to decrease load time
-            
-            visPhysics(
-                solver = "forceAtlas2Based", 
-                timestep = 0.5,
-                minVelocity = 1,
-                maxVelocity = 30,
-                forceAtlas2Based = list(gravitationalConstant = -200, damping = 1),
-                stabilization = list(iterations = 200, updateInterval = 10),
-                adaptiveTimestep = TRUE) %>%
-            
-            # add legend for groups
-            
-            visLegend()
+          visGroups(groupname = "Dorms", color = "darkblue", shape = "square", size = 65) %>%
+          visGroups(groupname = "Pre-Orientation", color = "darkred", shape = "square", size = 45) %>%
+          visGroups(groupname = "Sports", color = "darkgreen", shape = "square", size = 45) %>%
+          visGroups(groupname = "Student", shape = "circle") %>%
+          
+          # add functionality to highlight close connections when hovering over node
+          
+          visOptions(nodesIdSelection = list(enabled = TRUE,
+                                             style = "margin-bottom: -30px; visibility: hidden"),
+                     highlightNearest = list(enabled = T, degree = 2, hover = T),
+                     selectedBy = "group") %>%
+          
+          # adjust physics to decrease load time
+          
+          visPhysics(
+            solver = "forceAtlas2Based", 
+            timestep = 0.5,
+            minVelocity = 1,
+            maxVelocity = 30,
+            forceAtlas2Based = list(gravitationalConstant = -200, damping = 1),
+            stabilization = list(iterations = 300, updateInterval = 10),
+            adaptiveTimestep = TRUE) %>%
+          
+          # add legend for groups
+          
+          visLegend(zoom = FALSE) %>%
+          
+          # disable graph movement within window
+          
+          visInteraction(dragView = FALSE,
+                         zoomView = FALSE) %>%
+          visNodes(label = "label", size = 50)
         
         
     })
