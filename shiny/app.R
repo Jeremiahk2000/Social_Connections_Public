@@ -1394,14 +1394,8 @@ server <- function(input, output) {
         select(most_id) %>% 
         filter(most_id != 1654)
       
-<<<<<<< HEAD
       most_10 <- most %>% 
-        count(most_id) %>% 
-=======
-      count(most) %>% 
-        arrange(desc(n)) 
-      most_10 <- count(most) %>% 
->>>>>>> 472be9618b7f10393654ab200803947ed9c73d08
+        count(most_id) %>%
         arrange(desc(n)) %>% 
         head(10) 
       
@@ -1536,14 +1530,8 @@ server <- function(input, output) {
         select(most_id) %>% 
         filter(most_id != 1654)
       
-<<<<<<< HEAD
       most_10 <- most %>% 
         count(most_id) %>% 
-=======
-      count(most) %>% 
-        arrange(desc(n)) 
-      most_10 <- count(most) %>% 
->>>>>>> 472be9618b7f10393654ab200803947ed9c73d08
         arrange(desc(n)) %>% 
         head(10) 
       
