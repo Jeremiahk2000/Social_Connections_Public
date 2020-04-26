@@ -858,6 +858,24 @@ server <- function(input, output) {
         group_by(know_annenberg) %>%
         summarize(satis_know_mean = mean(satisfaction_lvl))
       
+      
+      freshmen2 <- read_csv("data/freshmen.csv") 
+      
+      freshmen_satisfaction <- freshmen2 %>%
+        nest(top4 = c(know_best_1, know_best_2,
+                      know_best_3, know_best_4)) %>%
+        select(name, satisfaction, top4) %>%
+        mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
+                                            satisfaction == "Satisfied" ~ 1,
+                                            satisfaction == "Neutral" ~ 0,
+                                            satisfaction == "Dissatisfied" ~ -1,
+                                            satisfaction == "Very Dissatisfied" ~ -2))
+
+      
+      all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
+        summarize(mean = mean(satisfaction_lvl)) %>%
+        pull(mean)
+      
       ggplot(data = freshmen_mod2, aes(x = know_annenberg, y = satis_know_mean)) +
         geom_bar(stat = "identity", fill = "tomato3") + 
         guides(fill = FALSE) +
@@ -1162,6 +1180,22 @@ server <- function(input, output) {
         group_by(know_street) %>%
         summarize(satis_know_mean = mean(satisfaction_lvl))
       
+      freshmen2 <- read_csv("data/freshmen.csv") 
+      
+      freshmen_satisfaction <- freshmen2 %>%
+        nest(top4 = c(know_best_1, know_best_2,
+                      know_best_3, know_best_4)) %>%
+        select(name, satisfaction, top4) %>%
+        mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
+                                            satisfaction == "Satisfied" ~ 1,
+                                            satisfaction == "Neutral" ~ 0,
+                                            satisfaction == "Dissatisfied" ~ -1,
+                                            satisfaction == "Very Dissatisfied" ~ -2))
+      
+      all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
+        summarize(mean = mean(satisfaction_lvl)) %>%
+        pull(mean)
+      
       ggplot(data = freshmen_mod, aes(x = know_street, y = satis_know_mean)) +
         geom_bar(stat = "identity", fill = "tomato3") + 
         guides(fill = FALSE) +
@@ -1205,7 +1239,7 @@ server <- function(input, output) {
         tab_footnote(footnote = "These percentages total 99.99% due to rounding",
                      locations = cells_column_labels(columns = vars("percent_survey"))) %>% 
         tab_footnote(footnote = "These percentages differ from the home page because some respondents declared themselves as multiple races. We counted every occurence of every race.",
-                   locations = cells_column_labels(columns = vars("percent_survey")))
+                     locations = cells_column_labels(columns = vars("percent_survey")))
       
       
       racial_respondent
