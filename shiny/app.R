@@ -1203,7 +1203,9 @@ server <- function(input, output) {
         fmt_number(decimals = 2, columns = "percent_survey") %>% 
         cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
         tab_footnote(footnote = "These percentages total 99.99% due to rounding",
-                     locations = cells_column_labels(columns = vars("percent_survey")))
+                     locations = cells_column_labels(columns = vars("percent_survey"))) %>% 
+        tab_footnote(footnote = "These percentages differ from the home page because some respondents declared themselves as multiple races. We counted every occurence of every race.",
+                   locations = cells_column_labels(columns = vars("percent_survey")))
       
       
       racial_respondent
