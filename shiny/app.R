@@ -60,33 +60,29 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("3.) Specify your race and/or ethnicity"),
                         br(),
                         p("4.) Are you classified as an international student?"),
-               br(),
-               p("5.) Which pre-orientation, if any, did you participate in?"),
-               br(),
-               p("6.) Are you involved with any sports teams on campus?"),
-               br(),
-               p("7.) List the four names of the people who you are closest friends with."),
-               br(),
-               p("8.) How many people would you recognize as a Harvard first-year if you saw them on the street?"),
-               br(),
-               p("9.) How many first-years do you know by name?"),
-               br(),
-               p("10.) How many people would you feel comfortable sitting down next to in Annenberg unprompted?"),
-               br(),
-               p("11.) Name the most socially connected person in the class of 2023."),
-               br(),
-               p("12.) How satisfied are you with your social connections with first-year students at Harvard?"),
-               br(),
-               p("If you would like to see our methodology about why we chose these specific questions and what our purpose behind each question was, please follow this link:"),
-               h3(tags$a(href="https://docs.google.com/document/d/1vx0WUw2ExeIp8rgt1f23C0LbKV0dPIBXf3JDR6UZJmk/edit?usp=sharing", "Survey Methodology")),
-               br(),
-               br(),
-               p("Gov 1005: Harvard University")
-               
-               
-                        ),
-                        
-                        
+                        br(),
+                        p("5.) Which pre-orientation, if any, did you participate in?"),
+                        br(),
+                        p("6.) Are you involved with any sports teams on campus?"),
+                        br(),
+                        p("7.) List the four names of the people who you are closest friends with."),
+                        br(),
+                        p("8.) How many people would you recognize as a Harvard first-year if you saw them on the street?"),
+                        br(),
+                        p("9.) How many first-years do you know by name?"),
+                        br(),
+                        p("10.) How many people would you feel comfortable sitting down next to in Annenberg unprompted?"),
+                        br(),
+                        p("11.) Name the most socially connected person in the class of 2023."),
+                        br(),
+                        p("12.) How satisfied are you with your social connections with first-year students at Harvard?"),
+                        br(),
+                        p("If you would like to see our methodology about why we chose these specific questions and what our purpose behind each question was, please follow this link:"),
+                        h3(tags$a(href="https://docs.google.com/document/d/1vx0WUw2ExeIp8rgt1f23C0LbKV0dPIBXf3JDR6UZJmk/edit?usp=sharing", "Survey Methodology")),
+                        br(),
+                        br(),
+                        p("Gov 1005: Harvard University")
+               ),
                tabPanel("The Social Web",
                         
                         h2(tags$b("Total Sample Size")),
@@ -111,7 +107,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("When coded from -2 to 2 (-2 being Very Dissatisfied, 0 being Neutral, 
                           and 2 being Very Satisfied), the mean satisfaction score 
                           of all respondents was 0.7917676."), br(),
-                    
+                        
                         
                         h2(tags$b("Satisfaction of Harvard’s social culture based on whether
                            or not they were listed among other respondents’ closest 4 friends")),
@@ -121,7 +117,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                            how satisfied they were with their social connections 
                            (Very Dissatisfied, Dissatisfied, Neutral, Satisfied, or Very Satisfied)."), 
                         br(),
-                         
+                        
                         p("To analyze this data, we counted how many times each 
                            respondent’s name appeared in other respondents’ top 4 
                            closest friends lists. We compared this to each respondent’s 
@@ -135,7 +131,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                           respondents who did appear in others' friend lists, 
                           and the satisfaction score mean of those who did not."), 
                         br(),
-
+                        
                         p("The horizontal line the graph indicates the mean satisfaction 
                           level across all first-years, which was 0.7917676. 
                           Since the satisfaction levels were scaled as a 0 if neutral 
@@ -179,14 +175,14 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         2023 class they would recognize on the street. Below were our results:"), 
                         br(),
                         
- # We need this graph                       
+                        # We need this graph                       
                         
                         p("We then observed the mean satisfaction levels 
                         (measured on a scale from -2 to 2) of each group that 
                         stated similar street recognition levels. Below are our 
                         results, graphed with the overall average satisfaction 
                         level of our entire sample (the black horizontal line)."),
- br(),
+                        br(),
                         plotOutput("street_results"),
                         br(),
                         plotOutput("social_num_street_satisfaction"),
@@ -199,7 +195,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         fellow freshmen the respondent could recognize, the 
                         more satisfied they tended to feel about their social 
                         experience. This correlation is intuitive."), 
- br(),
+                        br(),
                         
                         h3(tags$b("How many members of the Class of 2023 would 
                                   you feel comfortable sitting down with at Annenberg?")),
@@ -207,9 +203,9 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         p("We also asked respondents how many freshmen they 
                         would feel comfortable sitting down with at Annenberg. Below were our results:"), 
- br(),
-                       
- 
+                        br(),
+                        
+                        
                         
                         
                         p("We then observed the mean satisfaction levels 
@@ -218,13 +214,13 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         sitting next to in Annenberg. Below are our results, 
                         graphed with the overall average satisfaction level 
                         of our entire sample (the black horizontal line)."), 
- br(),
+                        br(),
                         plotOutput("know_in_berg_count"),
- br(),
+                        br(),
                         plotOutput("know_in_berg_satisfaction"),
- br(),
-
-                      
+                        br(),
+                        
+                        
                         
                         
                         p("In this question, students who answered differently 
@@ -240,6 +236,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         
                ),
+               
+               
                tabPanel("Most Connected Individuals",
                         h2(tags$b('Analyzing the "most socially" connected individuals?')),
                         
@@ -255,9 +253,9 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         how many times those students appeared in other 
                         respondents top 4 friend lists.'), br(),
                         
-                       
+                        
                         plotOutput("top_socially_connected_appearance_in_top4"),
- 
+                        
                         
                         p('As seen in the graph above, the number of times 
                         someone was named "most socially connected" had a very 
@@ -312,12 +310,12 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Degree centrality is the simplest of the tests. It measures the number of connections between a node and all other nodes. Essentially, it calculates the number of connections each student has. Degree centrality assigns an importance score based simply on the number of links held by each node. This test is best used for finding very connected individuals who can quickly connect with the wider network."),
                         p("The following IDs correspond to the 10 students with the highest degree centrality:"),
                         gt_output("degree"),
- 
+                        
                         h4(tags$b("Closeness Centrality")),
                         p("Closeness centrality is an evaluation of the proximity of a node to all other nodes in a network, not only direct connections. The closeness centrality of a node is defined by the inverse of the average length of the shortest paths to or from all the other nodes in the graph. Closeness centrality can help find good ‘broadcasters’, but in a highly-connected network, often all nodes have a similar score (this is the case for our data). This test is best used for finding the individuals who are best placed to influence the entire network most quickly."),
                         p("The following IDs correspond to the 10 students with the highest closeness centrality:"),
                         gt_output("close"),
- 
+                        
                         h4(tags$b("Betweenness Centrality")),
                         p("Betweenness centrality measures the number of times a node lies on the shortest path between other nodes.This measure shows which nodes are ‘bridges’ between nodes in a network. It does this by identifying all the shortest paths and then counting how many times each node falls on one. Betweenness is useful for analyzing communication dynamics, but should be used with care. A high betweenness count could indicate someone holds authority over disparate clusters in a network, or just that they are on the periphery of both clusters. This test is best used for finding the individuals who influence the flow around a system"),
                         p("The following IDs correspond to the 10 students with the highest betweenness centrality:"),
@@ -327,7 +325,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Eigenvector Centrality measures a node’s influence based on the number of links it has to other nodes in the network, just like degree centrality. The test then goes a step further by also taking into account how well connected a node is, and how many links their connections have, and so on through the network. By calculating the extended connections of a node, we can identify individuals with influence over the whole network, not just those directly connected to it. This test is the best overall evaluation of an individual in a network."),
                         p("The following IDs correspond to the 10 students with the highest eigenvector centrality:"),
                         gt_output("eigen"),
-
+                        
                         h4(tags$b("Top 10 Centrality Comparison")),
                         gt_output("top10"),
                         p("We can see a significant difference in the perceived influential people in the network, versus the centrality test results."),
@@ -352,109 +350,107 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
                         br(),
                         plotOutput("race_satisfaction"),
-<<<<<<< Updated upstream
-                        br(),
-                        br(),
-                        
-=======
->>>>>>> Stashed changes
-                        br(),
                         br(),
                         br(),
                         
                         p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         br(),
                         br(),
-<<<<<<< Updated upstream
-                        
-                        
                         plotOutput("race_know_street"),
-=======
+                        br(),
+                        br(),
                         plotOutput("race_know_name"),
->>>>>>> Stashed changes
                         br(),
                         br(),
+                      
                         
                         
                         plotOutput("race_know_berg"),
                         br(),
                         br(),
                         
-                        
-                        plotOutput("race_know_name"),
                         br(),
                         br(),
                         
-                        br(),br(),br(),
-                        p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
-                        p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
-                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
-                
-               ),
-               
-               tabPanel("Comment Analysis",
-                        h2(tags$b("Word Cloud- taken from survey comments")),
-                        img(src="wordcloud.png", width = "50%", align = "center"),
-                        h2(tags$b("Comment Analysis")),
-                        p('Four Primary Themes: (out of 81 total comments)'),
-                        
-                        h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
-                        p("Examples:"),
-                        p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
-                        p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
-                        p("“Everyone has been pretty great and super interesting to meet so far.”"),
-                        p("“Absolutely love it”"),
-                        p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
-                        
-                        h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
-                        p("Examples:"),
-                        p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
-                        p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
-                        p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”"),
+                       br(),br(),br(),
+                       p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
+                       p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
+                       p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race."),
+                       
+                       tabPanel("Comment Analysis",
+                                h2(tags$b("Word Cloud- taken from survey comments")),
+                                img(src="wordcloud.png", width = "50%", align = "center"),
+                                h2(tags$b("Comment Analysis")),
+                                p('Four Primary Themes: (out of 81 total comments)'),
+                                
+                                h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
+                                p("Examples:"),
+                                p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
+                                p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
+                                p("“Everyone has been pretty great and super interesting to meet so far.”"),
+                                p("“Absolutely love it”"),
+                                p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
+                                
+                                h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
+                                p("Examples:"),
+                                p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
+                                p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
+                                p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”"),
                         p("“There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”'),
-                        p("“It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out’...”"),
+                                p("“It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out’...”"),
+                                
+                                h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
+                                p("Examples:"),
+                                p("“Once you make friends initially, it is hard to expand out of that circle.”"),
+                                p("“I feel like Harvard is a difficult place to make a ton of friends unless you're already part of a defined group, like a sports team.”"),
+                                p("“I find it difficult to connect with people that you aren't naturally in contact with (in your entryway, in your social group, a cappella group, section, etc.)”"),
+                                p("“If you don't have time to be in one of the high-time commitment clubs, then it's really hard to make friends. I personally feel super lonely because of my niche interests and my desire to just debate with my peers over various topics.”"),
+                                p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”"),
+                                
+                                h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
+                                p("Examples: "),
+                                p("“I will say the social environment is very very easy to self-segregate. In my case, I went from having maybe two asian friends in high school to having majority Asian friends in college (this is also where choice of extracurriculars matters a lot, and I am in two orgs that have “Asian american” in their names)”"),
+                                p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
+                                p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
+                                
+                                h2(tags$b("Summary:")),
+                                p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
+                                
+                                
+                       ),
+                       tabPanel("Creators",
+                                h3(tags$b("Purpose of our research")),
+                                p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
+                                p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
+                                p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
+                                
+                                
+                                h2(tags$b("The Team")),
+                                p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
+                                h2(tags$b("Jeremiah Kim")),
+                                p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu."),
+                                h2(tags$b("Emily Ni")),
+                                p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
+                                h2(tags$b("Kelsey Wu")),
+                                p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
+                                h2(tags$b("Jack Kelly")),
+                                p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com"),
+                                h2(tags$b("Mark Stephens")),
+                                p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu"),
+                                h2(tags$b("Helen Pang")),
+                                p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu."))
+                       
+                       
                         
-                        h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
-                        p("Examples:"),
-                        p("“Once you make friends initially, it is hard to expand out of that circle.”"),
-                        p("“I feel like Harvard is a difficult place to make a ton of friends unless you're already part of a defined group, like a sports team.”"),
-                        p("“I find it difficult to connect with people that you aren't naturally in contact with (in your entryway, in your social group, a cappella group, section, etc.)”"),
-                        p("“If you don't have time to be in one of the high-time commitment clubs, then it's really hard to make friends. I personally feel super lonely because of my niche interests and my desire to just debate with my peers over various topics.”"),
-                        p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”"),
                         
-                        h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
-                        p("Examples: "),
-                        p("“I will say the social environment is very very easy to self-segregate. In my case, I went from having maybe two asian friends in high school to having majority Asian friends in college (this is also where choice of extracurriculars matters a lot, and I am in two orgs that have “Asian american” in their names)”"),
-                        p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
-                        p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
                         
-                        h2(tags$b("Summary:")),
-                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
-  
                         
-            ),
-            tabPanel("Creators",
-                     h3(tags$b("Purpose of our research")),
-                     p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
-                     p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
-                     p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
-                     
-                     
-                     h2(tags$b("The Team")),
-                     p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
-                     h2(tags$b("Jeremiah Kim")),
-                     p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu."),
-                     h2(tags$b("Emily Ni")),
-                     p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
-                     h2(tags$b("Kelsey Wu")),
-                     p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
-                     h2(tags$b("Jack Kelly")),
-                     p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com"),
-                     h2(tags$b("Mark Stephens")),
-                     p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu"),
-                     h2(tags$b("Helen Pang")),
-                     p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu."))
-    
+                    
+               )
+               
+                        
+                        
+             
 ))
 
 # Define server logic
@@ -497,7 +493,6 @@ server <- function(input, output) {
         
     })
     
-    #Included
     
     output$gender_plot <- renderPlot({
       
@@ -676,50 +671,50 @@ server <- function(input, output) {
     })
     
     output$compare_satisfaction <- renderPlot({
-        freshmen <- read_csv("data/freshmen.csv") 
-   
-        freshmen_satisfaction <- freshmen %>%
-            nest(top4 = c(know_best_1, know_best_2,
-                          know_best_3, know_best_4)) %>%
-            select(name, satisfaction, top4) %>%
-            mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
-                                                satisfaction == "Satisfied" ~ 1,
-                                                satisfaction == "Neutral" ~ 0,
-                                                satisfaction == "Dissatisfied" ~ -1,
-                                                satisfaction == "Very Dissatisfied" ~ -2))
-        
-        # List of all names listed in top 4 friends, with repeats
-        
-        freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
-        
-        # Calculate overall satisfaction score mean
-        
-        all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
-            summarize(mean = mean(satisfaction_lvl)) %>%
-            pull(mean)
-        
-        # Create a tibble for comparing satisfaction levels vs. whether or not
-        # they appear.
-        
-        compare_satisfaction <- freshmen_satisfaction %>%
-            mutate(appear = name %in% freshmen_top4_list) %>%
-            group_by(appear) %>%
-            summarize(mean_satis = mean(satisfaction_lvl))
-        
-        compare_satisfaction %>%
-            ggplot(aes(x = appear, y = mean_satis, fill = appear)) +
-            geom_bar(stat = "identity") + 
-            guides(fill=FALSE) +
-            scale_x_discrete(labels = c("No", "Yes")) +
-            labs(
-                x = "Did the respondent's name appear in other respondents' top 4 friends lists?",
-                y = "Mean Satisfaction Score",
-                title = "Comparing mean satisfaction scores of respondents",
-                subtitle = "Respondents who appeared in others lists were more satisfied",
-                caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
-            ) +
-            geom_hline(yintercept = all_freshmen_satisfaction_mean) +
-            theme_economist()
+      freshmen <- read_csv("data/freshmen.csv") 
+      
+      freshmen_satisfaction <- freshmen %>%
+        nest(top4 = c(know_best_1, know_best_2,
+                      know_best_3, know_best_4)) %>%
+        select(name, satisfaction, top4) %>%
+        mutate(satisfaction_lvl = case_when(satisfaction == "Very Satisfied" ~ 2,
+                                            satisfaction == "Satisfied" ~ 1,
+                                            satisfaction == "Neutral" ~ 0,
+                                            satisfaction == "Dissatisfied" ~ -1,
+                                            satisfaction == "Very Dissatisfied" ~ -2))
+      
+      # List of all names listed in top 4 friends, with repeats
+      
+      freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
+      
+      # Calculate overall satisfaction score mean
+      
+      all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
+        summarize(mean = mean(satisfaction_lvl)) %>%
+        pull(mean)
+      
+      # Create a tibble for comparing satisfaction levels vs. whether or not
+      # they appear.
+      
+      compare_satisfaction <- freshmen_satisfaction %>%
+        mutate(appear = name %in% freshmen_top4_list) %>%
+        group_by(appear) %>%
+        summarize(mean_satis = mean(satisfaction_lvl))
+      
+      compare_satisfaction %>%
+        ggplot(aes(x = appear, y = mean_satis, fill = appear)) +
+        geom_bar(stat = "identity") + 
+        guides(fill=FALSE) +
+        scale_x_discrete(labels = c("No", "Yes")) +
+        labs(
+          x = "Did the respondent's name appear in other respondents' top 4 friends lists?",
+          y = "Mean Satisfaction Score",
+          title = "Comparing mean satisfaction scores of respondents",
+          subtitle = "Respondents who appeared in others lists were more satisfied",
+          caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
+        ) +
+        geom_hline(yintercept = all_freshmen_satisfaction_mean) +
+        theme_economist()
     })
     
     # Included
@@ -813,7 +808,7 @@ server <- function(input, output) {
         ) + 
         theme_economist()
       
-    
+      
     })
     
     output$know_in_berg_count <- renderPlot({
@@ -893,36 +888,36 @@ server <- function(input, output) {
         select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
-        race_satisfaction <- tempfile(fileext='.gif')
-        
-        # now make the animation
-        p = data %>% 
-          select(manipulated_race, satisfied) %>% 
-          group_by(manipulated_race) %>% 
-          count(satisfied) %>% 
-          mutate(proportion = case_when(
-            manipulated_race == "Asian / Pacific Islander" ~ n / 116,
-            manipulated_race == "White" ~ n / 154, 
-            manipulated_race == "Black or African American" ~ n / 32,
-            manipulated_race == "Hispanic or Latino" ~ n / 29,
-            manipulated_race == "Other" ~ n / 84)) %>% 
-          ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
-          geom_col(fill = "darkred") +
-          theme_economist() +
-          theme(axis.title.x = element_text(vjust = -0.5)) +
-          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-          transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-          labs(title = "Social Satisfaction levels",
-               subtitle = "Racial group: {closest_state}",
-               x = "How satisfied are respondents with Harvard's social environment?",
-               y = "Proportion of respondents")
-        
-        
-        anim_save("race_satisfaction.gif", animate(p)) # New
-        
-        # Return a list containing the filename
-        list(src = "race_satisfaction.gif",
-             contentType = 'image/gif')}, 
+      race_satisfaction <- tempfile(fileext='.gif')
+      
+      # now make the animation
+      p = data %>% 
+        select(manipulated_race, satisfied) %>% 
+        group_by(manipulated_race) %>% 
+        count(satisfied) %>% 
+        mutate(proportion = case_when(
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
+        ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
+        geom_col(fill = "darkred") +
+        theme_economist() +
+        theme(axis.title.x = element_text(vjust = -0.5)) +
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+        labs(title = "Social Satisfaction levels",
+             subtitle = "Racial group: {closest_state}",
+             x = "How satisfied are respondents with Harvard's social environment?",
+             y = "Proportion of respondents")
+      
+      
+      anim_save("race_satisfaction.gif", animate(p)) # New
+      
+      # Return a list containing the filename
+      list(src = "race_satisfaction.gif",
+           contentType = 'image/gif')}, 
       deleteFile = TRUE)
     
     # Included
@@ -1225,56 +1220,56 @@ server <- function(input, output) {
     # Included
     
     output$helen_plot <- renderPlot({
-        survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
-        library(RColorBrewer)
-        color <- brewer.pal(4, "Set3") 
-        
-        edges_full <- survey_data %>% 
-            select(id, first_id, second_id, third_id, fourth_id) %>% 
-            pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
-            mutate(colors = case_when(
-                degree == "first_id" ~ color[1],
-                degree == "second_id" ~ color[2],
-                degree == "third_id" ~ color[3],
-                degree == "fourth_id" ~ color[4]
-            ))
-        
-        edges <- edges_full %>% 
-            select(id, endpoint)
-        
-        nodes <- survey_data %>% 
-            select(id) 
-        
-        first <- survey_data %>% 
-            select(first_id) 
-        
-        second <- survey_data %>% 
-            select(second_id) 
-        
-        third <- survey_data %>% 
-            select(third_id) 
-        
-        fourth <- survey_data %>% 
-            select(fourth_id) 
-        
-        all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
-        
-        
-        nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
-        
-        
-        g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
-        
-        
-        l <- layout_on_sphere(g)
-        
-        
-        #png("ms_6/helen_plot.png", 1800, 1800) 
-        plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
-        title("Friend Network",cex.main=3,col.main="black")
-        
-        legend("bottomright", c("Firstt","Second", "Third", "Fourth"), pch=21,
-               col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3") 
+      
+      edges_full <- survey_data %>% 
+        select(id, first_id, second_id, third_id, fourth_id) %>% 
+        pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
+        mutate(colors = case_when(
+          degree == "first_id" ~ color[1],
+          degree == "second_id" ~ color[2],
+          degree == "third_id" ~ color[3],
+          degree == "fourth_id" ~ color[4]
+        ))
+      
+      edges <- edges_full %>% 
+        select(id, endpoint)
+      
+      nodes <- survey_data %>% 
+        select(id) 
+      
+      first <- survey_data %>% 
+        select(first_id) 
+      
+      second <- survey_data %>% 
+        select(second_id) 
+      
+      third <- survey_data %>% 
+        select(third_id) 
+      
+      fourth <- survey_data %>% 
+        select(fourth_id) 
+      
+      all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
+      
+      
+      nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
+      
+      
+      g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      
+      l <- layout_on_sphere(g)
+      
+      
+      #png("ms_6/helen_plot.png", 1800, 1800) 
+      plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
+      title("Friend Network",cex.main=3,col.main="black")
+      
+      legend("bottomright", c("Firstt","Second", "Third", "Fourth"), pch=21,
+             col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
     })
     
     output$eigen <- render_gt({
@@ -1448,7 +1443,7 @@ server <- function(input, output) {
         arrange(desc(between)) %>% 
         filter(between_id != 1654) %>% 
         select(between_id, between)
-    
+      
       betweenness_10 <- betweenness %>% 
         head(10)
       
@@ -1598,44 +1593,46 @@ server <- function(input, output) {
     #This is the web on the front of the web page
     
     output$mark_plot <- renderVisNetwork({
-        nodes2 <- read_csv("data/nodes2.csv")
-        edges2 <- read_csv("data/edges2.csv")
-        # change shape, color, and size for each group
+      nodes2 <- read_csv("data/nodes2.csv")
+      edges2 <- read_csv("data/edges2.csv")
+      # change shape, color, and size for each group
+      
+      visNetwork(nodes2, edges2) %>%
+        visGroups(groupname = "Dorms", color = "darkblue", shape = "square", size = 65) %>%
+        visGroups(groupname = "Pre-Orientation", color = "darkred", shape = "square", size = 45) %>%
+        visGroups(groupname = "Sports", color = "darkgreen", shape = "square", size = 45) %>%
         
-        visNetwork(nodes2, edges2) %>%
-            visGroups(groupname = "Dorms", color = "darkblue", shape = "square", size = 65) %>%
-            visGroups(groupname = "Pre-Orientation", color = "darkred", shape = "square", size = 45) %>%
-            visGroups(groupname = "Sports", color = "darkgreen", shape = "square", size = 45) %>%
-            
-            # add functionality to highlight close connections when hovering over node
-            
-            visOptions(nodesIdSelection = list(enabled = TRUE,
-                                               style = "margin-bottom: -30px; visibility: hidden"),
-                       highlightNearest = list(enabled = T, degree = 2, hover = T),
-                       selectedBy = "group") %>%
-            
-            # adjust physics to decrease load time
-            
-            visPhysics(
-                solver = "forceAtlas2Based", 
-                timestep = 0.5,
-                minVelocity = 1,
-                maxVelocity = 30,
-                forceAtlas2Based = list(gravitationalConstant = -200, damping = 1),
-                stabilization = list(iterations = 300, updateInterval = 10),
-                adaptiveTimestep = TRUE) %>%
-            
-            # add legend for groups
-            
-            visLegend(zoom = FALSE) %>%
-            
-            # disable graph movement within window
-            
-            visInteraction(dragView = FALSE, 
-                           zoomView = FALSE)
+        # add functionality to highlight close connections when hovering over node
         
+        visOptions(nodesIdSelection = list(enabled = TRUE,
+                                           style = "margin-bottom: -30px; visibility: hidden"),
+                   highlightNearest = list(enabled = T, degree = 2, hover = T),
+                   selectedBy = "group") %>%
         
+        # adjust physics to decrease load time
+        
+        visPhysics(
+          solver = "forceAtlas2Based", 
+          timestep = 0.5,
+          minVelocity = 1,
+          maxVelocity = 30,
+          forceAtlas2Based = list(gravitationalConstant = -200, damping = 1),
+          stabilization = list(iterations = 300, updateInterval = 10),
+          adaptiveTimestep = TRUE) %>%
+        
+        # add legend for groups
+        
+        visLegend(zoom = FALSE) %>%
+        
+        # disable graph movement within window
+        
+        visInteraction(dragView = FALSE, 
+                       zoomView = FALSE)
+      
+      
     })
+    #Included
+    
     
     
 }
