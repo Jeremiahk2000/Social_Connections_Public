@@ -1,0 +1,63 @@
+---
+title: "Scratchwork"
+author: "Jeremiah Kim"
+date: "4/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Use this document to test graphs within the shiny
+```
+
+```{r}
+library(shiny)
+library(igraph)
+library(visNetwork)
+library(purrr)
+library(ggpubr)
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(magrittr)
+library(stringr)
+library(dplyr)
+library(gt)
+library(RColorBrewer)
+library(ggplot2)
+library(shinythemes)
+library(infer)
+library(broom)
+library(magrittr)
+library(readr)
+library(gganimate)
+library(ggthemes)
+library(plyr)
+```
+
+```{r}
+freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+```
+
+```{r}
+      int_plot <- freshmen %>% 
+        select(international) %>% 
+        count() %>% 
+        mutate(perc_int = round(freq / total_respondents*100, digits = 2))
+      
+      int_plot %>%
+        ggplot(aes(y = freq, x = international, fill = international)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_int, "%")), size = 4) +
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "International Student Distribution in Respondent Sample") + 
+        theme(legend.position = "none")
+```
+
+
+

@@ -79,7 +79,10 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                p("12.) How satisfied are you with your social connections with first-year students at Harvard?"),
                br(),
                p("If you would like to see our methodology about why we chose these specific questions and what our purpose behind each question was, please follow this link:"),
-               strong(tags$a(href="https://docs.google.com/document/d/1vx0WUw2ExeIp8rgt1f23C0LbKV0dPIBXf3JDR6UZJmk/edit?usp=sharing", "Survey Methodology"))
+               h3(tags$a(href="https://docs.google.com/document/d/1vx0WUw2ExeIp8rgt1f23C0LbKV0dPIBXf3JDR6UZJmk/edit?usp=sharing", "Survey Methodology")),
+               br(),
+               br(),
+               p("Gov 1005: Harvard University")
                
                
                         ),
@@ -471,11 +474,11 @@ server <- function(input, output) {
         
       dorm_plot <- freshmen %>%
         select(dorm) %>%
-        count(dorm) %>%
-        mutate(perc_dorm = round(n / total_respondents*100, digits = 2))
+        count() %>%
+        mutate(perc_dorm = round(freq / total_respondents*100, digits = 2))
       
       dorm_plot %>%
-        ggplot(aes(y = n, x = dorm, fill = dorm)) +
+        ggplot(aes(y = freq, x = dorm, fill = dorm)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
         coord_flip() + 
@@ -499,13 +502,13 @@ server <- function(input, output) {
       
       gender_plot <- freshmen %>%
         select(gender) %>%
-        count(gender) %>%
-        mutate(perc_gender = round(n / total_respondents * 100, digits = 2))
+        count() %>%
+        mutate(perc_gender = round(freq / total_respondents * 100, digits = 2))
       
       level_order <- c('Female', 'Male', 'Genderqueer', 'Prefer not to say')
       
       gender_plot %>%
-        ggplot(aes(y = n, x = factor(gender, level = level_order), fill = gender)) +
+        ggplot(aes(y = freq, x = factor(gender, level = level_order), fill = gender)) +
         geom_bar(stat = "identity", width = 1) + 
         geom_text(aes(label = paste0(perc_gender, "%")), size = 4) + 
         theme_economist() +
@@ -533,11 +536,11 @@ server <- function(input, output) {
                                          "Mixed Race / Other", 
                                          race)) %>% 
         select(manipulated_race) %>% 
-        count(manipulated_race) %>% 
-        mutate(perc_race = round(n / total_respondents*100, digits = 2))
+        count() %>% 
+        mutate(perc_race = round(freq / total_respondents*100, digits = 2))
       
       race_plot %>%
-        ggplot(aes(y = n, x = manipulated_race, fill = manipulated_race)) +
+        ggplot(aes(y = freq, x = manipulated_race, fill = manipulated_race)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_race, "%")), size = 4) +
         coord_flip() + 
@@ -560,11 +563,11 @@ server <- function(input, output) {
       
       gap_year_plot <- freshmen %>% 
         select(gap_year) %>% 
-        count(gap_year) %>% 
-        mutate(perc_gap = round(n / total_respondents*100, digits = 2))
+        count() %>% 
+        mutate(perc_gap = round(freq / total_respondents*100, digits = 2))
       
       gap_year_plot %>%
-        ggplot(aes(y = n, x = gap_year, fill = gap_year)) +
+        ggplot(aes(y = freq, x = gap_year, fill = gap_year)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_gap, "%")), size = 4) +
         theme_economist() +
@@ -586,11 +589,11 @@ server <- function(input, output) {
       
       int_plot <- freshmen %>% 
         select(international) %>% 
-        count(international) %>% 
-        mutate(perc_int = round(n / total_respondents*100, digits = 2))
+        count() %>% 
+        mutate(perc_int = round(freq / total_respondents*100, digits = 2))
       
       int_plot %>%
-        ggplot(aes(y = n, x = international, fill = international)) +
+        ggplot(aes(y = freq, x = international, fill = international)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_int, "%")), size = 4) +
         theme_economist() +
@@ -617,8 +620,8 @@ server <- function(input, output) {
                                         "FYRE & FCU / FIP & FCU", 
                                         pre_orientation)) %>% 
         select(manipulated_pre) %>% 
-        count(manipulated_pre) %>% 
-        mutate(perc_pre = round(n / total_respondents*100, digits = 2)) %>% 
+        count() %>% 
+        mutate(perc_pre = round(freq / total_respondents*100, digits = 2)) %>% 
         na.omit
       
       level_order <- c('None',
@@ -630,7 +633,7 @@ server <- function(input, output) {
                        'FYRE - First-Year Retreat and Experience')
       
       pre_plot %>%
-        ggplot(aes(y = n, x = factor(manipulated_pre, level = level_order), fill = manipulated_pre)) +
+        ggplot(aes(y = freq, x = factor(manipulated_pre, level = level_order), fill = manipulated_pre)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_pre, "%")), size = 4) +
         coord_flip() +
@@ -651,11 +654,11 @@ server <- function(input, output) {
       
       sports_plot <- freshmen %>% 
         select(sports) %>% 
-        count(sports) %>% 
-        mutate(perc_sports = round(n / total_respondents*100, digits = 2))
+        count() %>% 
+        mutate(perc_sports = round(freq / total_respondents*100, digits = 2))
       
       sports_plot %>%
-        ggplot(aes(y = n, x = sports, fill = sports)) +
+        ggplot(aes(y = freq, x = sports, fill = sports)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_sports, "%")), size = 4) +
         theme_economist() +
@@ -1115,7 +1118,7 @@ server <- function(input, output) {
     
     output$street_results <- renderPlot({
       
-      freshmen <- read_csv("shiny/data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
         clean_names() %>%
         mutate(
           id = as.character(id),
@@ -1144,7 +1147,7 @@ server <- function(input, output) {
     
     output$social_num_street_satisfaction <- renderPlot({
       
-      freshmen <- read_csv("shiny/data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
         clean_names() %>%
         mutate(
           id = as.character(id),
