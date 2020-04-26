@@ -484,6 +484,7 @@ server <- function(input, output) {
     
     # Included
     output$satisfaction_scatter_plot <- renderPlot({
+      
         satisfaction_scatter_tbl <- read_csv("data/satisfaction_scatter_tbl.csv")
         
         satisfaction_scatter_tbl %>%
