@@ -22,7 +22,6 @@ library(magrittr)
 library(readr)
 library(gganimate)
 library(ggthemes)
-library(plyr)
 
 
 
@@ -333,7 +332,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         br(),
                         
-                        br(),
+                        br(),br(),br(),
                         p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
                         p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
                         p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
@@ -504,11 +503,11 @@ server <- function(input, output) {
     })
     
     # Included
-    output$race_satisfaction <- renderPlot({
+    output$race_satisfaction <- renderImage({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
-        select(-X1, gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
+        select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
         race_satisfaction <- tempfile(fileext='.gif')
@@ -517,13 +516,13 @@ server <- function(input, output) {
         p = data %>% 
           select(manipulated_race, satisfied) %>% 
           group_by(manipulated_race) %>% 
-          count() %>% 
+          count(satisfied) %>% 
           mutate(proportion = case_when(
-            manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-            manipulated_race == "White" ~ freq / 154, 
-            manipulated_race == "Black or African American" ~ freq / 32,
-            manipulated_race == "Hispanic or Latino" ~ freq / 29,
-            manipulated_race == "Other" ~ freq / 84)) %>% 
+            manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+            manipulated_race == "White" ~ n / 154, 
+            manipulated_race == "Black or African American" ~ n / 32,
+            manipulated_race == "Hispanic or Latino" ~ n / 29,
+            manipulated_race == "Other" ~ n / 84)) %>% 
           ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
           geom_col(fill = "darkred") +
           theme_economist() +
@@ -555,14 +554,14 @@ server <- function(input, output) {
       race_know_street <- tempfile(fileext='.gif')
       
       s = data %>% 
-        group_by(manipulated_race, know_street) %>%
-        count() %>% 
+        group_by(manipulated_race) %>%
+        count(know_street) %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-          manipulated_race == "White" ~ freq / 154, 
-          manipulated_race == "Black or African American" ~ freq / 32,
-          manipulated_race == "Hispanic or Latino" ~ freq / 29,
-          manipulated_race == "Other" ~ freq / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
         ggplot(aes(x = know_street, y = proportion)) + 
         geom_col(fill = "red") + 
         theme_economist() +
@@ -594,14 +593,14 @@ server <- function(input, output) {
       race_know_name <- tempfile(fileext='.gif')
       
       x = data %>% 
-        group_by(manipulated_race, know_by_name) %>%
-        count() %>% 
+        group_by(manipulated_race) %>%
+        count(know_by_name) %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-          manipulated_race == "White" ~ freq / 154, 
-          manipulated_race == "Black or African American" ~ freq / 32,
-          manipulated_race == "Hispanic or Latino" ~ freq / 29,
-          manipulated_race == "Other" ~ freq / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
         ggplot(aes(x = know_by_name, y = proportion)) + 
         geom_col(fill = "steelblue") + 
         theme_economist() +
@@ -631,14 +630,14 @@ server <- function(input, output) {
       race_know_berg <- tempfile(fileext='.gif')
       
       b = data %>% 
-        group_by(manipulated_race, know_annenberg) %>%
-        count() %>% 
+        group_by(manipulated_race) %>%
+        count(know_annenberg) %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-          manipulated_race == "White" ~ freq / 154, 
-          manipulated_race == "Black or African American" ~ freq / 32,
-          manipulated_race == "Hispanic or Latino" ~ freq / 29,
-          manipulated_race == "Other" ~ freq / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
         ggplot(aes(x = know_annenberg, y = proportion)) + 
         geom_col(fill = "purple") + 
         theme_economist() +
@@ -705,15 +704,15 @@ server <- function(input, output) {
         count() %>% 
         ungroup() 
       
-      total <- sum(races$freq) 
+      total <- sum(races$n) 
       
       
       racial_respondent <- races %>% 
-        mutate(percent_survey = freq / total * 100) %>%
+        mutate(percent_survey = n / total * 100) %>%
         gt() %>% 
         tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
         fmt_number(decimals = 2, columns = "percent_survey") %>% 
-        cols_label(race = "Reported Ethnicity and/or Race", freq = "Total number", percent_survey = "Percent of our survey") %>% 
+        cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
         tab_footnote(footnote = "These percentages total 99.99% due to rounding",
                      locations = cells_column_labels(columns = vars("percent_survey")))
       
@@ -901,16 +900,15 @@ server <- function(input, output) {
         select(most_id) %>% 
         filter(most_id != 1654)
       
-      count(most) %>% 
-        arrange(desc(freq)) 
-      most_10 <- count(most) %>% 
-        arrange(desc(freq)) %>% 
+      most_10 <- most %>% 
+        count(most_id) %>% 
+        arrange(desc(n)) %>% 
         head(10) 
       
       gt(most_10) %>% 
         tab_header(title = "Top 10 Socially Connected Freshman: Survey") %>% 
         cols_label(most_id = "ID",
-                   freq = "Number of Votes")
+                   n = "Number of Votes")
     })
     
     output$between <- render_gt({
@@ -1038,10 +1036,9 @@ server <- function(input, output) {
         select(most_id) %>% 
         filter(most_id != 1654)
       
-      count(most) %>% 
-        arrange(desc(freq)) 
-      most_10 <- count(most) %>% 
-        arrange(desc(freq)) %>% 
+      most_10 <- most %>% 
+        count(most_id) %>% 
+        arrange(desc(n)) %>% 
         head(10) 
       
       deg <- degree(g, mode="all")

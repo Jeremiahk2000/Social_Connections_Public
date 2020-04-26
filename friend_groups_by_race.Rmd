@@ -19,6 +19,7 @@ library(ggpubr)
 library(RColorBrewer)
 library(igraph)
 library(magick)
+
 data <- read_csv("data/FINAL_PUBLIC_DATA_W_NA-4-20-20.csv", col_types = cols()) %>% 
   mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
   select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
@@ -45,15 +46,15 @@ races <- race %>%
   count() %>% 
   ungroup() 
 
-total <- sum(races$freq) 
+total <- sum(races$n) 
 
 
 racial_respondent <- races %>% 
-  mutate(percent_survey = freq / total * 100) %>%
+  mutate(percent_survey = n / total * 100) %>%
   gt() %>% 
   tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
   fmt_number(decimals = 2, columns = "percent_survey") %>% 
-  cols_label(race = "Reported Ethnicity and/or Race", freq = "Total number", percent_survey = "Percent of our survey") %>% 
+  cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
   tab_footnote(footnote = "These percentages total 99.99% due to rounding",
                locations = cells_column_labels(columns = vars("percent_survey")))
 
@@ -76,13 +77,13 @@ read_this
 race_satisfaction <- read_this %>% 
   select(manipulated_race, satisfied) %>% 
   group_by(manipulated_race) %>% 
-  count() %>% 
+  count(satisfied) %>% 
   mutate(proportion = case_when(
-    manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-    manipulated_race == "White" ~ freq / 154, 
-    manipulated_race == "Black or African American" ~ freq / 32,
-    manipulated_race == "Hispanic or Latino" ~ freq / 29,
-    manipulated_race == "Other" ~ freq / 84)) %>% 
+    manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+    manipulated_race == "White" ~ n / 154, 
+    manipulated_race == "Black or African American" ~ n / 32,
+    manipulated_race == "Hispanic or Latino" ~ n / 29,
+    manipulated_race == "Other" ~ n / 84)) %>% 
   ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
   geom_col(fill = "darkred") +
   theme_economist() +
@@ -105,14 +106,14 @@ In addition to satisfaction rates mirroring each other, the amount of people eac
 
 ```{r, Who students know, cache=TRUE}
 name <- data %>% 
-  group_by(manipulated_race, know_by_name) %>%
-  count() %>% 
+  group_by(manipulated_race) %>%
+  count(know_by_name) %>% 
   mutate(proportion = case_when(
-    manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-    manipulated_race == "White" ~ freq / 154, 
-    manipulated_race == "Black or African American" ~ freq / 32,
-    manipulated_race == "Hispanic or Latino" ~ freq / 29,
-    manipulated_race == "Other" ~ freq / 84)) %>% 
+    manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+    manipulated_race == "White" ~ n / 154, 
+    manipulated_race == "Black or African American" ~ n / 32,
+    manipulated_race == "Hispanic or Latino" ~ n / 29,
+    manipulated_race == "Other" ~ n / 84)) %>% 
   ggplot(aes(x = know_by_name, y = proportion)) + 
   geom_col(fill = "steelblue") + 
   theme_economist() +

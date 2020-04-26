@@ -17,7 +17,6 @@ library(gt)
 library(igraph)
 library(ggthemes)
 library(RColorBrewer)
-library(plyr)
 library(dplyr)
 survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
 ```
@@ -80,17 +79,15 @@ most <- survey_data %>%
   select(most_id) %>% 
   filter(most_id != 1654)
 
-count(most) %>% 
-  arrange(desc(freq)) 
-most_10 <- count(most) %>% 
-  arrange(desc(freq)) %>% 
+most_10 <- most %>% 
+  count(most_id) %>% 
+  arrange(desc(n)) %>% 
   head(10) 
 
 gt(most_10) %>% 
   tab_header(title = "Top 10 Socially Connected Freshman: Survey") %>% 
   cols_label(most_id = "ID",
-             freq = "Number of Votes") %>% 
-  gtsave("shiny/www/most.png")
+             n = "Number of Votes")
 
 ```
 
