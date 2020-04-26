@@ -778,7 +778,9 @@ server <- function(input, output) {
     })
     
     output$eigen <- render_gt({
-      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv")
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3")
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
@@ -822,7 +824,9 @@ server <- function(input, output) {
                    eigen = "Eigenvector Score") 
     })
     output$degree <- render_gt({
-      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv")
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3")
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
@@ -865,7 +869,9 @@ server <- function(input, output) {
                    deg = "Number of Connections") 
     })
     output$most <- render_gt({
-      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv")
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3")
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
@@ -908,7 +914,9 @@ server <- function(input, output) {
     })
     
     output$between <- render_gt({
-      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv")
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3")
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
@@ -953,6 +961,8 @@ server <- function(input, output) {
     
     output$close <- render_gt({
       survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3")
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
@@ -997,6 +1007,8 @@ server <- function(input, output) {
     
     output$top10 <- render_gt({
       survey_data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") 
+      library(RColorBrewer)
+      color <- brewer.pal(4, "Set3")
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
