@@ -245,7 +245,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         
                         h3(tags$b('How many times did the "most socially connected" 
-                                  students appear in top 4 friend lists??')),
+                                  students appear in top 4 friend lists?')),
                         
                         p('To create the graph below, we compiled the top 100 
                         "most socially connected" students. Then, we counted 
@@ -336,7 +336,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions.")
                         
                ),
-               tabPanel("Satisfaction and race",
+               tabPanel("Satisfaction and Race",
                         
                         h2(tags$b("Analysis of the data by race")),
                         
@@ -1041,7 +1041,7 @@ server <- function(input, output) {
         theme(axis.title.x = element_text(vjust = -1)) +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-        labs(title = "The Amount of classmates respondenets would sit
+        labs(title = "The Amount of classmates respondents would sit
         next to in Annenberg",
              subtitle = "Racial group: {closest_state}",
              x = "Amount of people students would sit next
