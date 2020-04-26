@@ -77,7 +77,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         p("12.) How satisfied are you with your social connections with first-year students at Harvard?"),
                         br(),
-                        p("If you would like to see our methodology about why we chose these specific questions and what our purpose behind each question was, please follow this link:"),
+                        p("If you would like to learn about the methodology we employed to chose these questions and what our purpose behind each question was, please follow this link:"),
                         h3(tags$a(href="https://docs.google.com/document/d/1vx0WUw2ExeIp8rgt1f23C0LbKV0dPIBXf3JDR6UZJmk/edit?usp=sharing", "Survey Methodology")),
                         br(),
                         br(),
@@ -352,23 +352,37 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
 
                         br(),
                         br(),
-                        
-                        p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
+                        br(),
+                        br(),
+                        br(),
                         br(),
                         
-
+                        p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         
-                        
+                        br(),
+                        br(),
+                        br(),
+                        br(),
+ 
                         plotOutput("race_know_street"),
+                        
+                        br(),
+                        br(),
+                        br(),
+                        br(),
 
                         plotOutput("race_know_name"),
 
                         br(),
                         br(),
-                      
-                        
-                        
+                        br(),
+                        br(),
+   
                         plotOutput("race_know_berg"),
+                        br(),
+                        br(),
+                        br(),
+                        br(),
                         br(),
                         br(),
                         br(),
@@ -714,31 +728,7 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
-      perc_respondents <- round(total_respondents / total_students * 100, digits = 2)
       
-      females <- freshmen %>%
-        filter(gender == "Female") %>%
-        nrow()
-      
-      males <- freshmen %>%
-        filter(gender == "Male") %>%
-        nrow()
-      
-      genderqueer <- freshmen %>%
-        filter(gender == "Genderqueer") %>%
-        nrow()
-      
-      gender_prefer_not <- freshmen %>%
-        filter(gender == "Prefer not to Say") %>%
-        nrow()
-      
-      perc_female <- round(females / total_respondents * 100, digits = 2)
-      
-      perc_male <- round(males / total_respondents * 100, digits = 2)
-      
-      perc_genderqueer <- round(genderqueer / total_respondents * 100, digits = 2)
-      
-      perc_genderprefernot <- round(gender_prefer_not / total_respondents * 100, digits = 2)
       
       # Rescale satisfaction level for bar plot
       
@@ -750,7 +740,11 @@ server <- function(input, output) {
                                             satisfied == "Satisfied" ~ 1,
                                             satisfied == "Neutral" ~ 0,
                                             satisfied == "Dissatisfied" ~ -1,
-                                            satisfied == "Very Dissatisfied" ~ -2)) 
+                                            satisfied == "Very Dissatisfied" ~ -2))
+      
+      # List of all names listed in top 4 friends, with repeats
+      
+      freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
       
       # Name search function: counts how many times name appeared in list
       
@@ -963,7 +957,8 @@ server <- function(input, output) {
         theme(axis.title.x = element_text(vjust = -1)) +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-        labs(title = "The Amount of classmates respondents know by name",
+        labs(title = "The Amount of classmates respondents
+             know by name",
              subtitle = "Racial group: {closest_state}",
              x = "Amount of people students know by name",
              y = "Proportion of respondents")
@@ -1000,8 +995,8 @@ server <- function(input, output) {
         theme(axis.title.x = element_text(vjust = -1)) +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-        labs(title = "The Amount of classmates respondenets would sit next to
-       in Annenberg",
+        labs(title = "The Amount of classmates respondenets would sit
+        next to in Annenberg",
              subtitle = "Racial group: {closest_state}",
              x = "Amount of people students would sit next
        to in Annenberg",

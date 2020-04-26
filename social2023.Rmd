@@ -83,75 +83,6 @@ A total of `r total_respondents` first-year students answered our survey. Theref
 `r perc_genderqueer`% of respondents were genderqueer.
 `r perc_genderprefernot`% of respondents preferred not to share their gender.
 
-```{r gender_pie, echo = FALSE}
-
-
-# Not using
-gender_group <- freshmen %>%
-  select(gender) %>%
-  count(gender) %>%
-  mutate(perc_gender = round(n / total_respondents * 100, digits = 2))
-
-gender_group %>%
-  ggplot(aes(x = "", y = n, fill = gender)) +
-  geom_bar(stat = "identity", width = 1) +
-  geom_text(aes(label = paste0(perc_gender, "%")), size = 3,
-            check_overlap = TRUE,
-            position = position_stack(vjust = 0.5)) +
-  coord_polar("y", start = 0) +
-  labs(
-    title = "Gender Identity Ratio of All Responses",
-    fill = "Gender Identity"
-  ) + 
-  theme_economist() +
-  theme(axis.line=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks=element_blank(), 
-        axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid  = element_blank(),
-        plot.margin = margin(2, 80, 2, 80, "pt"))
-
-
-```
-
-## Dorm Ratio
-
-```{r dorm_stats, echo = FALSE}
-
-# Not using
-
-dorm_group <- freshmen %>%
-  select(dorm) %>%
-  count(dorm) %>%
-  mutate(perc_dorm = round(n / total_respondents*100, digits = 2))
-
-dorm_group %>%
-  ggplot(aes(x = "", y = n, fill = dorm)) +
-  geom_bar(stat = "identity", width = 1) +
-  geom_text(aes(label = paste0(perc_dorm, "%")), size = 3,
-            check_overlap = TRUE,
-            position = position_stack(vjust = 0.5)) +
-  coord_polar("y", start = 0) +
-  labs(
-    title = "Dorm Ratio of All Responses",
-    fill = "Dorm"
-  ) + 
-  theme_economist() +
-  guides(fill=guide_legend(ncol=2)) +
-  theme(axis.line=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks=element_blank(), 
-        axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid  = element_blank(),
-        legend.position = "right",
-        plot.margin = margin(20, 15, 20, 15, "pt"))
-
-
-```
 
 # Analyzing the Data
 
@@ -206,7 +137,7 @@ The horizontal line the graph indicates the mean satisfaction level across all f
 
 Respondents who appeared in other respondents' top 4 closest friends lists reported a higher level of satisfaction than respondents who did not appear. In fact, respondents who did not appear at all in other respondents' top 4 closest friends lists reported a below average level of satisfaction, while respondents who did appear reported an above average level of satisfaction.
 
-```{r create_satisfaction_plot, echo = FALSE. GOOD}
+```{r create_satisfaction_plot, echo = FALSE. included}
 
 # Create ggplot for comparing satisfaction
 
@@ -231,7 +162,7 @@ compare_satisfaction %>%
 
 Then, we plotted number of appearances against mean satisfaction score on a scatter plot.
 
-```{r satisfaction_scatter_plot, echo = FALSE, GOOD}
+```{r satisfaction_scatter_plot, echo = FALSE, INCLUDED}
 
 # Rescale satisfaction level for bar plot
 
@@ -292,7 +223,7 @@ The R value is not statistically significant (p > 0.05), indicating that there i
 
 We also asked respondents how many members of the 2023 class they would recognize on the street. Below were our results:
 
-```{r street_results, echo = FALSE}
+```{r street_results, echo = FALSE, included}
 
 freshmen$know_street <- factor(freshmen$know_street,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000", "1000+"))
 
@@ -474,7 +405,7 @@ As seen in the graph above, the number of times someone was named "most socially
 
 ### Comparing satisfaction levels of top 100 "most socially connected" to top 100 number of appearances in friend lists
 
-```{r socially_connected_satisfaction, echo = FALSE, message = FALSE, warning = FALSE}
+```{r socially_connected_satisfaction, echo = FALSE, message = FALSE, warning = FALSE, PROBLEM}
 
 top_well_connected_satisfaction <- inner_join(well_connected_top_appearances, freshmen, by = "id") %>%
   mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
