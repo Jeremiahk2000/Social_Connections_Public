@@ -620,7 +620,7 @@ server <- function(input, output) {
                                         "FYRE & FCU / FIP & FCU", 
                                         pre_orientation)) %>% 
         select(manipulated_pre) %>% 
-        count(manipulated) %>% 
+        count(manipulated_pre) %>% 
         mutate(perc_pre = round(n / total_respondents*100, digits = 2)) %>% 
         na.omit
       
