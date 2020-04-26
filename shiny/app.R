@@ -1266,7 +1266,7 @@ server <- function(input, output) {
         plot(g, vertex.label="", layout = l, edge.width = 1, vertex.size=0.5, edge.color = edges_full$colors)
         title("Friend Network",cex.main=3,col.main="black")
         
-        legend("bottomright", c("First","Second", "Third", "Fourth"), pch=21,
+        legend("bottomright", c("Firstt","Second", "Third", "Fourth"), pch=21,
                col="#777777", pt.bg=edges_full$colors, pt.cex=1, cex=.8)
     })
     
