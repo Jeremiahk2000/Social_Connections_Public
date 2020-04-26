@@ -1062,6 +1062,16 @@ server <- function(input, output) {
       
       myPalette <- brewer.pal(5, "Set2") 
       
+      freshmen_satisfaction <- freshmen %>%
+        nest(top4 = c(first_id, second_id,
+                      third_id, fourth_id)) %>%
+        select(id, satisfied, top4) %>%
+        mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
+                                            satisfied == "Satisfied" ~ 1,
+                                            satisfied == "Neutral" ~ 0,
+                                            satisfied == "Dissatisfied" ~ -1,
+                                            satisfied == "Very Dissatisfied" ~ -2))
+      
       # List of all names listed in top 4 friends, with repeats
       
       freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
