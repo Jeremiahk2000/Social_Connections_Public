@@ -1,0 +1,189 @@
+---
+title: "Demographics Plots"
+author: "Emily Ni"
+date: "4/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggthemes)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(janitor)
+```
+
+```{r read in file, include = FALSE}
+freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+  clean_names()
+
+total_respondents <- freshmen %>% nrow()
+```
+
+```{r gender_plot, echo = FALSE}
+
+gender_plot <- freshmen %>%
+  select(gender) %>%
+  count(gender) %>%
+  mutate(perc_gender = round(n / total_respondents * 100, digits = 2))
+
+level_order <- c('Female', 'Male', 'Genderqueer', 'Prefer not to say')
+
+gender_plot %>%
+  ggplot(aes(y = n, x = factor(gender, level = level_order), fill = gender)) +
+  geom_bar(stat = "identity", width = 1) + 
+  geom_text(aes(label = paste0(perc_gender, "%")), size = 4) + 
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "Gender Distribution in Respondent Sample") + 
+  theme(legend.position = "none")
+
+```
+
+
+```{r dorm_plot, echo = FALSE}
+
+dorm_plot <- freshmen %>%
+  select(dorm) %>%
+  count(dorm) %>%
+  mutate(perc_dorm = round(n / total_respondents*100, digits = 2))
+
+dorm_plot %>%
+  ggplot(aes(y = n, x = dorm, fill = dorm)) +
+  geom_col() + 
+  geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
+  coord_flip() + 
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "Dorm Distribution in Respondent Sample") + 
+  theme(legend.position = "none")
+```
+
+```{r race_plot, echo = FALSE}
+
+race_plot <- freshmen %>% 
+  mutate(manipulated_race = ifelse(race != "White" & 
+                                   race != "Asian / Pacific Islander" & 
+                                   race != "Black or African American" & 
+                                   race != "Hispanic or Latino", 
+                                   "Mixed Race / Other", 
+                                   race)) %>% 
+  select(manipulated_race) %>% 
+  count(manipulated_race) %>% 
+  mutate(perc_race = round(n / total_respondents*100, digits = 2))
+
+race_plot %>%
+  ggplot(aes(y = n, x = manipulated_race, fill = manipulated_race)) +
+  geom_col() + 
+  geom_text(aes(label = paste0(perc_race, "%")), size = 4) +
+  coord_flip() + 
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "Racial Distribution in Respondent Sample") + 
+  theme(legend.position = "none")
+```
+
+```{r gap_year_plot, echo = FALSE}
+
+gap_year_plot <- freshmen %>% 
+  select(gap_year) %>% 
+  count(gap_year) %>% 
+  mutate(perc_gap = round(n / total_respondents*100, digits = 2))
+  
+gap_year_plot %>%
+  ggplot(aes(y = n, x = gap_year, fill = gap_year)) +
+  geom_col() + 
+  geom_text(aes(label = paste0(perc_gap, "%")), size = 4) +
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "Gap Year Student Distribution in Respondent Sample") + 
+  theme(legend.position = "none")
+
+```
+
+```{r int_plot, echo = FALSE}
+
+int_plot <- freshmen %>% 
+  select(international) %>% 
+  count(international) %>% 
+  mutate(perc_int = round(n / total_respondents*100, digits = 2))
+  
+int_plot %>%
+  ggplot(aes(y = n, x = international, fill = international)) +
+  geom_col() + 
+  geom_text(aes(label = paste0(perc_int, "%")), size = 4) +
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "International Student Distribution in Respondent Sample") + 
+  theme(legend.position = "none")
+```
+
+```{r pre_plot, echo = FALSE}
+
+pre_plot <- freshmen %>% 
+    mutate(manipulated_pre = ifelse(pre_orientation != "FAP - First-Year Arts Program" & 
+                                   pre_orientation != "FCU - Fall Clean-Up with Dorm Crew" & 
+                                   pre_orientation != "FIP - First-Year International Program" & 
+                                   pre_orientation != "FOP - First-Year Outdoor Program" &
+                                   pre_orientation != "FYRE - First-Year Retreat and Experience" &
+                                   pre_orientation != "None",
+                                   "FYRE & FCU / FIP & FCU", 
+                                   pre_orientation)) %>% 
+  select(manipulated_pre) %>% 
+  count(manipulated_pre) %>% 
+  mutate(perc_pre = round(n / total_respondents*100, digits = 2)) %>% 
+  na.omit
+
+level_order <- c('None',
+                 'FYRE & FCU / FIP & FCU',
+                 'FAP - First-Year Arts Program', 
+                 'FCU - Fall Clean-Up with Dorm Crew', 
+                 'FIP - First-Year International Program', 
+                 'FOP - First-Year Outdoor Program',
+                 'FYRE - First-Year Retreat and Experience')
+  
+pre_plot %>%
+  ggplot(aes(y = n, x = factor(manipulated_pre, level = level_order), fill = manipulated_pre)) +
+  geom_col() + 
+  geom_text(aes(label = paste0(perc_pre, "%")), size = 4) +
+  coord_flip() +
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "Pre-Orientation Participation Distribution in Respondent Sample") +
+  theme(legend.position = "none")
+```
+
+```{r sports_plot, echo = FALSE}
+
+sports_plot <- freshmen %>% 
+  select(sports) %>% 
+  count(sports) %>% 
+  mutate(perc_sports = round(n / total_respondents*100, digits = 2))
+  
+sports_plot %>%
+  ggplot(aes(y = n, x = sports, fill = sports)) +
+  geom_col() + 
+  geom_text(aes(label = paste0(perc_sports, "%")), size = 4) +
+  theme_economist() +
+  labs(
+    x = "",
+    y = "Number of Respondents",
+    title = "Sports Participation Distribution in Respondent Sample") +
+  theme(legend.position = "none")
+```
+
