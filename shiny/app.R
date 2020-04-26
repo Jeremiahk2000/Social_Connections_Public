@@ -359,6 +359,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         plotOutput("race_know_street"),
                         br(),
                         br(),
+
                         plotOutput("race_know_name"),
                         br(),
                         br(),
@@ -371,77 +372,54 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         br(),
                         br(),
+
+                        br(),br(),br(),
+                        p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
+                        p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
+                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
+                
+               ),
+               
+               tabPanel("Comment Analysis",
+                        h2(tags$b("Word Cloud- taken from survey comments")),
+                        img(src="wordcloud.png", width = "50%", align = "center"),
+                        h2(tags$b("Comment Analysis")),
+                        p('Four Primary Themes: (out of 81 total comments)'),
                         
-                       br(),br(),br(),
-                       p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
-                       p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
-                       p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race."),
-                       
-                       tabPanel("Comment Analysis",
-                                h2(tags$b("Word Cloud- taken from survey comments")),
-                                img(src="wordcloud.png", width = "50%", align = "center"),
-                                h2(tags$b("Comment Analysis")),
-                                p('Four Primary Themes: (out of 81 total comments)'),
-                                
-                                h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
-                                p("Examples:"),
-                                p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
-                                p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
-                                p("“Everyone has been pretty great and super interesting to meet so far.”"),
-                                p("“Absolutely love it”"),
-                                p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
-                                
-                                h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
-                                p("Examples:"),
-                                p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
-                                p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
-                                p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”"),
-                        p("“There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”'),
-                                p("“It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out’...”"),
-                                
-                                h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
-                                p("Examples:"),
-                                p("“Once you make friends initially, it is hard to expand out of that circle.”"),
-                                p("“I feel like Harvard is a difficult place to make a ton of friends unless you're already part of a defined group, like a sports team.”"),
-                                p("“I find it difficult to connect with people that you aren't naturally in contact with (in your entryway, in your social group, a cappella group, section, etc.)”"),
-                                p("“If you don't have time to be in one of the high-time commitment clubs, then it's really hard to make friends. I personally feel super lonely because of my niche interests and my desire to just debate with my peers over various topics.”"),
-                                p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”"),
-                                
-                                h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
-                                p("Examples: "),
-                                p("“I will say the social environment is very very easy to self-segregate. In my case, I went from having maybe two asian friends in high school to having majority Asian friends in college (this is also where choice of extracurriculars matters a lot, and I am in two orgs that have “Asian american” in their names)”"),
-                                p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
-                                p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
-                                
-                                h2(tags$b("Summary:")),
-                                p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
-                                
-                                
-                       ),
-                       tabPanel("Creators",
-                                h3(tags$b("Purpose of our research")),
-                                p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
-                                p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
-                                p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
-                                
-                                
-                                h2(tags$b("The Team")),
-                                p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
-                                h2(tags$b("Jeremiah Kim")),
-                                p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu."),
-                                h2(tags$b("Emily Ni")),
-                                p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
-                                h2(tags$b("Kelsey Wu")),
-                                p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
-                                h2(tags$b("Jack Kelly")),
-                                p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com"),
-                                h2(tags$b("Mark Stephens")),
-                                p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu"),
-                                h2(tags$b("Helen Pang")),
-                                p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu."))
-                       
-                       
+                        h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
+                        p("Examples:"),
+                        p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
+                        p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
+                        p("“Everyone has been pretty great and super interesting to meet so far.”"),
+                        p("“Absolutely love it”"),
+                        p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
                         
+                        h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
+                        p("Examples:"),
+                        p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
+                        p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
+                        p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”'),
+                        p("There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”"),
+                        p("It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out"),
+                        
+                        h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
+                        p("Examples:"),
+                        p("“Once you make friends initially, it is hard to expand out of that circle.”"),
+                        p("“I feel like Harvard is a difficult place to make a ton of friends unless you're already part of a defined group, like a sports team.”"),
+                        p("“I find it difficult to connect with people that you aren't naturally in contact with (in your entryway, in your social group, a cappella group, section, etc.)”"),
+                        p("“If you don't have time to be in one of the high-time commitment clubs, then it's really hard to make friends. I personally feel super lonely because of my niche interests and my desire to just debate with my peers over various topics.”"),
+                        p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”"),
+                        
+                        h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
+                        p("Examples: "),
+                        p("“I will say the social environment is very very easy to self-segregate. In my case, I went from having maybe two asian friends in high school to having majority Asian friends in college (this is also where choice of extracurriculars matters a lot, and I am in two orgs that have “Asian american” in their names)”"),
+                        p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
+                        p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
+                        
+                        h2(tags$b("Summary:")),
+                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
+  
+
                         
                         
                         
