@@ -22,7 +22,7 @@ library(magrittr)
 library(readr)
 library(gganimate)
 library(ggthemes)
-library(plyr)
+
 
 
 
@@ -474,11 +474,11 @@ server <- function(input, output) {
         
       dorm_plot <- freshmen %>%
         select(dorm) %>%
-        count() %>%
-        mutate(perc_dorm = round(freq / total_respondents*100, digits = 2))
+        count(dorm) %>%
+        mutate(perc_dorm = round(n / total_respondents*100, digits = 2))
       
       dorm_plot %>%
-        ggplot(aes(y = freq, x = dorm, fill = dorm)) +
+        ggplot(aes(y = n, x = dorm, fill = dorm)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
         coord_flip() + 
@@ -502,13 +502,13 @@ server <- function(input, output) {
       
       gender_plot <- freshmen %>%
         select(gender) %>%
-        count() %>%
-        mutate(perc_gender = round(freq / total_respondents * 100, digits = 2))
+        count(gender) %>%
+        mutate(perc_gender = round(n / total_respondents * 100, digits = 2))
       
       level_order <- c('Female', 'Male', 'Genderqueer', 'Prefer not to say')
       
       gender_plot %>%
-        ggplot(aes(y = freq, x = factor(gender, level = level_order), fill = gender)) +
+        ggplot(aes(y = n, x = factor(gender, level = level_order), fill = gender)) +
         geom_bar(stat = "identity", width = 1) + 
         geom_text(aes(label = paste0(perc_gender, "%")), size = 4) + 
         theme_economist() +
@@ -536,11 +536,11 @@ server <- function(input, output) {
                                          "Mixed Race / Other", 
                                          race)) %>% 
         select(manipulated_race) %>% 
-        count() %>% 
-        mutate(perc_race = round(freq / total_respondents*100, digits = 2))
+        count(manipulated_race) %>% 
+        mutate(perc_race = round(n / total_respondents*100, digits = 2))
       
       race_plot %>%
-        ggplot(aes(y = freq, x = manipulated_race, fill = manipulated_race)) +
+        ggplot(aes(y = n, x = manipulated_race, fill = manipulated_race)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_race, "%")), size = 4) +
         coord_flip() + 
@@ -563,11 +563,11 @@ server <- function(input, output) {
       
       gap_year_plot <- freshmen %>% 
         select(gap_year) %>% 
-        count() %>% 
-        mutate(perc_gap = round(freq / total_respondents*100, digits = 2))
+        count(gap_year) %>% 
+        mutate(perc_gap = round(n / total_respondents*100, digits = 2))
       
       gap_year_plot %>%
-        ggplot(aes(y = freq, x = gap_year, fill = gap_year)) +
+        ggplot(aes(y = n, x = gap_year, fill = gap_year)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_gap, "%")), size = 4) +
         theme_economist() +
@@ -589,11 +589,11 @@ server <- function(input, output) {
       
       int_plot <- freshmen %>% 
         select(international) %>% 
-        count() %>% 
-        mutate(perc_int = round(freq / total_respondents*100, digits = 2))
+        count(international) %>% 
+        mutate(perc_int = round(n / total_respondents*100, digits = 2))
       
       int_plot %>%
-        ggplot(aes(y = freq, x = international, fill = international)) +
+        ggplot(aes(y = n, x = international, fill = international)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_int, "%")), size = 4) +
         theme_economist() +
@@ -620,8 +620,8 @@ server <- function(input, output) {
                                         "FYRE & FCU / FIP & FCU", 
                                         pre_orientation)) %>% 
         select(manipulated_pre) %>% 
-        count() %>% 
-        mutate(perc_pre = round(freq / total_respondents*100, digits = 2)) %>% 
+        count(manipulated) %>% 
+        mutate(perc_pre = round(n / total_respondents*100, digits = 2)) %>% 
         na.omit
       
       level_order <- c('None',
@@ -633,7 +633,7 @@ server <- function(input, output) {
                        'FYRE - First-Year Retreat and Experience')
       
       pre_plot %>%
-        ggplot(aes(y = freq, x = factor(manipulated_pre, level = level_order), fill = manipulated_pre)) +
+        ggplot(aes(y = n, x = factor(manipulated_pre, level = level_order), fill = manipulated_pre)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_pre, "%")), size = 4) +
         coord_flip() +
@@ -654,11 +654,11 @@ server <- function(input, output) {
       
       sports_plot <- freshmen %>% 
         select(sports) %>% 
-        count() %>% 
-        mutate(perc_sports = round(freq / total_respondents*100, digits = 2))
+        count(sports) %>% 
+        mutate(perc_sports = round(n / total_respondents*100, digits = 2))
       
       sports_plot %>%
-        ggplot(aes(y = freq, x = sports, fill = sports)) +
+        ggplot(aes(y = n, x = sports, fill = sports)) +
         geom_col() + 
         geom_text(aes(label = paste0(perc_sports, "%")), size = 4) +
         theme_economist() +
@@ -893,13 +893,13 @@ server <- function(input, output) {
         p = data %>% 
           select(manipulated_race, satisfied) %>% 
           group_by(manipulated_race) %>% 
-          count() %>% 
+          count(manipulated_race) %>% 
           mutate(proportion = case_when(
-            manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-            manipulated_race == "White" ~ freq / 154, 
-            manipulated_race == "Black or African American" ~ freq / 32,
-            manipulated_race == "Hispanic or Latino" ~ freq / 29,
-            manipulated_race == "Other" ~ freq / 84)) %>% 
+            manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+            manipulated_race == "White" ~ n / 154, 
+            manipulated_race == "Black or African American" ~ n / 32,
+            manipulated_race == "Hispanic or Latino" ~ n / 29,
+            manipulated_race == "Other" ~ n / 84)) %>% 
           ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
           geom_col(fill = "darkred") +
           theme_economist() +
@@ -934,11 +934,11 @@ server <- function(input, output) {
         group_by(manipulated_race, know_street) %>%
         count() %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-          manipulated_race == "White" ~ freq / 154, 
-          manipulated_race == "Black or African American" ~ freq / 32,
-          manipulated_race == "Hispanic or Latino" ~ freq / 29,
-          manipulated_race == "Other" ~ freq / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
         ggplot(aes(x = know_street, y = proportion)) + 
         geom_col(fill = "red") + 
         theme_economist() +
@@ -973,11 +973,11 @@ server <- function(input, output) {
         group_by(manipulated_race, know_by_name) %>%
         count() %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-          manipulated_race == "White" ~ freq / 154, 
-          manipulated_race == "Black or African American" ~ freq / 32,
-          manipulated_race == "Hispanic or Latino" ~ freq / 29,
-          manipulated_race == "Other" ~ freq / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
         ggplot(aes(x = know_by_name, y = proportion)) + 
         geom_col(fill = "steelblue") + 
         theme_economist() +
@@ -1010,11 +1010,11 @@ server <- function(input, output) {
         group_by(manipulated_race, know_annenberg) %>%
         count() %>% 
         mutate(proportion = case_when(
-          manipulated_race == "Asian / Pacific Islander" ~ freq / 116,
-          manipulated_race == "White" ~ freq / 154, 
-          manipulated_race == "Black or African American" ~ freq / 32,
-          manipulated_race == "Hispanic or Latino" ~ freq / 29,
-          manipulated_race == "Other" ~ freq / 84)) %>% 
+          manipulated_race == "Asian / Pacific Islander" ~ n / 116,
+          manipulated_race == "White" ~ n / 154, 
+          manipulated_race == "Black or African American" ~ n / 32,
+          manipulated_race == "Hispanic or Latino" ~ n / 29,
+          manipulated_race == "Other" ~ n / 84)) %>% 
         ggplot(aes(x = know_annenberg, y = proportion)) + 
         geom_col(fill = "purple") + 
         theme_economist() +
@@ -1199,15 +1199,15 @@ server <- function(input, output) {
         count() %>% 
         ungroup() 
       
-      total <- sum(races$freq) 
+      total <- sum(races$n) 
       
       
       racial_respondent <- races %>% 
-        mutate(percent_survey = freq / total * 100) %>%
+        mutate(percent_survey = n / total * 100) %>%
         gt() %>% 
         tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
         fmt_number(decimals = 2, columns = "percent_survey") %>% 
-        cols_label(race = "Reported Ethnicity and/or Race", freq = "Total number", percent_survey = "Percent of our survey") %>% 
+        cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
         tab_footnote(footnote = "These percentages total 99.99% due to rounding",
                      locations = cells_column_labels(columns = vars("percent_survey")))
       
@@ -1396,15 +1396,15 @@ server <- function(input, output) {
         filter(most_id != 1654)
       
       count(most) %>% 
-        arrange(desc(freq)) 
+        arrange(desc(n)) 
       most_10 <- count(most) %>% 
-        arrange(desc(freq)) %>% 
+        arrange(desc(n)) %>% 
         head(10) 
       
       gt(most_10) %>% 
         tab_header(title = "Top 10 Socially Connected Freshman: Survey") %>% 
         cols_label(most_id = "ID",
-                   freq = "Number of Votes")
+                   n = "Number of Votes")
     })
     
     output$between <- render_gt({
@@ -1533,9 +1533,9 @@ server <- function(input, output) {
         filter(most_id != 1654)
       
       count(most) %>% 
-        arrange(desc(freq)) 
+        arrange(desc(n)) 
       most_10 <- count(most) %>% 
-        arrange(desc(freq)) %>% 
+        arrange(desc(n)) %>% 
         head(10) 
       
       deg <- degree(g, mode="all")

@@ -33,7 +33,6 @@ library(magrittr)
 library(readr)
 library(gganimate)
 library(ggthemes)
-library(plyr)
 ```
 
 ```{r}
@@ -42,21 +41,62 @@ freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
 ```
 
 ```{r}
-      int_plot <- freshmen %>% 
-        select(international) %>% 
-        count() %>% 
-        mutate(perc_int = round(freq / total_respondents*100, digits = 2))
-      
-      int_plot %>%
-        ggplot(aes(y = freq, x = international, fill = international)) +
-        geom_col() + 
-        geom_text(aes(label = paste0(perc_int, "%")), size = 4) +
-        theme_economist() +
-        labs(
-          x = "",
-          y = "Number of Respondents",
-          title = "International Student Distribution in Respondent Sample") + 
-        theme(legend.position = "none")
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+  clean_names() %>%
+  mutate(
+    id = as.character(id),
+    first_id = as.character(first_id),
+    second_id = as.character(second_id),
+    third_id = as.character(third_id),
+    fourth_id = as.character(fourth_id)
+  )
+
+myPalette <- brewer.pal(5, "Set2") 
+
+
+freshmen_satisfaction <- freshmen %>%
+  nest(top4 = c(first_id, second_id,
+                third_id, fourth_id)) %>%
+  select(id, satisfied, top4) %>%
+  mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
+                                      satisfied == "Satisfied" ~ 1,
+                                      satisfied == "Neutral" ~ 0,
+                                      satisfied == "Dissatisfied" ~ -1,
+                                      satisfied == "Very Dissatisfied" ~ -2))
+
+# List of all names listed in top 4 friends, with repeats
+
+freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
+
+# Calculate overall satisfaction score mean
+
+all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
+  summarize(mean = mean(satisfaction_lvl)) %>%
+  pull(mean)
+
+# Create a tibble for comparing satisfaction levels vs. whether or not
+# they appear.
+
+compare_satisfaction <- freshmen_satisfaction %>%
+  mutate(appear = id %in% freshmen_top4_list) %>%
+  group_by(appear) %>%
+  summarize(mean_satis = mean(satisfaction_lvl))
+
+compare_satisfaction %>%
+  ggplot(aes(x = appear, fill = appear)) +
+  geom_histogram(stat = "count") + 
+  guides(fill=FALSE) +
+  scale_x_discrete(labels = c("No", "Yes")) +
+  labs(
+    x = "Did the respondent's name appear in other respondents' top 4 friends lists?",
+    y = "Mean Satisfaction Score",
+    title = "Comparing mean satisfaction scores of respondents",
+    subtitle = "Respondents who appeared in others lists were more satisfied",
+    caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
+  ) +
+  geom_hline(yintercept = all_freshmen_satisfaction_mean) +
+  theme_economist()
+
 ```
 
 
