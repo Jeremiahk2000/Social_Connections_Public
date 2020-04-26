@@ -352,12 +352,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
                         br(),
                         plotOutput("race_satisfaction"),
-<<<<<<< Updated upstream
                         br(),
                         br(),
-                        
-=======
->>>>>>> Stashed changes
                         br(),
                         br(),
                         br(),
@@ -365,13 +361,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         br(),
                         br(),
-<<<<<<< Updated upstream
-                        
-                        
                         plotOutput("race_know_street"),
-=======
                         plotOutput("race_know_name"),
->>>>>>> Stashed changes
                         br(),
                         br(),
                         
@@ -410,9 +401,9 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Examples:"),
                         p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
                         p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
-                        p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”"),
-                        p("“There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”'),
-                        p("“It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out’...”"),
+                        p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”'),
+                        p("There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”"),
+                        p("It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out"),
                         
                         h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
                         p("Examples:"),
