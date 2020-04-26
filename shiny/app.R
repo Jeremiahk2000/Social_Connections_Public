@@ -1600,7 +1600,8 @@ server <- function(input, output) {
         # disable graph movement within window
         
         visInteraction(dragView = FALSE, 
-                       zoomView = FALSE)
+                       zoomView = FALSE,
+                       navigationButtons = TRUE)
       
       
     })
