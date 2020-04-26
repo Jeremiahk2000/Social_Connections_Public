@@ -396,7 +396,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                
                tabPanel("Comment Analysis",
                         h2(tags$b("Word Cloud- taken from survey comments")),
-                        img(src="wordcloud.png", width = "50%", align = "center"),
+                        img(src="wordcloud.png", width = "50%", style= "display: block; margin-left: auto; margin-right: auto;"),
                         h2(tags$b("Comment Analysis")),
                         p('Four Primary Themes: (out of 81 total comments)'),
                         
@@ -445,18 +445,24 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         h2(tags$b("The Team")),
                         p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
-                        h2(tags$b("Jeremiah Kim")),
-                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu."),
-                        h2(tags$b("Emily Ni")),
-                        p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu"),
-                        h2(tags$b("Kelsey Wu")),
-                        p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu"),
-                        h2(tags$b("Jack Kelly")),
-                        p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com"),
-                        h2(tags$b("Mark Stephens")),
-                        p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu"),
-                        h2(tags$b("Helen Pang")),
-                        p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu."))
+                        h2(tags$b("Jeremiah Kim"), align = "center"),
+                        img(src="jeremiah.jpg", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
+                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
+                        h2(tags$b("Emily Ni"), align = "center"),
+                        img(src="Emily.JPG", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
+                        p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu", align = "center"),
+                        h2(tags$b("Kelsey Wu"), align = "center"),
+                        img(src="Kelsey.JPG", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
+                        p("My name is Kelsey Wu, and I’m planning on studying Government under the Data Science Track and Economics. On campus, I’m involved in Harvard Open Data Project and Harvard Data Analytics Group, sing for the Veritones, and conduct research for HLS. I love trying various noodles, playing around with Final Cut Pro, and spontaneously blasting music with friends. Feel free to contact me at kelseywu@college.harvard.edu", align = "center"),
+                        h2(tags$b("Jack Kelly"), align = "center"),
+                        img(src="First year retreat good profile photo.jpg", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
+                        p("I’m Jack Kelly, a freshman from Fairfax County, Virginia currently residing in Belfast, Maine. I am currently planning to concentrate in Government or Economics and am a staff writer for the Harvard College Law Review. I also work part time for HSA at their marketing agency, Studio 67. In my spare time, I can be found listening to podcasts, watching random YouTube videos, and relaxing with friends. Feel free to reach me at jackrandolphkelly@gmail.com", align = "center"),
+                        h2(tags$b("Mark Stephens"), align = "center"),
+                        img(src="Mark.jpg", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
+                        p("I am a first-year at Harvard from San Francisco, CA.  Although undeclared, I plan on studying economics and computer science.  Along with my studies, I also play midfield on the men’s lacrosse team here at Harvard. My contact information is markstephens@college.harvard.edu", align = "center"),
+                        h2(tags$b("Helen Pang"), align = "center"),
+                        img(src="Helen.JPG", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
+                        p("Hi! I’m a first-year just housed in Quincy, planning on studying Computer Science and Statistics. I’m a data research assistant at HKS, and I’m very passionate about exploring new data science software. You can reach me at hpang@college.harvard.edu.", align = "center"))
                
                
                
@@ -876,7 +882,9 @@ server <- function(input, output) {
         summarize(mean = mean(satisfaction_lvl)) %>%
         pull(mean)
       
-      ggplot(data = freshmen_mod2, aes(x = know_annenberg, y = satis_know_mean)) +
+      level_order <- c('0-20', '20-50', '50-100', '100-250', '250-500', '500-1000')
+      
+      ggplot(data = freshmen_mod2, aes(x = factor(know_annenberg, level = level_order), y = satis_know_mean)) +
         geom_bar(stat = "identity", fill = "tomato3") + 
         guides(fill = FALSE) +
         geom_hline(yintercept = all_freshmen_satisfaction_mean) +
@@ -1217,7 +1225,9 @@ server <- function(input, output) {
         summarize(mean = mean(satisfaction_lvl)) %>%
         pull(mean)
       
-      ggplot(data = freshmen_mod, aes(x = know_street, y = satis_know_mean)) +
+      level_order <- c('0-50', '50-100', '100-250', '250-500', '500-1000', '1000+')
+      
+      ggplot(data = freshmen_mod, aes(x = factor(know_street, level = level_order), y = satis_know_mean)) +
         geom_bar(stat = "identity", fill = "tomato3") + 
         guides(fill = FALSE) +
         geom_hline(yintercept = all_freshmen_satisfaction_mean) +
