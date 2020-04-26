@@ -1062,6 +1062,17 @@ server <- function(input, output) {
       
       myPalette <- brewer.pal(5, "Set2") 
       
+      # List of all names listed in top 4 friends, with repeats
+      
+      freshmen_top4_list <- unlist(freshmen_satisfaction$top4)
+      
+      # Name search function: counts how many times name appeared in list
+      
+      name_search <- function(name){
+        a <- table(freshmen_top4_list)
+        
+        unname(a[names(a) == name])
+      }
       
       # Function takes name input, outputs how many times that name
       # appears in the "most socially connected" column.
