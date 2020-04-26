@@ -179,7 +179,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         2023 class they would recognize on the street. Below were our results:"), 
                         br(),
                         
- # We need this graph                       
+                     
                         
                         p("We then observed the mean satisfaction levels 
                         (measured on a scale from -2 to 2) of each group that 
@@ -352,12 +352,10 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
                         br(),
                         plotOutput("race_satisfaction"),
-<<<<<<< Updated upstream
+
                         br(),
                         br(),
                         
-=======
->>>>>>> Stashed changes
                         br(),
                         br(),
                         br(),
@@ -365,13 +363,13 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         br(),
                         br(),
-<<<<<<< Updated upstream
+
                         
                         
                         plotOutput("race_know_street"),
-=======
+
                         plotOutput("race_know_name"),
->>>>>>> Stashed changes
+
                         br(),
                         br(),
                         
@@ -381,7 +379,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         
                         
-                        plotOutput("race_know_name"),
+                       
                         br(),
                         br(),
                         
