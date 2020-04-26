@@ -22,6 +22,8 @@ library(magrittr)
 library(readr)
 library(gganimate)
 library(ggthemes)
+library(plyr)
+
 
 
 
