@@ -38,12 +38,52 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumably bias associated with who responded and who did not, we cross checked our responses with a random sample of 2023 students. The random sample was a random compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
                         br(),
                         h2(tags$b("Common Demographics")),
-                        plotOutput("dorm_stats"),
-                        p("We need to put a gender breakdown, which activites were the most common from respondents, and other VERY BASIC things about our literal data"),
+                        plotOutput("dorm_plot"),
+                        p("Because Canaday is the largest freshman dorm, it necessarily made up the largest portion of our sample."),
                         br(),
-                        h2(tags$b("Survey Questions"))
-                      
-                        
+                        plotOutput("gender_plot"),
+                        br(),
+                        plotOutput("race_plot"),
+                        br(),
+                        plotOutput("gap_year_plot"),
+                        br(),
+                        plotOutput("int_plot"),
+                        br(),
+                        plotOutput("pre_plot"),
+                        br(),
+                        plotOutput("sports_plot"),
+                        h2(tags$b("Survey Questions")),
+                        p("1.) Have you taken a gap year?"),
+                        br(),
+                        p("2.) Which gender identity do you most identify with?"),
+                        br(),
+                        p("3.) Specify your race and/or ethnicity"),
+                        br(),
+                        p("4.) Are you classified as an international student?"),
+               br(),
+               p("5.) Which pre-orientation, if any, did you participate in?"),
+               br(),
+               p("6.) Are you involved with any sports teams on campus?"),
+               br(),
+               p("7.) List the four names of the people who you are closest friends with."),
+               br(),
+               p("8.) How many people would you recognize as a Harvard first-year if you saw them on the street?"),
+               br(),
+               p("9.) How many first-years do you know by name?"),
+               br(),
+               p("10.) How many people would you feel comfortable sitting down next to in Annenberg unprompted?"),
+               br(),
+               p("11.) Name the most socially connected person in the class of 2023."),
+               br(),
+               p("12.) How satisfied are you with your social connections with first-year students at Harvard?"),
+               br(),
+               p("If you would like to see our methodology about why we chose these specific questions and what our purpose behind each question was, please follow this link:"),
+               h3(tags$a(href="https://docs.google.com/document/d/1vx0WUw2ExeIp8rgt1f23C0LbKV0dPIBXf3JDR6UZJmk/edit?usp=sharing", "Survey Methodology")),
+               br(),
+               br(),
+               p("Gov 1005: Harvard University")
+               
+               
                         ),
                         
                         
@@ -112,8 +152,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         satisfaction, while respondents who did appear reported 
                         an above average level of satisfaction."), br(),
                         
-                        p("Then, we plotted number of appearances against mean 
-                        satisfaction score on a scatter plot."), br(),
+                        p("Then, we plotted number of appearances against 
+                        satisfaction scores on a scatter plot."), br(),
                         
                         plotOutput("satisfaction_scatter_plot"),
                         
@@ -130,9 +170,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         h2(tags$b("Do students who know more first-years feel more satisfied?")),
                         br(),
-                        plotOutput("top_socially_connected_appearance_in_top4"),
-                        br(),
-                        p("Obviously these numbers are pretty thin, indicating that it is hard to draw conclusions from the students who were listed most often. Therefore, the data we have suggests that students who know more people may have more close friends, but the relationship is certainly not clear."),
+                        
                         
                         h3(tags$b("How many members of the Class of 2023 would 
                         you recognize on the street?")),
@@ -149,7 +187,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         results, graphed with the overall average satisfaction 
                         level of our entire sample (the black horizontal line)."),
  br(),
-                        
+                        plotOutput("street_results"),
+                        br(),
                         plotOutput("social_num_street_satisfaction"),
                         
                         p("As can be observed, the respondents who could recognize 
@@ -167,20 +206,26 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         
                         
                         p("We also asked respondents how many freshmen they 
-                        would feel comfortable sitting down with at Annenberg. Below were our results:"), br(),
+                        would feel comfortable sitting down with at Annenberg. Below were our results:"), 
+ br(),
                        
- # Get the RMD 
-                        img(src="7know_in_berg_responses.png", width = "50%"),
+ 
+                        
                         
                         p("We then observed the mean satisfaction levels 
                         (measured on a scale from -2 to 2) of each group that 
                         stated similar numbers of students they felt comfortable 
                         sitting next to in Annenberg. Below are our results, 
                         graphed with the overall average satisfaction level 
-                        of our entire sample (the black horizontal line)."), br(),
+                        of our entire sample (the black horizontal line)."), 
+ br(),
+                        plotOutput("know_in_berg_count"),
+ br(),
+                        plotOutput("know_in_berg_satisfaction"),
+ br(),
 
- # Get the RMD                        
-                        img(src="8know_in_berg_satisfaction.png", width = "50%"),
+                      
+                        
                         
                         p("In this question, students who answered differently 
                         did not demonstrate large differences in satisfaction 
@@ -210,8 +255,9 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         how many times those students appeared in other 
                         respondents top 4 friend lists.'), br(),
                         
- # Get the RMD                       
-                        img(src="9social_connect_top4.png", width = "50%"),
+                       
+                        plotOutput("top_socially_connected_appearance_in_top4"),
+ 
                         
                         p('As seen in the graph above, the number of times 
                         someone was named "most socially connected" had a very 
@@ -413,28 +459,214 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
 # The image's original dimensions are 2099x1499, so I scaled it down by half and rounded
 
 server <- function(input, output) {
+  
+  
 
     #Included
     
-    output$dorm_stats <- renderPlot({
-        dorm_group <- read_csv("data/dorm_group.csv")
+    output$dorm_plot <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
         
-        dorm_group %>%
-            ggplot(aes(y = n, x = dorm, fill = dorm)) +
-            geom_col() + 
-            geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
-            coord_flip() + 
-          theme_economist() +
-            labs(
-                x = "",
-                y = "Number of Respondents",
-                title = "Respondent Sample by Dorm"
-            ) + 
-            theme(legend.position = "none")
+      dorm_plot <- freshmen %>%
+        select(dorm) %>%
+        count(dorm) %>%
+        mutate(perc_dorm = round(n / total_respondents*100, digits = 2))
+      
+      dorm_plot %>%
+        ggplot(aes(y = n, x = dorm, fill = dorm)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_dorm, "%")), size = 4) +
+        coord_flip() + 
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "Dorm Distribution in Respondent Sample") + 
+        theme(legend.position = "none")
         
     })
     
+    #Included
+    
+    output$gender_plot <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      gender_plot <- freshmen %>%
+        select(gender) %>%
+        count(gender) %>%
+        mutate(perc_gender = round(n / total_respondents * 100, digits = 2))
+      
+      level_order <- c('Female', 'Male', 'Genderqueer', 'Prefer not to say')
+      
+      gender_plot %>%
+        ggplot(aes(y = n, x = factor(gender, level = level_order), fill = gender)) +
+        geom_bar(stat = "identity", width = 1) + 
+        geom_text(aes(label = paste0(perc_gender, "%")), size = 4) + 
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "Gender Distribution in Respondent Sample") + 
+        theme(legend.position = "none")
+    })
+    
+    #Included
+    
+    output$race_plot <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      race_plot <- freshmen %>% 
+        mutate(manipulated_race = ifelse(race != "White" & 
+                                           race != "Asian / Pacific Islander" & 
+                                           race != "Black or African American" & 
+                                           race != "Hispanic or Latino", 
+                                         "Mixed Race / Other", 
+                                         race)) %>% 
+        select(manipulated_race) %>% 
+        count(manipulated_race) %>% 
+        mutate(perc_race = round(n / total_respondents*100, digits = 2))
+      
+      race_plot %>%
+        ggplot(aes(y = n, x = manipulated_race, fill = manipulated_race)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_race, "%")), size = 4) +
+        coord_flip() + 
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "Racial Distribution in Respondent Sample") + 
+        theme(legend.position = "none")
+    })
+    
     # Included
+    
+    output$gap_year_plot <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      gap_year_plot <- freshmen %>% 
+        select(gap_year) %>% 
+        count(gap_year) %>% 
+        mutate(perc_gap = round(n / total_respondents*100, digits = 2))
+      
+      gap_year_plot %>%
+        ggplot(aes(y = n, x = gap_year, fill = gap_year)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_gap, "%")), size = 4) +
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "Gap Year Student Distribution in Respondent Sample") + 
+        theme(legend.position = "none")
+    })
+    
+    # Included
+    
+    output$int_plot <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      int_plot <- freshmen %>% 
+        select(international) %>% 
+        count(international) %>% 
+        mutate(perc_int = round(n / total_respondents*100, digits = 2))
+      
+      int_plot %>%
+        ggplot(aes(y = n, x = international, fill = international)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_int, "%")), size = 4) +
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "International Student Distribution in Respondent Sample") + 
+        theme(legend.position = "none")
+    })
+    
+    output$pre_plot <- renderPlot({
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      pre_plot <- freshmen %>% 
+        mutate(manipulated_pre = ifelse(pre_orientation != "FAP - First-Year Arts Program" & 
+                                          pre_orientation != "FCU - Fall Clean-Up with Dorm Crew" & 
+                                          pre_orientation != "FIP - First-Year International Program" & 
+                                          pre_orientation != "FOP - First-Year Outdoor Program" &
+                                          pre_orientation != "FYRE - First-Year Retreat and Experience" &
+                                          pre_orientation != "None",
+                                        "FYRE & FCU / FIP & FCU", 
+                                        pre_orientation)) %>% 
+        select(manipulated_pre) %>% 
+        count(manipulated_pre) %>% 
+        mutate(perc_pre = round(n / total_respondents*100, digits = 2)) %>% 
+        na.omit
+      
+      level_order <- c('None',
+                       'FYRE & FCU / FIP & FCU',
+                       'FAP - First-Year Arts Program', 
+                       'FCU - Fall Clean-Up with Dorm Crew', 
+                       'FIP - First-Year International Program', 
+                       'FOP - First-Year Outdoor Program',
+                       'FYRE - First-Year Retreat and Experience')
+      
+      pre_plot %>%
+        ggplot(aes(y = n, x = factor(manipulated_pre, level = level_order), fill = manipulated_pre)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_pre, "%")), size = 4) +
+        coord_flip() +
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "Pre-Orientation Participation Distribution in Respondent Sample") +
+        theme(legend.position = "none")
+    })
+    
+    output$sports_plot <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names()
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      sports_plot <- freshmen %>% 
+        select(sports) %>% 
+        count(sports) %>% 
+        mutate(perc_sports = round(n / total_respondents*100, digits = 2))
+      
+      sports_plot %>%
+        ggplot(aes(y = n, x = sports, fill = sports)) +
+        geom_col() + 
+        geom_text(aes(label = paste0(perc_sports, "%")), size = 4) +
+        theme_economist() +
+        labs(
+          x = "",
+          y = "Number of Respondents",
+          title = "Sports Participation Distribution in Respondent Sample") +
+        theme(legend.position = "none")
+    })
     
     output$compare_satisfaction <- renderPlot({
         freshmen <- read_csv("data/freshmen.csv") 
@@ -485,21 +717,165 @@ server <- function(input, output) {
     
     # Included
     output$satisfaction_scatter_plot <- renderPlot({
-        satisfaction_scatter_tbl <- read_csv("data/satisfaction_scatter_tbl.csv")
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names() %>%
+        mutate(
+          id = as.character(id),
+          first_id = as.character(first_id),
+          second_id = as.character(second_id),
+          third_id = as.character(third_id),
+          fourth_id = as.character(fourth_id)
+        )
+      
+      myPalette <- brewer.pal(5, "Set2") 
+      
+      total_students <- 1650
+      
+      total_respondents <- freshmen %>% nrow()
+      
+      perc_respondents <- round(total_respondents / total_students * 100, digits = 2)
+      
+      females <- freshmen %>%
+        filter(gender == "Female") %>%
+        nrow()
+      
+      males <- freshmen %>%
+        filter(gender == "Male") %>%
+        nrow()
+      
+      genderqueer <- freshmen %>%
+        filter(gender == "Genderqueer") %>%
+        nrow()
+      
+      gender_prefer_not <- freshmen %>%
+        filter(gender == "Prefer not to Say") %>%
+        nrow()
+      
+      perc_female <- round(females / total_respondents * 100, digits = 2)
+      
+      perc_male <- round(males / total_respondents * 100, digits = 2)
+      
+      perc_genderqueer <- round(genderqueer / total_respondents * 100, digits = 2)
+      
+      perc_genderprefernot <- round(gender_prefer_not / total_respondents * 100, digits = 2)
+      
+      # Rescale satisfaction level for bar plot
+      
+      freshmen_satisfaction <- freshmen %>%
+        nest(top4 = c(first_id, second_id,
+                      third_id, fourth_id)) %>%
+        select(id, satisfied, top4) %>%
+        mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
+                                            satisfied == "Satisfied" ~ 1,
+                                            satisfied == "Neutral" ~ 0,
+                                            satisfied == "Dissatisfied" ~ -1,
+                                            satisfied == "Very Dissatisfied" ~ -2)) 
+      
+      # Name search function: counts how many times name appeared in list
+      
+      name_search <- function(name){
+        a <- table(freshmen_top4_list)
         
-        satisfaction_scatter_tbl %>%
-            ggplot(aes(x = appearances, y = mean)) +
-            geom_point(position = "jitter") +
-            geom_smooth(method='lm', formula= y~x) +
-            stat_cor(label.x = 5, label.y = 4.7) +
-            labs(
-                x = "Number of appearances in top 4 friend lists",
-                y = "Mean satisfaction level (1 = Very Dissatisfied, 5 = Very Satisfied)",
-                title = "Number of appearances and satisfaction level of Harvard social culture",
-                subtitle = "Respondents who appeared more frequently reported to be more satisfied",
-                caption = "Very Dissatisfied = 1, Dissatisfied = 2, Neutral = 3, Satisfied = 4, Very Satisfied = 5"
-            ) + 
-            theme_economist()
+        unname(a[names(a) == name])
+      }
+      
+      # Create tibble with number of appearances column
+      # Group respondents by number of appearances they had
+      # Find mean of each group
+      
+      satisfaction_scatter_tbl <- freshmen_satisfaction %>%
+        mutate(appearances = map(id, ~ name_search(.))) %>%
+        unnest(appearances)
+      
+      # Create scatter plot (appearances vs. mean satisfaction level)
+      
+      satisfaction_scatter_tbl %>%
+        ggplot(aes(x = appearances, y = satisfaction_lvl)) +
+        geom_point(position = "jitter") +
+        geom_smooth(method='lm', formula= y~x) +
+        stat_cor(label.x = 5, label.y = 1.5) +
+        labs(
+          x = "Number of appearances in top 4 friend lists",
+          y = "Satisfaction level
+    (-2 = Very Dissatisfied, 2 = Very Satisfied)",
+          title = "Number of appearances and satisfaction level of
+    Harvard social culture",
+          subtitle = "Respondents who appeared more frequently reported to be more satisfied",
+          caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 2"
+        ) + 
+        theme_economist()
+      
+    
+    })
+    
+    output$know_in_berg_count <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names() %>%
+        mutate(
+          id = as.character(id),
+          first_id = as.character(first_id),
+          second_id = as.character(second_id),
+          third_id = as.character(third_id),
+          fourth_id = as.character(fourth_id)
+        )
+      
+      myPalette <- brewer.pal(5, "Set2") 
+      
+      freshmen$know_annenberg <- factor(freshmen$know_annenberg,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000"))
+      
+      freshmen_mod2 <- freshmen %>%
+        filter(know_annenberg != "NA")
+      
+      ggplot(data = freshmen_mod2, aes(x = know_annenberg)) + 
+        geom_bar(fill = "maroon3") + 
+        labs(
+          x = "Number of freshmen respondents would feel comfortable
+    sitting down with at Annenberg",
+          y = "Count",
+          title = "How many freshmen would you feel comfortable sitting 
+    down with at Annenberg?",
+          subtitle = "50-100 was the most popular response") + 
+        theme_economist()
+    })
+    
+    output$know_in_berg_satisfaction <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names() %>%
+        mutate(
+          id = as.character(id),
+          first_id = as.character(first_id),
+          second_id = as.character(second_id),
+          third_id = as.character(third_id),
+          fourth_id = as.character(fourth_id)
+        )
+      
+      myPalette <- brewer.pal(5, "Set2") 
+      
+      freshmen_mod2 <- freshmen %>%
+        filter(know_annenberg != "NA") %>%
+        mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
+                                            satisfied == "Satisfied" ~ 1,
+                                            satisfied == "Neutral" ~ 0,
+                                            satisfied == "Dissatisfied" ~ -1,
+                                            satisfied == "Very Dissatisfied" ~ -2)) %>%
+        group_by(know_annenberg) %>%
+        summarize(satis_know_mean = mean(satisfaction_lvl))
+      
+      ggplot(data = freshmen_mod2, aes(x = know_annenberg, y = satis_know_mean)) +
+        geom_bar(stat = "identity", fill = "tomato3") + 
+        guides(fill = FALSE) +
+        geom_hline(yintercept = all_freshmen_satisfaction_mean) +
+        labs(
+          x = "Number of freshmen respondents would feel comfortable
+    sitting next to in Annenberg", 
+          y = "Satisfaction Level",
+          title = "Relationship Between Satisfaction and Number of 
+    People Comfortable Sitting Next to in Annenberg",
+          caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 1")  + 
+        theme_economist()
     })
     
     # Included
@@ -657,34 +1033,152 @@ server <- function(input, output) {
            contentType = 'image/gif')}, 
       deleteFile = TRUE)
     
-    # Included, but strongly consider getting rid of this graph and section
+    # Included
     
     output$top_socially_connected_appearance_in_top4 <- renderPlot({
-        well_connected_top_appearances <- read_csv("data/well_connected_top_appearances.csv")
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names() %>%
+        mutate(
+          id = as.character(id),
+          first_id = as.character(first_id),
+          second_id = as.character(second_id),
+          third_id = as.character(third_id),
+          fourth_id = as.character(fourth_id)
+        )
+      
+      myPalette <- brewer.pal(5, "Set2") 
+      
+      
+      # Function takes name input, outputs how many times that name
+      # appears in the "most socially connected" column.
+      # In other words, how many respondents thought they were the
+      # most socially connected person.
+      
+      well_connected_name_search <- function(name){
+        a <- table(freshmen$most_id)
         
-        well_connected_top_appearances %>%
-            ggplot(aes(x = appearances_in_well_connected, y = appearances_in_top4)) +
-            geom_jitter() +
-            geom_smooth(method='lm', formula= y~x) +
-            stat_cor(label.x = 5, label.y = 4.7) +
-            labs(
-                x = "Number of appearances in 'most socially connected' question",
-                y = "Number of appearances in top 4 friend lists",
-                title = "Appearances of 'most socially connected' people in top 4 friend lists",
-                subtitle = "Most 'socially connected' does not strongly correlate with 'closeness' with the most people"
-            ) +
-          theme_economist()
+        unname(a[names(a) == name])
+      }
+      
+      # Create tibble counting how many times each name appears.
+      # Then, arrange tibble to contain top 100 "socially connected" students
+      
+      well_connected_top <- freshmen %>%
+        count(most_id) %>%
+        arrange(desc(n)) %>%
+        head(100) %>%
+        pull(most_id) %>%
+        na.omit()
+      
+      # Create function that checks for outliers using quantile
+      
+      is_outlier <- function(x) {
+        return(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x))
+      }
+      
+      # Create tibble that shows the top 100 "socially connected" students.
+      # The tibble has 3 columns:
+      # name column: names of top 100 "socially connected" students
+      # appearances_in_well_connected column: how many respondents thought this student was the most well connected
+      # appearances_in_top4 column: how many respondents listed this student as one of their top 4 friends
+      
+      well_connected_top_appearances <- tibble(
+        id = as.character(well_connected_top),
+        appearances_in_top4 = map(id, ~ name_search(.)),
+        appearances_in_well_connected = map(id, ~ well_connected_name_search(.))) %>%
+        unnest(cols = c(appearances_in_top4, appearances_in_well_connected)) %>%
+        mutate(outlierconn = is_outlier(appearances_in_well_connected)) %>%
+        mutate(outliertop4 = is_outlier(appearances_in_top4)) %>%
+        filter(outlierconn == FALSE & outliertop4 == FALSE)
+      
+      # Create ggplot
+      
+      well_connected_top_appearances %>%
+        ggplot(aes(x = appearances_in_well_connected, y = appearances_in_top4)) +
+        geom_point() +
+        
+        # Add line of best fit
+        
+        geom_smooth(method='lm', formula= y~x, color = "skyblue3") +
+        
+        geom_jitter() +
+        
+        # Add correlation labels
+        
+        stat_cor(label.x = 2, label.y = 3.5) +
+        labs(
+          x = "Number of appearances in 'most socially connected' question",
+          y = "Number of appearances in top 4 friend lists",
+          title = "Appearances of 'most socially connected' people in top 4 friend lists",
+          subtitle = "Most 'socially connected' does not strongly correlate with 'closeness' with the most people"
+        ) + theme_economist()
     })
     
-    # This is included, but the second part of these analysis is missing
+    output$street_results <- renderPlot({
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names() %>%
+        mutate(
+          id = as.character(id),
+          first_id = as.character(first_id),
+          second_id = as.character(second_id),
+          third_id = as.character(third_id),
+          fourth_id = as.character(fourth_id)
+        )
+      
+      myPalette <- brewer.pal(5, "Set2") 
+      
+      freshmen$know_street <- factor(freshmen$know_street,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000", "1000+"))
+      
+      ggplot(data = freshmen, aes(x = know_street)) + 
+        geom_bar(fill = "seagreen4") + 
+        labs(
+          x = "How many members of the Class of 2023 would you
+    recognize on the street?",
+          y = "Count",
+          title = "Number of freshmen respondents would recognize
+    on the street") + 
+        theme_economist()
+    })
+    
+    # Included
     
     output$social_num_street_satisfaction <- renderPlot({
-        freshmen_mod <- read_csv("data/freshmen_mod.csv")
-        
-        ggplot(data = freshmen_mod, aes(x = recognize_street, y = satisfaction)) + geom_point(alpha = .2) + geom_jitter() + labs(
-            x = "Number of fellow freshmen respondents would recognize if encountered on the street", y = "levels of satisfaction",
-            title = "Relationship between satisfaction with social life and number of people they recognize") +
-          theme_economist()
+      
+      freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
+        clean_names() %>%
+        mutate(
+          id = as.character(id),
+          first_id = as.character(first_id),
+          second_id = as.character(second_id),
+          third_id = as.character(third_id),
+          fourth_id = as.character(fourth_id)
+        )
+      
+      myPalette <- brewer.pal(5, "Set2") 
+      
+      freshmen_mod <- freshmen %>%
+        mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
+                                            satisfied == "Satisfied" ~ 1,
+                                            satisfied == "Neutral" ~ 0,
+                                            satisfied == "Dissatisfied" ~ -1,
+                                            satisfied == "Very Dissatisfied" ~ -2)) %>%
+        group_by(know_street) %>%
+        summarize(satis_know_mean = mean(satisfaction_lvl))
+      
+      ggplot(data = freshmen_mod, aes(x = know_street, y = satis_know_mean)) +
+        geom_bar(stat = "identity", fill = "tomato3") + 
+        guides(fill = FALSE) +
+        geom_hline(yintercept = all_freshmen_satisfaction_mean) +
+        labs(
+          x = "Number of freshmen respondents would recognize 
+    if encountered on the street", 
+          y = "Satisfaction Level",
+          title = "Relationship Between Satisfaction and Number of 
+    People Recognized",
+          caption = "Very Dissatisfied = -2, Dissatisfied = -1, Neutral = 0, Satisfied = 1, Very Satisfied = 1")  + 
+        theme_economist()
     })
     
     # Included
@@ -900,8 +1394,14 @@ server <- function(input, output) {
         select(most_id) %>% 
         filter(most_id != 1654)
       
+<<<<<<< HEAD
       most_10 <- most %>% 
         count(most_id) %>% 
+=======
+      count(most) %>% 
+        arrange(desc(n)) 
+      most_10 <- count(most) %>% 
+>>>>>>> 472be9618b7f10393654ab200803947ed9c73d08
         arrange(desc(n)) %>% 
         head(10) 
       
@@ -1036,8 +1536,14 @@ server <- function(input, output) {
         select(most_id) %>% 
         filter(most_id != 1654)
       
+<<<<<<< HEAD
       most_10 <- most %>% 
         count(most_id) %>% 
+=======
+      count(most) %>% 
+        arrange(desc(n)) 
+      most_10 <- count(most) %>% 
+>>>>>>> 472be9618b7f10393654ab200803947ed9c73d08
         arrange(desc(n)) %>% 
         head(10) 
       
