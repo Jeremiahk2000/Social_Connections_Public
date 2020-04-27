@@ -32,7 +32,7 @@ library(ggthemes)
 
 ui <- fluidPage(theme = shinytheme("yeti"),
                     tags$head(tags$style(type="text/css", "#helen_plot img{
-                    width: 60%;
+                    width: 100%;
                     display: block;
                     margin-left: auto;
                     margin-right: auto;
@@ -309,7 +309,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("First, we begin by visualizing our social network graph. A graph consists of edges and nodes. In our case, the nodes are the freshmen, and the edges are connections between students. The graph is colored based on the level of connection (first through fourth)"),
                         
                         
-                        plotOutput("helen_plot", width = 500, height = 500),
+                        plotOutput("helen_plot"),
                         
                         p("Now, onto the analysis. Although visualizing the network can be useful for examining the data at a high level, one of the most important features of social network analysis is the ability to mathematically describe a node’s characteristics on the network. The positions of individuals are best described in terms of centrality. Centrally positioned individuals enjoy a position of privilege over those in the circumference of the network. We ran the three main centrality tests: degree centrality, betweenness centrality, and closeness centrality."),
                         
@@ -344,63 +344,62 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions.")
                         
                ),
-               tabPanel(align = "center", "Satisfaction and Race",
+             #  tabPanel(align = "center", "Satisfaction and Race",
                         
-                        h2(tags$b("Analysis of the data by race")),
-                        
-                        p("According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, we were unable to satisfactorily replicate Harvard’s admission statistics."), 
-                        br(),
-                        p("Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:"),
-                        br(),
-                        gt_output("racial_respondent"),
-                        br(),
-                        p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
-                        br(),
-                        imageOutput("race_satisfaction"),
+             #            h2(tags$b("Analysis of the data by race")),
+                      
+             #           p("According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, we were unable to satisfactorily replicate Harvard’s admission statistics."), 
+             #           br(),
+             #           p("Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:"),
+             #             br(),
+             #            gt_output("racial_respondent"),
+             #           br(),
+             #            p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
+             #            br(),
+             #            imageOutput("race_satisfaction"),
 
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #           br(),
+             #           br(),
+             #           br(),
+             #            br(),
+                       
                         
-                        p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
+             #            p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #           br(),
+             #           br(),
+             #           br(),
+             #           br(),
                         
-                        imageOutput("race_know_street"),
+             #           imageOutput("race_know_street"),
                         
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #           br(),
+             #           br(),
+             #           br(),
+             #            br(),
 
-                        imageOutput("race_know_name"),
+             #            imageOutput("race_know_name"),
 
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #            br(),
+             #            br(),
+             #            br(),
+             #           br(),
    
-                        imageOutput("race_know_berg"),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #            imageOutput("race_know_berg"),
+             #           br(),
+             #           br(),
+             #            br(),
+             #            br(),
+             #            br(),
+             #            br(),
+             #            br(),
                         
 
-                        p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
-                        p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
-                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
+             #           p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
+             #           p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
+             #           p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
                 
-               ),
+             #   ),
                
                tabPanel(align = "center", "Comment Analysis",
                         h2(tags$b("Word Cloud- taken from survey comments")),
@@ -416,7 +415,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                           p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
                           p("“Everyone has been pretty great and super interesting to meet so far.”"),
                           p("“Absolutely love it”"),
-                          p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
+                          p("“I LOVE HARVARD AND MY FRIENDS!!!!!”")
                         ),
                         
                         column(6, h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
@@ -442,10 +441,11 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
                         p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”")
                         ),
-                        br(),
-                        h2(tags$b("Summary:")),
+                        
+                        
+                        column(6, align = "center", h3(tags$b("Summary:")),
                         p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging."),
-                        br()
+                        br())
                     
                ),
                
@@ -460,7 +460,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
                         h2(tags$b("Jeremiah Kim"), align = "center"),
                         img(src="jeremiah.jpg", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
-                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
+                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am also a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
                         h2(tags$b("Emily Ni"), align = "center"),
                         img(src="Emily.JPG", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
                         p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu", align = "center"),
@@ -948,8 +948,8 @@ server <- function(input, output) {
       
       # Return a list containing the filename
       list(src = "race_satisfaction.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')}
+      )
     
     # Included
     
@@ -987,8 +987,7 @@ server <- function(input, output) {
       anim_save("race_know_street.gif", animate(s))
       
       list(src = "race_know_street.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')})
     
     # Included
     
@@ -1025,8 +1024,7 @@ server <- function(input, output) {
       anim_save("race_know_name.gif", animate(x))
       
       list(src = "race_know_name.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')})
     
     # Included
     
@@ -1064,8 +1062,7 @@ server <- function(input, output) {
       anim_save("race_know_berg.gif", animate(b))
       
       list(src = "race_know_berg.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')})
     
     # Included
     
@@ -1280,7 +1277,7 @@ server <- function(input, output) {
         tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
         fmt_number(decimals = 2, columns = "percent_survey") %>% 
         cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
-        tab_footnote(footnote = "These percentages total 99.99% due to rounding",
+        tab_footnote(footnote = "These percentages do not total 100% due to rounding",
                      locations = cells_column_labels(columns = vars("percent_survey"))) %>% 
         tab_footnote(footnote = "These percentages differ from the home page because some respondents declared themselves as multiple races. We counted every occurence of every race.",
                      locations = cells_column_labels(columns = vars("percent_survey")))
