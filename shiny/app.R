@@ -30,7 +30,13 @@ library(ggthemes)
 # use plotOutput function to plot the graph
 # I named my image "plot" so that is what I put in the function call
 
-ui <- bootstrapPage(theme = shinytheme("yeti"),
+ui <- fluidPage(theme = shinytheme("yeti"),
+                    tags$head(tags$style(type="text/css", "#helen_plot img{
+                    width: 100%;
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                                         }")),
     navbarPage(tags$b("Social Connectedness in the Class of 2023"),
                
                # First tab shows basic information about the survey
@@ -303,7 +309,9 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         h4(tags$b("What is Social Network Analysis?")),
                         p("Social Network Analysis is a set of methods used to visualize networks, describe specific characteristics of overall network structure, and build mathematical and statistical models of network structures and dynamics."),
                         p("First, we begin by visualizing our social network graph. A graph consists of edges and nodes. In our case, the nodes are the freshmen, and the edges are connections between students. The graph is colored based on the level of connection (first through fourth)"),
-                        plotOutput("helen_plot", width = 500, height = 500),
+                        
+                        
+                        plotOutput("helen_plot"),
                         
                         p("Now, onto the analysis. Although visualizing the network can be useful for examining the data at a high level, one of the most important features of social network analysis is the ability to mathematically describe a node’s characteristics on the network. The positions of individuals are best described in terms of centrality. Centrally positioned individuals enjoy a position of privilege over those in the circumference of the network. We ran the three main centrality tests: degree centrality, betweenness centrality, and closeness centrality."),
                         
@@ -338,6 +346,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions.")
                         
                ),
+<<<<<<< HEAD
                
                # Fifth tab analyzes the survey data based on race and satisfaction of respondents
                
@@ -354,92 +363,116 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
                         br(),
                         plotOutput("race_satisfaction"),
-
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+=======
+             #  tabPanel(align = "center", "Satisfaction and Race",
                         
-                        p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
-                        
-                        br(),
-                        br(),
-                        br(),
-                        br(),
- 
-                        plotOutput("race_know_street"),
-                        
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #            h2(tags$b("Analysis of the data by race")),
+                      
+             #           p("According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, we were unable to satisfactorily replicate Harvard’s admission statistics."), 
+             #           br(),
+             #           p("Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:"),
+             #             br(),
+             #            gt_output("racial_respondent"),
+             #           br(),
+             #            p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
+             #            br(),
+             #            imageOutput("race_satisfaction"),
+>>>>>>> 87bee17eef983d37689a7627e39829d5809aae79
 
-                        plotOutput("race_know_name"),
+             #           br(),
+             #           br(),
+             #           br(),
+             #            br(),
+                       
+                        
+             #            p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
+                        
+             #           br(),
+             #           br(),
+             #           br(),
+             #           br(),
+                        
+             #           imageOutput("race_know_street"),
+                        
+             #           br(),
+             #           br(),
+             #           br(),
+             #            br(),
 
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #            imageOutput("race_know_name"),
+
+             #            br(),
+             #            br(),
+             #            br(),
+             #           br(),
    
-                        plotOutput("race_know_berg"),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
+             #            imageOutput("race_know_berg"),
+             #           br(),
+             #           br(),
+             #            br(),
+             #            br(),
+             #            br(),
+             #            br(),
+             #            br(),
                         
 
-                        p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
-                        p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
-                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
+             #           p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
+             #           p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
+             #           p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
                 
-               ),
+             #   ),
                
+<<<<<<< HEAD
                # Sixth tab analyzes the comments given by respondents from the survey and interviews
                
                tabPanel("Comment Analysis",
+=======
+               tabPanel(align = "center", "Comment Analysis",
+>>>>>>> 87bee17eef983d37689a7627e39829d5809aae79
                         h2(tags$b("Word Cloud- taken from survey comments")),
                         img(src="wordcloud.png", width = "50%", style= "display: block; margin-left: auto; margin-right: auto;"),
+                        
+                        
                         h2(tags$b("Comment Analysis")),
                         p('Four Primary Themes: (out of 81 total comments)'),
                         
-                        h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
-                        p("Examples:"),
-                        p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
-                        p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
-                        p("“Everyone has been pretty great and super interesting to meet so far.”"),
-                        p("“Absolutely love it”"),
-                        p("“I LOVE HARVARD AND MY FRIENDS!!!!!”"),
+                        column(6, h3(tags$b("Holding a Positive Outlook on Harvard's Social Environment: 10 comments")),
+                          p("Examples:"),
+                          p("“I believe Harvard builds community really well, especially for first-years. Having all first-years eat in one dining hall really builds up the freshman community. Our entryways and dorms also provide us with a community right when we arrive on campus. I'm grateful for how attentive Harvard is in helping first-years meet new people.”"),
+                          p("“People have been incredibly encouraging and supportive. I really haven’t encountered much of the toxic competitiveness (though I’m well aware it exists), so I feel I’ve been particularly fortunate in that I’ve been able to find a number of people in my life with whom I share genuinely deep bonds with.”"),
+                          p("“Everyone has been pretty great and super interesting to meet so far.”"),
+                          p("“Absolutely love it”"),
+                          p("“I LOVE HARVARD AND MY FRIENDS!!!!!”")
+                        ),
                         
-                        h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
+                        column(6, h3(tags$b("Competitive Environment and Transactional Relationships: 15 comments")),
                         p("Examples:"),
                         p("“I feel like it's a little hard to make genuine social connections here because everyone is so busy and many people see connections in a very transactional way.”"),
                         p("“Unfortunately, friendships at Harvard often seem quite superficial.”"),
                         p('“Most people are really concerned with having everyone like them and with "networking," often leading in disingenuous or transactional relationships.”'),
                         p("There’s also a lot of competitiveness that makes it hard for me to connect with people...Also I realize this is my own specific experience. I’m in too many pre-professional clubs which definitely doesn’t help.”"),
-                        p("It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out"),
-                        
-                        h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
+                        p("It was actually a very personally challenging experience for me... trying to figure out what I wanted to do with my life long-term...whether or not I should ‘sell out")
+                        ),
+                        column(7, h3(tags$b("Difficulty Branching Out: Coping with Cliques: 11 comments")),
                         p("Examples:"),
                         p("“Once you make friends initially, it is hard to expand out of that circle.”"),
                         p("“I feel like Harvard is a difficult place to make a ton of friends unless you're already part of a defined group, like a sports team.”"),
                         p("“I find it difficult to connect with people that you aren't naturally in contact with (in your entryway, in your social group, a cappella group, section, etc.)”"),
                         p("“If you don't have time to be in one of the high-time commitment clubs, then it's really hard to make friends. I personally feel super lonely because of my niche interests and my desire to just debate with my peers over various topics.”"),
-                        p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”"),
-                        
-                        h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
+                        p("“I feel like the social environment kind of changed for me from the beginning of the year until now. Speaking as a freshman, when we first arrived on campus, everyone wanted to know everyone and people were super friendly. As the year went on, this dynamic definitely changed just in the sense that people started to hang out with the same sort of people. Also, I feel like all athletes know each other (I’m not an athlete).”")
+                        ),
+
+                        column(5, h3(tags$b("Self Segregation and Racial Exclusivity: 8 comments")),
                         p("Examples: "),
                         p("“I will say the social environment is very very easy to self-segregate. In my case, I went from having maybe two asian friends in high school to having majority Asian friends in college (this is also where choice of extracurriculars matters a lot, and I am in two orgs that have “Asian american” in their names)”"),
                         p("“It is incredibly racially segregated and as a biracial woman (half black, half white) who identifies much more as black, I've definitely had to choose whether I wanted to hang out with my black friends or everyone else – it feels like there's no bridging that divide (and from my experiences during this aborted first year, it doesn't seem like anyone is particularly interested in trying). I understand why this is, it's just a stark observation that I've made and that has contributed to me often feeling out of place.”"),
-                        p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”"),
+                        p("“From my perspective, at Harvard, people are self-segregated into their respective groups. It is easy for people to form groups that are primarily Asian, primarily Hispanic, primarily Athletes, primarily STEM, and etc. It might be a universal trend across multiple schools, but it is a shame that for a school body that is as diverse as Harvard, people still self-segregate into these groups rather than form more diverse communities.”")
+                        ),
                         
-                        h2(tags$b("Summary:")),
-                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging.")
-  
+                        
+                        column(6, align = "center", h3(tags$b("Summary:")),
+                        p("Majority seem to find there to be some level of difficulty, whether in branching out from initial friend groups, a degree of superficiality, racial exclusion, or getting to know people on a deeper level, but as a whole are nonetheless generally satisfied with the overall experience. People typically felt that clubs are where they were able to find their most meaningful connections but found making friends outside of that context more challenging."),
+                        br())
                     
                ),
                
@@ -456,7 +489,7 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
                         h2(tags$b("Jeremiah Kim"), align = "center"),
                         img(src="jeremiah.jpg", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
-                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
+                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am also a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
                         h2(tags$b("Emily Ni"), align = "center"),
                         img(src="Emily.JPG", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
                         p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu", align = "center"),
@@ -988,8 +1021,8 @@ server <- function(input, output) {
       # Return a list containing the filename
       
       list(src = "race_satisfaction.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')}
+      )
     
     # Included
     
@@ -1030,8 +1063,7 @@ server <- function(input, output) {
       anim_save("race_know_street.gif", animate(s))
       
       list(src = "race_know_street.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')})
     
     # Included
     
@@ -1071,8 +1103,7 @@ server <- function(input, output) {
       anim_save("race_know_name.gif", animate(x))
       
       list(src = "race_know_name.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')})
     
     # Included
     
@@ -1113,8 +1144,7 @@ server <- function(input, output) {
       anim_save("race_know_berg.gif", animate(b))
       
       list(src = "race_know_berg.gif",
-           contentType = 'image/gif')}, 
-      deleteFile = TRUE)
+           contentType = 'image/gif')})
     
     # Included
     
@@ -1334,7 +1364,7 @@ server <- function(input, output) {
         tab_header(title = "Racial Breakdown of Survey Respondents") %>% 
         fmt_number(decimals = 2, columns = "percent_survey") %>% 
         cols_label(race = "Reported Ethnicity and/or Race", n = "Total number", percent_survey = "Percent of our survey") %>% 
-        tab_footnote(footnote = "These percentages total 99.99% due to rounding",
+        tab_footnote(footnote = "These percentages do not total 100% due to rounding",
                      locations = cells_column_labels(columns = vars("percent_survey"))) %>% 
         tab_footnote(footnote = "These percentages differ from the home page because some respondents declared themselves as multiple races. We counted every occurence of every race.",
                      locations = cells_column_labels(columns = vars("percent_survey")))
