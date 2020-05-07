@@ -33,6 +33,9 @@ library(ggthemes)
 ui <- bootstrapPage(theme = shinytheme("yeti"),
     navbarPage(tags$b("Social Connectedness in the Class of 2023"),
                
+               # First tab shows basic information about the survey
+               # Displays common demographics and survey methodology
+               
                tabPanel(align = "center", "The Survey",
                         h2(tags$b("About the survey")),
                         p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumably bias associated with who responded and who did not, we cross checked our responses with a random sample of 2023 students. The random sample was a random compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
@@ -83,8 +86,10 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         p("Gov 1005: Harvard University")
                ),
+               
+               # Second tab displays the social web
+               
                tabPanel("The Social Web",
-                        
                         h2(tags$b("Total Sample Size")),
                         
                         p("A total of 413 first-year students answered our survey. 
@@ -95,6 +100,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         visNetworkOutput("mark_plot", width = "100%", height = "1000px")
                         
                ),
+               
+               # Third tab contains many different plots involving satisfaction level and other variables
                
                tabPanel("Analyzing the Data",
                         
@@ -205,8 +212,6 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         
                         
-                        
-                        
                         p("We then observed the mean satisfaction levels 
                         (measured on a scale from -2 to 2) of each group that 
                         stated similar numbers of students they felt comfortable 
@@ -220,8 +225,6 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         br(),
                         
                         
-                        
-                        
                         p("In this question, students who answered differently 
                         did not demonstrate large differences in satisfaction 
                         level. Compared to the street recognition level question, 
@@ -231,11 +234,10 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         more heavily on how many students they recognize, 
                         rather than how many students they feel personally close to."), br()
                         
-                        
-                        
-                        
                ),
                
+               # Fourth tab contains various degrees and methods of analysis
+               # Used survey data to analyze the most socially connected students
                
                tabPanel("Most Connected Individuals",
                         h2(tags$b('Analyzing the "most socially" connected individuals?')),
@@ -336,6 +338,9 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                         p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions.")
                         
                ),
+               
+               # Fifth tab analyzes the survey data based on race and satisfaction of respondents
+               
                tabPanel("Satisfaction and Race",
                         
                         h2(tags$b("Analysis of the data by race")),
@@ -394,6 +399,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
                 
                ),
                
+               # Sixth tab analyzes the comments given by respondents from the survey and interviews
+               
                tabPanel("Comment Analysis",
                         h2(tags$b("Word Cloud- taken from survey comments")),
                         img(src="wordcloud.png", width = "50%", style= "display: block; margin-left: auto; margin-right: auto;"),
@@ -435,6 +442,8 @@ ui <- bootstrapPage(theme = shinytheme("yeti"),
   
                     
                ),
+               
+               # Seventh tab introduces members of the group project
                
                tabPanel("Creators",
                         h3(tags$b("Purpose of our research")),
@@ -483,19 +492,23 @@ server <- function(input, output) {
   
   
 
-    #Included
-    
+    # Included
+  
     output$dorm_plot <- renderPlot({
       
       freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
         clean_names()
       
       total_respondents <- freshmen %>% nrow()
+      
+      # Specified the percentage of students in each dorm
         
       dorm_plot <- freshmen %>%
         select(dorm) %>%
         count(dorm) %>%
         mutate(perc_dorm = round(n / total_respondents*100, digits = 2))
+      
+      # Used ggplot and theme economist to create the plot of the dorm distribution
       
       dorm_plot %>%
         ggplot(aes(y = n, x = dorm, fill = dorm)) +
@@ -510,8 +523,9 @@ server <- function(input, output) {
         theme(legend.position = "none")
         
     })
-    
-    
+
+    # Included
+
     output$gender_plot <- renderPlot({
       
       freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
@@ -519,10 +533,14 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
+      # Specified the percentage of each gender in the respondent sample
+      
       gender_plot <- freshmen %>%
         select(gender) %>%
         count(gender) %>%
         mutate(perc_gender = round(n / total_respondents * 100, digits = 2))
+      
+      # Used ggplot and theme economist to create a bar graph that shows distribution of gender
       
       level_order <- c('Female', 'Male', 'Genderqueer', 'Prefer not to say')
       
@@ -547,6 +565,9 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
+      # Specified the percentage of each race in the respondent sample
+      # Specified mixed race or other using ifelse
+      
       race_plot <- freshmen %>% 
         mutate(manipulated_race = ifelse(race != "White" & 
                                            race != "Asian / Pacific Islander" & 
@@ -557,6 +578,8 @@ server <- function(input, output) {
         select(manipulated_race) %>% 
         count(manipulated_race) %>% 
         mutate(perc_race = round(n / total_respondents*100, digits = 2))
+      
+      # Created a bar graph to show the distribution of race
       
       race_plot %>%
         ggplot(aes(y = n, x = manipulated_race, fill = manipulated_race)) +
@@ -580,10 +603,14 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
+      # Calculated the number of gap year students in our data
+      
       gap_year_plot <- freshmen %>% 
         select(gap_year) %>% 
         count(gap_year) %>% 
         mutate(perc_gap = round(n / total_respondents*100, digits = 2))
+      
+      # Used ggplot to create a bar graph showing the number of gap year students
       
       gap_year_plot %>%
         ggplot(aes(y = n, x = gap_year, fill = gap_year)) +
@@ -606,10 +633,14 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
+      # Calculated the number of international students in our data
+      
       int_plot <- freshmen %>% 
         select(international) %>% 
         count(international) %>% 
         mutate(perc_int = round(n / total_respondents*100, digits = 2))
+      
+      # Used ggplot to create a bar graph showing the number of international students
       
       int_plot %>%
         ggplot(aes(y = n, x = international, fill = international)) +
@@ -629,6 +660,8 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
+      # Specified the percentage of respondents that participated in each pre-orientation
+      
       pre_plot <- freshmen %>% 
         mutate(manipulated_pre = ifelse(pre_orientation != "FAP - First-Year Arts Program" & 
                                           pre_orientation != "FCU - Fall Clean-Up with Dorm Crew" & 
@@ -642,6 +675,8 @@ server <- function(input, output) {
         count(manipulated_pre) %>% 
         mutate(perc_pre = round(n / total_respondents*100, digits = 2)) %>% 
         na.omit
+      
+      # Used ggplot and theme economist to create a bar graph
       
       level_order <- c('None',
                        'FYRE & FCU / FIP & FCU',
@@ -671,10 +706,14 @@ server <- function(input, output) {
       
       total_respondents <- freshmen %>% nrow()
       
+      # Specified the percentage of students that participate in sports
+      
       sports_plot <- freshmen %>% 
         select(sports) %>% 
         count(sports) %>% 
         mutate(perc_sports = round(n / total_respondents*100, digits = 2))
+      
+      # Created a bar graph showing the distribution of athletes
       
       sports_plot %>%
         ggplot(aes(y = n, x = sports, fill = sports)) +
@@ -736,6 +775,7 @@ server <- function(input, output) {
     })
     
     # Included
+    
     output$satisfaction_scatter_plot <- renderPlot({
       
       freshmen <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv") %>%
@@ -753,8 +793,6 @@ server <- function(input, output) {
       total_students <- 1650
       
       total_respondents <- freshmen %>% nrow()
-      
-      
       
       # Rescale satisfaction level for bar plot
       
@@ -823,10 +861,14 @@ server <- function(input, output) {
       
       myPalette <- brewer.pal(5, "Set2") 
       
+      # Specified how many people each student would sit with in Annenberg
+      
       freshmen$know_annenberg <- factor(freshmen$know_annenberg,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000"))
       
       freshmen_mod2 <- freshmen %>%
         filter(know_annenberg != "NA")
+      
+      # Used ggplot and theme economist to create a bar graph
       
       ggplot(data = freshmen_mod2, aes(x = know_annenberg)) + 
         geom_bar(fill = "maroon3") + 
@@ -854,6 +896,9 @@ server <- function(input, output) {
       
       myPalette <- brewer.pal(5, "Set2") 
       
+      # Calculated how satisfied each student was
+      # Found the mean
+      
       freshmen_mod2 <- freshmen %>%
         filter(know_annenberg != "NA") %>%
         mutate(satisfaction_lvl = case_when(satisfied == "Very Satisfied" ~ 2,
@@ -866,6 +911,7 @@ server <- function(input, output) {
       
       
       freshmen2 <- read_csv("data/freshmen.csv") 
+      
       
       freshmen_satisfaction <- freshmen2 %>%
         nest(top4 = c(know_best_1, know_best_2,
@@ -881,6 +927,9 @@ server <- function(input, output) {
       all_freshmen_satisfaction_mean <- freshmen_satisfaction %>%
         summarize(mean = mean(satisfaction_lvl)) %>%
         pull(mean)
+      
+      # Created a bar graph using ggplot and theme economist
+      # Used a line to show the mean satisfaction
       
       level_order <- c('0-20', '20-50', '50-100', '100-250', '250-500', '500-1000')
       
@@ -899,6 +948,7 @@ server <- function(input, output) {
     })
     
     # Included
+    
     output$race_satisfaction <- renderImage({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
@@ -908,7 +958,9 @@ server <- function(input, output) {
       
       race_satisfaction <- tempfile(fileext='.gif')
       
-      # now make the animation
+      # Graphed the satisfaction based on race
+      # Made the animation
+      
       p = data %>% 
         select(manipulated_race, satisfied) %>% 
         group_by(manipulated_race) %>% 
@@ -934,6 +986,7 @@ server <- function(input, output) {
       anim_save("race_satisfaction.gif", animate(p)) # New
       
       # Return a list containing the filename
+      
       list(src = "race_satisfaction.gif",
            contentType = 'image/gif')}, 
       deleteFile = TRUE)
@@ -948,6 +1001,9 @@ server <- function(input, output) {
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
       race_know_street <- tempfile(fileext='.gif')
+      
+      # Specified the number of people a student would recognize on the street by race
+      # Created animated bar graph
       
       s = data %>% 
         group_by(manipulated_race) %>%
@@ -988,6 +1044,9 @@ server <- function(input, output) {
       
       race_know_name <- tempfile(fileext='.gif')
       
+      # Specified the number of people a respondent knows by name specified by race
+      # Created animated bar graph
+      
       x = data %>% 
         group_by(manipulated_race) %>%
         count(know_by_name) %>% 
@@ -1025,6 +1084,9 @@ server <- function(input, output) {
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
       race_know_berg <- tempfile(fileext='.gif')
+      
+      # Specified the number of people a respondent would sit in Annenberg with specified by race
+      # Created animated bar graph
       
       b = data %>% 
         group_by(manipulated_race) %>%
@@ -1173,6 +1235,8 @@ server <- function(input, output) {
       
       freshmen$know_street <- factor(freshmen$know_street,levels = c("0-50", "50-100", "100-250", "250-500", "500-1000", "1000+"))
       
+      # Created bar graph to show the number of people each student recognizes on the street
+      
       ggplot(data = freshmen, aes(x = know_street)) + 
         geom_bar(fill = "seagreen4") + 
         labs(
@@ -1225,6 +1289,8 @@ server <- function(input, output) {
         summarize(mean = mean(satisfaction_lvl)) %>%
         pull(mean)
       
+      # Graphed the relationship between statisfaction and the number of people the respondent recognizes
+      
       level_order <- c('0-50', '50-100', '100-250', '250-500', '500-1000', '1000+')
       
       ggplot(data = freshmen_mod, aes(x = factor(know_street, level = level_order), y = satis_know_mean)) +
@@ -1260,6 +1326,7 @@ server <- function(input, output) {
       
       total <- sum(races$n) 
       
+      # Found the racial breakdown of the data
       
       racial_respondent <- races %>% 
         mutate(percent_survey = n / total * 100) %>%
@@ -1284,6 +1351,8 @@ server <- function(input, output) {
       library(RColorBrewer)
       color <- brewer.pal(4, "Set3") 
       
+      # Created a friend network plot
+      
       edges_full <- survey_data %>% 
         select(id, first_id, second_id, third_id, fourth_id) %>% 
         pivot_longer(cols = c(first_id, second_id, third_id, fourth_id), names_to = "degree", values_to = "endpoint") %>% 
@@ -1293,6 +1362,8 @@ server <- function(input, output) {
           degree == "third_id" ~ color[3],
           degree == "fourth_id" ~ color[4]
         ))
+      
+      # Specified the edges, nodes, and top four friends
       
       edges <- edges_full %>% 
         select(id, endpoint)
@@ -1361,6 +1432,8 @@ server <- function(input, output) {
       nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
       g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
       
+      # Created a tibble showing the eigenvector statistics
+      
       eigen <- eigen_centrality(g)
       eigen <- eigen$vector
       
@@ -1372,6 +1445,8 @@ server <- function(input, output) {
       
       eigenvector_10 <- eigenvector %>% 
         head(10)
+      
+      # Created a gt table for the top 10 eigenvector scores
       
       gt(eigenvector_10) %>% 
         tab_header(title = "Top 10 Eigenvector Centrality") %>% 
@@ -1407,6 +1482,8 @@ server <- function(input, output) {
       nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
       g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
       
+      # Made a tibble showing the degree centrality
+      
       deg <- degree(g, mode="all")
       
       degree <- tibble(deg) %>% 
@@ -1417,6 +1494,8 @@ server <- function(input, output) {
       
       degree_10 <- degree %>% 
         head(10)
+      
+      # Created a gt table with the data for degree centrality
       
       gt(degree_10) %>% 
         tab_header(title = "Top 10 Degree Centrality") %>% 
@@ -1452,6 +1531,8 @@ server <- function(input, output) {
       nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
       g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
       
+      # Found the most socially connected students based on survey responses
+      
       most <- survey_data %>% 
         select(most_id) %>% 
         filter(most_id != 1654)
@@ -1460,6 +1541,8 @@ server <- function(input, output) {
         count(most_id) %>%
         arrange(desc(n)) %>% 
         head(10) 
+      
+      # Created a gt of the top 10 most socially connected students
       
       gt(most_10) %>% 
         tab_header(title = "Top 10 Socially Connected Freshman: Survey") %>% 
@@ -1496,6 +1579,8 @@ server <- function(input, output) {
       nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
       g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
       
+      # Found the betweenness score of each student
+      
       between <- betweenness(g, directed=F, weights=NA, normalized = T)
       
       betweenness <- tibble(between) %>% 
@@ -1506,6 +1591,8 @@ server <- function(input, output) {
       
       betweenness_10 <- betweenness %>% 
         head(10)
+      
+      # Created a gt table of the top 10 students with the highest betweenness score
       
       gt(betweenness_10) %>% 
         tab_header(title = "Top 10 Betweenness Centrality") %>% 
@@ -1542,6 +1629,8 @@ server <- function(input, output) {
       nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
       g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
       
+      # Found the closeness score of each student
+      
       close <- closeness(g, mode="all", weights=NA, normalized=T)
       
       closeness <- tibble(close) %>% 
@@ -1552,6 +1641,8 @@ server <- function(input, output) {
       
       closeness_10 <- closeness %>% 
         head(10)
+      
+      # Created a gt table of the top 10 students with the highest closeness score
       
       gt(closeness_10) %>% 
         tab_header(title = "Top 10 Closeness Centrality") %>% 
@@ -1587,6 +1678,9 @@ server <- function(input, output) {
       all_names <- full_join(fourth, full_join(third, full_join(first, second, by = c("first_id"="second_id")), by=c("third_id" = "first_id")), by=c("fourth_id" = "third_id"))
       nodes <- unique(full_join(nodes, all_names, by=c("id"="fourth_id")))
       g <- graph_from_data_frame(d = edges, vertices = nodes, directed=FALSE)
+      
+      # Identified the top 10 for most socially connected based on the survey
+      # Identified the top 10 scores for degree centrality, closeness, betweenness, and eigenvector
       
       most <- survey_data %>% 
         select(most_id) %>% 
@@ -1634,6 +1728,7 @@ server <- function(input, output) {
       eigenvector_10 <- eigenvector %>% 
         head(10)
       
+      # Specified the top 10 results of each test
       
       most_id_10 <- most_10$most_id
       degree_id_10 <- degree_10$degree_id
@@ -1641,6 +1736,8 @@ server <- function(input, output) {
       between_id_10 <- betweenness_10$between_id
       eigen_id_10 <- eigenvector_10$eigen_id
       comp <- tibble(most_id_10, degree_id_10, close_id_10, between_id_10, eigen_id_10) 
+      
+      # Created a gt table to display all top 10 scores
       
       gt(comp) %>% 
         tab_header(title = "Top 10 ID Comparison") %>% 
@@ -1650,26 +1747,28 @@ server <- function(input, output) {
                    close_id_10 = "Closeness Centrality",
                    between_id_10 = "Betweenness Centrality") 
     })
-    #This is the web on the front of the web page
+    
+    # This is the web on the front of the web page
     
     output$mark_plot <- renderVisNetwork({
       nodes2 <- read_csv("data/nodes2.csv")
       edges2 <- read_csv("data/edges2.csv")
-      # change shape, color, and size for each group
+      
+      # Changed shape, color, and size for each group
       
       visNetwork(nodes2, edges2) %>%
         visGroups(groupname = "Dorms", color = "darkblue", shape = "square", size = 65) %>%
         visGroups(groupname = "Pre-Orientation", color = "darkred", shape = "square", size = 45) %>%
         visGroups(groupname = "Sports", color = "darkgreen", shape = "square", size = 45) %>%
         
-        # add functionality to highlight close connections when hovering over node
+        # Added functionality to highlight close connections when hovering over node
         
         visOptions(nodesIdSelection = list(enabled = TRUE,
                                            style = "margin-bottom: -30px; visibility: hidden"),
                    highlightNearest = list(enabled = T, degree = 2, hover = T),
                    selectedBy = "group") %>%
         
-        # adjust physics to decrease load time
+        # Adjusted physics to decrease load time
         
         visPhysics(
           solver = "forceAtlas2Based", 
@@ -1680,11 +1779,11 @@ server <- function(input, output) {
           stabilization = list(iterations = 300, updateInterval = 10),
           adaptiveTimestep = TRUE) %>%
         
-        # add legend for groups
+        # Added legend for groups
         
         visLegend(zoom = FALSE) %>%
         
-        # disable graph movement within window
+        # Disabled graph movement within window
         
         visInteraction(dragView = FALSE, 
                        zoomView = FALSE,
@@ -1692,6 +1791,7 @@ server <- function(input, output) {
       
       
     })
+    
     #Included
     
     
