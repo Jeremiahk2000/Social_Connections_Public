@@ -346,11 +346,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("Overall, this data opens the question of how we as humans define social connectivity. Do we prioritize close-knit relationships, or developing a broad network? Do we consider someone who knows many people casually as more socially successful than someone who knows less people more deeply? Our survey data can only give us results, but it is up to us as people to apply these findings to our social interactions.")
                         
                ),
-<<<<<<< HEAD
                
-               # Fifth tab analyzes the survey data based on race and satisfaction of respondents
-               
-               tabPanel("Satisfaction and Race",
+               # The fifth tab is about correlation between race and social experience at Harvard
+
+               tabPanel(align = "center", "Satisfaction and Race",
                         
                         h2(tags$b("Analysis of the data by race")),
                         
@@ -360,75 +359,49 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         br(),
                         gt_output("racial_respondent"),
                         br(),
-                        p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
+                        p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups."),
                         br(),
                         plotOutput("race_satisfaction"),
-=======
-             #  tabPanel(align = "center", "Satisfaction and Race",
                         
-             #            h2(tags$b("Analysis of the data by race")),
-                      
-             #           p("According to Harvard college admission statistics, 14.3% of the class of 2023 is African-American, 25.3% is Asian, 12.2% is Hispanic or Latino, 1.8% is Native American, and 0.6% is Native Hawaiian. While we tried our best to simulate these numbers within our survey, we were unable to satisfactorily replicate Harvard’s admission statistics."), 
-             #           br(),
-             #           p("Of survey respondents, 27.95% were Asian / Pacific Islander, 7.71% were African American, 7% were Hispanic or Latino, 37% were white, 18.06% were of mixed race, and 2.27% fell into other categories. Here is the full racial breakdown:"),
-             #             br(),
-             #            gt_output("racial_respondent"),
-             #           br(),
-             #            p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups. The following graphs show social satisfaction across three racial groups: White, Asian / Pacific Islander, and Other."),
-             #            br(),
-             #            imageOutput("race_satisfaction"),
->>>>>>> 87bee17eef983d37689a7627e39829d5809aae79
-
-             #           br(),
-             #           br(),
-             #           br(),
-             #            br(),
+                        
+                        br(),
+                        br(),
                        
                         
-             #            p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         
-             #           br(),
-             #           br(),
-             #           br(),
-             #           br(),
+                        p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         
-             #           imageOutput("race_know_street"),
+                        br(),
+                        br(),
                         
-             #           br(),
-             #           br(),
-             #           br(),
-             #            br(),
-
-             #            imageOutput("race_know_name"),
-
-             #            br(),
-             #            br(),
-             #            br(),
-             #           br(),
-   
-             #            imageOutput("race_know_berg"),
-             #           br(),
-             #           br(),
-             #            br(),
-             #            br(),
-             #            br(),
-             #            br(),
-             #            br(),
+                        plotOutput("race_know_street"),
                         
-
-             #           p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
-             #           p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
-             #           p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
-                
-             #   ),
+                        br(),
+                        br(),
+                        
+                        plotOutput("race_know_name"),
+                        
+                        br(),
+                        br(),
+                        
+                        plotOutput("race_know_berg"),
+                        br(),
+                        br(),
+                       
+                        
+                        
+                        p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
+                        p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
+                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
+                        
+               ),
                
-<<<<<<< HEAD
+               
                # Sixth tab analyzes the comments given by respondents from the survey and interviews
                
-               tabPanel("Comment Analysis",
-=======
+
                tabPanel(align = "center", "Comment Analysis",
->>>>>>> 87bee17eef983d37689a7627e39829d5809aae79
+
                         h2(tags$b("Word Cloud- taken from survey comments")),
                         img(src="wordcloud.png", width = "50%", style= "display: block; margin-left: auto; margin-right: auto;"),
                         
@@ -982,19 +955,21 @@ server <- function(input, output) {
     
     # Included
     
-    output$race_satisfaction <- renderImage({
+    output$race_satisfaction <- renderPlot({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
         select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
-      race_satisfaction <- tempfile(fileext='.gif')
+      
       
       # Graphed the satisfaction based on race
       # Made the animation
       
-      p = data %>% 
+      level_order <- c('Very Dissatisfied', 'Dissatisfied', 'Neutral', 'Satisfied', 'Very Satisfied')
+      
+      data %>% 
         select(manipulated_race, satisfied) %>% 
         group_by(manipulated_race) %>% 
         count(satisfied) %>% 
@@ -1004,25 +979,23 @@ server <- function(input, output) {
           manipulated_race == "Black or African American" ~ n / 32,
           manipulated_race == "Hispanic or Latino" ~ n / 29,
           manipulated_race == "Other" ~ n / 84)) %>% 
-        ggplot(aes(x = reorder(satisfied, proportion), y = proportion)) +
+        ggplot(aes(x = factor(satisfied, level = level_order), y = proportion)) +
         geom_col(fill = "darkred") +
         theme_economist() +
-        theme(axis.title.x = element_text(vjust = -0.5)) +
-        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
+        facet_wrap(~manipulated_race) +
+        theme(panel.spacing.x = unit(4, "mm"),
+              panel.spacing.y =  unit(4, "mm"), 
+              axis.text.x = element_text(angle = 90, vjust = .5),
+              axis.title.y = element_text(vjust = 2),
+              strip.text.x = element_text(size = 10),
+              plot.title = element_text(size = 14, vjust = 4),
+              axis.title.x = element_blank()) +
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
         labs(title = "Social Satisfaction levels",
-             subtitle = "Racial group: {closest_state}",
              x = "How satisfied are respondents with Harvard's social environment?",
              y = "Proportion of respondents")
-      
-      
-      anim_save("race_satisfaction.gif", animate(p)) # New
-      
-      # Return a list containing the filename
-      
-      list(src = "race_satisfaction.gif",
-           contentType = 'image/gif')}
-      )
+     
+      })
     
     # Included
     
