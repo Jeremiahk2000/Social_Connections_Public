@@ -43,12 +43,15 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                # Displays common demographics and survey methodology
                
                tabPanel(align = "center", "The Survey",
-                        h2(tags$b("About the survey")),
-                        p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumably bias associated with who responded and who did not, we cross checked our responses with a random sample of 2023 students. The random sample was a random compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
+                        h2(tags$b("Purpose of our research")),
+                        p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
+                        p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
+                        p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University."),
+                        h3(tags$b("About the survey")),
+                        p("Data for our study was collected via survey. We sent the survey out to the entire class of 2023 and collected responses. Because there was presumable bias associated with who responded and who did not, we cross checked the demographics of our responses with demographics from a random sample of 2023 students in order to ensure continuity and representation. The random sample was a compilation of 10% of each freshman dorm. In order to protect students’ privacy, we assigned all students an ID number in place of their name."),
                         br(),
-                        h2(tags$b("Common Demographics")),
+                        h3(tags$b("Who responded?")),
                         plotOutput("dorm_plot"),
-                        p("Because Canaday is the largest freshman dorm, it necessarily made up the largest portion of our sample."),
                         br(),
                         plotOutput("gender_plot"),
                         br(),
@@ -367,18 +370,35 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
                         br(),
                         br(),
+                        h4(tags$b("Recognition on the street")),
                         plotOutput("race_know_street"),
                         br(),
                         br(),
+                        h4(tags$b("Recognition by name")),
                         plotOutput("race_know_name"),
                         br(),
                         br(),
+                        h4(tags$b("Sit with in Annenberg")),
                         plotOutput("race_know_berg"),
                         br(),
                         br(),
                         p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
                         p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
-                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
+                        h4(tags$b("One specific example: satisfaction and recognition by name")),
+                        br(),
+                        p("In order to determine if race played a factor in the relationship between satisfaction and the amount of people students knew by name, I calculated the correlation correlation coefficient between satisfaction and the number of people recognized by name, then faceted for race."),
+                        br(),
+                        p("In the following graph, the x-axis labels are as follows: 1 is 0-50 people, 2 is 50-100 people, 3 is 100-250 people, 4 is 250-500 people, and 5 is 500-1000 people.
+                          The y-axis labels are: -2 is Very Dissatisfied, -1 is Dissatisfied, 0 is Neutral, 1 is Satisfied, and 2 is Very Satisfied"),
+                        br(),
+                        plotOutput("race_name_graph"),
+                        br(),
+                        p("All of the relationships seem to show weak positive correlations, and to be certain I listed to correlation values. I calculated the correlation coefficient per race in the other contexts as well for accuracy."),
+                        br(),
+                        gt_output("race_correlation"),
+                        br(),
+                        p("With the correlation coefficient spelled out, controlling for race, it's clear that the number of people students know by name, would recognize on the street, & would sit with in Annenberg and their satisfaction levels have a positive but weak relationship."),
+                        p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social satisfaction other than race.")
                         
                ),
                
@@ -438,17 +458,11 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                # Seventh tab introduces members of the group project
                
                tabPanel("Creators",
-                        h3(tags$b("Purpose of our research")),
-                        p("Are the friends we make truly representative of our interests, or are they actually determined by uncontrollable factors like the dorms we live in, our extracurriculars, our race, and where we come from? In seeking to answer this question and others like it, we decided to map and analyze the literal social network of the Harvard class of 2023."), 
-                        p("We wanted to know why some people within the class of 2023 seemed to be well connected, while others seemed to be anonymous. At the heart of this project was our interest in the literal web of social connections, but we were also very interested in determining the role our environments play when determining the people we consider friends. By asking students about their demographic background, their four closest friends, and other speculative questions, we created a representative map of social connections, inferencing conclusions about the role of our environment from the available data."),
-                        p("This project was initially pitched to us by Preceptor David Kane in preparation for the Government 1005 semester long final project at Harvard University. Preceptor expressed interest in comparing social connections through the freshman class at Harvard to those at Yale, but after determining the resources we had available, we decided to limit the scope of our study to Harvard."),
-                        
-                        
                         h2(tags$b("The Team")),
                         p("In order to complete this project, we had an amazing team of 6 different student researchers. Each member of the team was responsibile for a distinct portion of the project, but there was also collaboration at every step."),
-                        h2(tags$b("Jeremiah Kim"), align = "center"),
+                        h2(tags$b("Jeremiah Kim - Project Lead"), align = "center"),
                         img(src="jeremiah.jpg", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
-                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in the political economy of Asia. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am also a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
+                        p("Hi, I am currently pursuing an A.B. in social studies, and I intend to complete a focus field in political economy. I use R as an assistant researcher at the Edmond J. Safra Center for Ethics. I am also a bass singer for the Harvard Radcliff Collegium Musicum, a staff writer for the Harvard College Law Review, and my contact information is jeremiahkim@college.harvard.edu.", align = "center"),
                         h2(tags$b("Emily Ni"), align = "center"),
                         img(src="Emily.JPG", width = "25%", style="display: block; margin-left: auto; margin-right: auto;"),
                         p("Hello! I am a freshman at Harvard College pursuing an A.B in Economics and Government. In Gov 1005, I’ve enjoyed using R for applications related to data science! My contact information is eni@college.harvard.edu", align = "center"),
@@ -1107,6 +1121,98 @@ server <- function(input, output) {
         labs(title = "The Amount of classmates respondents would sit next to in Annenberg",
              y = "Proportion of respondents") 
       })
+    
+    # Included
+    
+    output$race_name_graph <- renderPlot({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race))
+        
+      test <- data %>% 
+        mutate(
+          num_satisfied = case_when(
+            satisfied == "Very Dissatisfied" ~ -2,
+            satisfied == "Dissatisfied" ~ -1, 
+            satisfied == "Neutral" ~ 0,
+            satisfied == "Satisfied" ~ 1,
+            satisfied == "Very Satisfied" ~ 2),
+          num_people_name = case_when(
+            know_by_name == "0-50" ~ 1,
+            know_by_name == "50-100" ~ 2,
+            know_by_name == "100-250" ~ 3,
+            know_by_name == "250-500" ~ 4,
+            know_by_name == "500-1000" ~ 5)) %>% 
+        select(manipulated_race, num_satisfied, know_street, know_by_name, 
+               know_annenberg, gender, num_people_name, satisfied) 
+      
+      test %>% 
+        ggplot(aes(x = num_people_name, y = num_satisfied)) +
+        geom_point() +
+        geom_jitter() +
+        facet_wrap(~manipulated_race) +
+        geom_smooth(method = 'lm', formula = 'y~x', se = F) +
+        theme_economist() +
+        theme(panel.spacing.x = unit(4, "mm"),
+              panel.spacing.y =  unit(4, "mm"), 
+              axis.text.x = element_text(vjust = .5),
+              axis.title.y = element_text(vjust = 2),
+              plot.title = element_text(vjust = 4)) +
+        labs(title = "The Relationship between the number of people known by name and satisfaction, by race",
+             y = "Satisfaction Level",
+             x = "Number of people students know by name")
+    })
+    
+    output$race_correlation <- render_gt({
+      
+      data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
+        mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race))
+        
+      test <- data %>% 
+        mutate(
+          num_satisfied = case_when(
+            satisfied == "Very Dissatisfied" ~ -2,
+            satisfied == "Dissatisfied" ~ -1, 
+            satisfied == "Neutral" ~ 0,
+            satisfied == "Satisfied" ~ 1,
+            satisfied == "Very Satisfied" ~ 2),
+          num_people_name = case_when(
+            know_by_name == "0-50" ~ 1,
+            know_by_name == "50-100" ~ 2,
+            know_by_name == "100-250" ~ 3,
+            know_by_name == "250-500" ~ 4,
+            know_by_name == "500-1000" ~ 5),
+          num_people_street = case_when(
+            know_street == "0-50" ~ 1,
+            know_street == "50-100" ~ 2,
+            know_street == "100-250" ~ 3,
+            know_street == "250-500" ~ 4,
+            know_street == "500-1000" ~ 5,
+            know_street == "1000+" ~ 6),
+          num_people_berg = case_when(
+            know_annenberg == "0-20" ~ 1,
+            know_annenberg == "20-50" ~ 2,
+            know_annenberg == "50-100" ~ 3,
+            know_annenberg == "100-250" ~ 4,
+            know_annenberg == "250-500" ~ 5,
+            know_annenberg == "500-1000" ~ 6)) %>% 
+        select(manipulated_race, num_satisfied, num_people_name, num_people_street, num_people_berg)
+      
+      
+      test %>% 
+        group_by(manipulated_race) %>% 
+        summarize(cor_coef_name = cor(num_satisfied, num_people_name),
+                  cor_coef_street = cor(num_satisfied, num_people_street),
+                  cor_coef_berg = cor(num_satisfied, num_people_berg)) %>% 
+        gt() %>% 
+        tab_header(title = "Correlation Coefficient between satisfaction and the number of people known",
+                   subtitle = "Broken down by race and circumstance") %>% 
+        fmt_number(decimals = 3, columns = c("cor_coef_name", "cor_coef_street", "cor_coef_berg")) %>% 
+        cols_label(manipulated_race = "Race", 
+                   cor_coef_name = "Know by name", 
+                   cor_coef_street = "Recognize on street",
+                   cor_coef_berg = "Sit with in Annenberg")
+    })
     
     # Included
     
