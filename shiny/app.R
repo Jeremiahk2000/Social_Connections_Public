@@ -362,34 +362,20 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                         p("Given the small sample size of our survey, relative to the size of the class of 2023, we are hesitant to make generalizations about how race affects social relationships. Furthermore, we did not collect evidence of the fundamental factors behind friendship and therefore cannot speculate on the reasons for friendship. We did collect measures of satisfaction, and the data looks remarkably similar across racial groups."),
                         br(),
                         plotOutput("race_satisfaction"),
-                        
-                        
                         br(),
                         br(),
-                       
-                        
-                        
                         p("In addition to satisfaction rates mirroring each other, the amount of people each group of students said that they would recognize, under various circumstances, also mirrored one another."),
-                        
                         br(),
                         br(),
-                        
                         plotOutput("race_know_street"),
-                        
                         br(),
                         br(),
-                        
                         plotOutput("race_know_name"),
-                        
                         br(),
                         br(),
-                        
                         plotOutput("race_know_berg"),
                         br(),
                         br(),
-                       
-                        
-                        
                         p("These visualizations lack insight about causal effects, but they do suggest that all Harvard 2023 students, regardless of race, are experiencing a similar social atmosphere. Students across the racial spectrum reported similar satisfaction levels, similar levels of recognition on the street and by name, and racial groups were homogeneous in the reported number of people they would feel comfortable spontaneously sitting with in Annenberg."),
                         p("Regarding who was listed as the survey's number one friend, 150 of respondents both filled out our form and were listed by another person as a number one friend. Of those 150 students, 85 of the students were of the same race as their best friend. Since we do not have the demographic data of students who did not fill out the form, 20.4% of students reported that their best friend was of the same race as them, and this is only the lower bound. This gives credence to the fact that race plays a role when determining the friends we pick, but this same metric is confounded by dorm placement and extracurricular activities."),
                         p("All in all, the data from our survey suggests that students of all races feel similarly about the social condition of Harvard, suggesting that other factors may play a larger role in determining our social abilities than race.")
@@ -999,19 +985,21 @@ server <- function(input, output) {
     
     # Included
     
-    output$race_know_street <- renderImage({
+    output$race_know_street <- renderPlot({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
         select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
-      race_know_street <- tempfile(fileext='.gif')
+      
       
       # Specified the number of people a student would recognize on the street by race
       # Created animated bar graph
       
-      s = data %>% 
+      level_order <- c('0-50', '50-100', '100-250', '250-500', '500-1000', '1000+')
+      
+      data %>% 
         group_by(manipulated_race) %>%
         count(know_street) %>% 
         mutate(proportion = case_when(
@@ -1020,39 +1008,39 @@ server <- function(input, output) {
           manipulated_race == "Black or African American" ~ n / 32,
           manipulated_race == "Hispanic or Latino" ~ n / 29,
           manipulated_race == "Other" ~ n / 84)) %>% 
-        ggplot(aes(x = know_street, y = proportion)) + 
+        ggplot(aes(x = factor(know_street, level = level_order), y = proportion)) + 
         geom_col(fill = "red") + 
         theme_economist() +
-        theme(axis.title.x = element_text(vjust = -1)) +
+        facet_wrap(~manipulated_race) +
+        theme(panel.spacing.x = unit(4, "mm"),
+              panel.spacing.y =  unit(4, "mm"), 
+              axis.text.x = element_text(angle=50, vjust = .5),
+              axis.title.y = element_text(vjust = 2),
+              strip.text.x = element_text(size = 10),
+              plot.title = element_text(size = 14, vjust = 4),
+              axis.title.x = element_blank()) +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-        labs(title = "The Amount of classmates respondents would
-       recognize on the street",
-             subtitle = "Racial group: {closest_state}",
-             x = "Amount of people students would recognize 
-       on the street",
+        labs(title = "The Amount of classmates respondents would recognize on the street",
              y = "Proportion of respondents")
       
-      anim_save("race_know_street.gif", animate(s))
-      
-      list(src = "race_know_street.gif",
-           contentType = 'image/gif')})
+      })
     
     # Included
     
-    output$race_know_name <- renderImage({
+    output$race_know_name <- renderPlot({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
         select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
-      race_know_name <- tempfile(fileext='.gif')
       
       # Specified the number of people a respondent knows by name specified by race
       # Created animated bar graph
       
-      x = data %>% 
+      level_order <- c('0-50', '50-100', '100-250', '250-500', '500-1000')
+      
+      data %>% 
         group_by(manipulated_race) %>%
         count(know_by_name) %>% 
         mutate(proportion = case_when(
@@ -1061,38 +1049,41 @@ server <- function(input, output) {
           manipulated_race == "Black or African American" ~ n / 32,
           manipulated_race == "Hispanic or Latino" ~ n / 29,
           manipulated_race == "Other" ~ n / 84)) %>% 
-        ggplot(aes(x = know_by_name, y = proportion)) + 
+        ggplot(aes(x = factor(know_by_name, level = level_order), y = proportion)) + 
         geom_col(fill = "steelblue") + 
         theme_economist() +
-        theme(axis.title.x = element_text(vjust = -1)) +
+        facet_wrap(~manipulated_race) +
+        theme(panel.spacing.x = unit(4, "mm"),
+              panel.spacing.y =  unit(4, "mm"), 
+              axis.text.x = element_text(angle=50, vjust = .5),
+              axis.title.y = element_text(vjust = 2),
+              strip.text.x = element_text(size = 10),
+              plot.title = element_text(size = 14, vjust = 4),
+              axis.title.x = element_blank()) +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-        labs(title = "The Amount of classmates respondents
-             know by name",
-             subtitle = "Racial group: {closest_state}",
-             x = "Amount of people students know by name",
+        labs(title = "The Amount of classmates that respondents know by name",
              y = "Proportion of respondents")
+
       
-      anim_save("race_know_name.gif", animate(x))
-      
-      list(src = "race_know_name.gif",
-           contentType = 'image/gif')})
+      })
     
     # Included
     
-    output$race_know_berg <- renderImage({
+    output$race_know_berg <- renderPlot({
       
       data <- read_csv("data/FINAL_PUBLIC_DATA-4-23-20.csv", col_types = cols()) %>% 
         mutate(manipulated_race = ifelse(race != "White" & race != "Asian / Pacific Islander" & race != "Black or African American" & race != "Hispanic or Latino", "Other", race)) %>% 
         select(gender, race, first_meet, second_meet, third_meet, "fourth-meet", 
                id, first_id, second_id, third_id, fourth_id, know_street, know_by_name, know_annenberg, satisfied, manipulated_race)
       
-      race_know_berg <- tempfile(fileext='.gif')
+      
       
       # Specified the number of people a respondent would sit in Annenberg with specified by race
       # Created animated bar graph
       
-      b = data %>% 
+      level_order <- c('0-20', '20-50', '50-100', '100-250', '250-500','500-1000')
+      
+      data %>% 
         group_by(manipulated_race) %>%
         count(know_annenberg) %>% 
         mutate(proportion = case_when(
@@ -1101,23 +1092,21 @@ server <- function(input, output) {
           manipulated_race == "Black or African American" ~ n / 32,
           manipulated_race == "Hispanic or Latino" ~ n / 29,
           manipulated_race == "Other" ~ n / 84)) %>% 
-        ggplot(aes(x = know_annenberg, y = proportion)) + 
+        ggplot(aes(x = factor(know_annenberg, level = level_order), y = proportion)) + 
         geom_col(fill = "purple") + 
         theme_economist() +
-        theme(axis.title.x = element_text(vjust = -1)) +
+        facet_wrap(~manipulated_race) +
+        theme(panel.spacing.x = unit(4, "mm"),
+              panel.spacing.y =  unit(4, "mm"), 
+              axis.text.x = element_text(angle=50, vjust = .5),
+              axis.title.y = element_text(vjust = 2),
+              strip.text.x = element_text(size = 10),
+              plot.title = element_text(size = 14, vjust = 4),
+              axis.title.x = element_blank()) +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-        transition_states(states = manipulated_race, transition_length = 1.5, state_length = 3, wrap = T) +
-        labs(title = "The Amount of classmates respondents would sit
-        next to in Annenberg",
-             subtitle = "Racial group: {closest_state}",
-             x = "Amount of people students would sit next
-       to in Annenberg",
-             y = "Proportion of respondents")
-      
-      anim_save("race_know_berg.gif", animate(b))
-      
-      list(src = "race_know_berg.gif",
-           contentType = 'image/gif')})
+        labs(title = "The Amount of classmates respondents would sit next to in Annenberg",
+             y = "Proportion of respondents") 
+      })
     
     # Included
     
